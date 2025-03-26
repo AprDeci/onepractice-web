@@ -10,7 +10,7 @@ const config: Config = {
   bracketSpacing: true,
   plugins: ["prettier-plugin-tailwindcss"],
   tailwindStylesheet: "./src/style.css",
-  // "tailwindConfig": "./styles/tailwind.config.js"
+  htmlWhitespaceSensitivity: "ignore",
 };
 
 export default config;
