@@ -22,34 +22,36 @@ const testPapers = [
 <template>
     <main>
         <floatingPaper class="-z-1"></floatingPaper>
-        <div class="pl-20 pr-20">
+        <div class="">
             <homeNav></homeNav>
-            <div>
-                <section className="container mx-auto px-4 py-10">
-                    <div className="flex justify-between items-center mb-8">
-                        <h1 className="text-2xl md:text-3xl font-bold">Available Papers</h1>
-                        <div className="flex gap-4">
-                            <select className="px-3 py-2 border border-gray-200 rounded-md text-sm">
-                                <option>All Categories</option>
-                                <option>Reading</option>
-                                <option>Writing</option>
-                                <option>Listening</option>
-                                <option>Speaking</option>
-                                <option>Grammar</option>
-                                <option>Vocabulary</option>
-                            </select>
-                            <select className="px-3 py-2 border border-gray-200 rounded-md text-sm">
-                                <option>All Levels</option>
-                                <option>Beginner</option>
-                                <option>Intermediate</option>
-                                <option>Advanced</option>
-                            </select>
+            <div class="middle px-4 py-6">
+                <div>
+                    <section className="container mx-auto px-4 py-10">
+                        <div className="flex justify-between items-center mb-8">
+                            <h1 className="text-2xl md:text-3xl font-bold mr-5">Available Papers</h1>
+                            <div className="flex gap-4 flex-col lg:flex-row">
+                                <select className="px-3 py-2 border border-gray-200 rounded-md text-sm">
+                                    <option>All Categories</option>
+                                    <option>Reading</option>
+                                    <option>Writing</option>
+                                    <option>Listening</option>
+                                    <option>Speaking</option>
+                                    <option>Grammar</option>
+                                    <option>Vocabulary</option>
+                                </select>
+                                <select className="px-3 py-2 border border-gray-200 rounded-md text-sm">
+                                    <option>All Levels</option>
+                                    <option>Beginner</option>
+                                    <option>Intermediate</option>
+                                    <option>Advanced</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                </section>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                <paperCard v-for="apaper in testPapers" :paper=apaper></paperCard>
+                    </section>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <paperCard v-for="apaper in testPapers" :paper=apaper :key="apaper.id"></paperCard>
+                </div>
             </div>
             <div class="flex items-center justify-center mt-10 mb-10">
                 <div class="join">
@@ -59,9 +61,31 @@ const testPapers = [
                     <button class="join-item btn">4</button>
                 </div>
             </div>
-            <div>
-
-            </div>
+            <footer className="bg-white border-t border-gray-100 py-8 mt-12">
+                <div className="container mx-auto px-4">
+                    <div className="flex flex-col md:flex-row justify-between items-center">
+                        <div className="mb-4 md:mb-0">
+                            <p className="text-sm text-gray-600">
+                                © {{ new Date().getFullYear() }} OnePractice English. All rights reserved.
+                            </p>
+                        </div>
+                        <div className="flex gap-8">
+                            <a href="#" className="text-sm text-gray-600 hover:text-gray-900">
+                                Terms
+                            </a>
+                            <a href="#" className="text-sm text-gray-600 hover:text-gray-900">
+                                Privacy
+                            </a>
+                            <a href="#" className="text-sm text-gray-600 hover:text-gray-900">
+                                Help
+                            </a>
+                            <a href="#" className="text-sm text-gray-600 hover:text-gray-900">
+                                Contact
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
         </div>
     </main>
 
