@@ -9,7 +9,11 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     A: typeof import('./src/components/a.vue')['default']
-    LoginPage: typeof import('./src/components/loginPage.vue')['default']
+    FloatingPaper: typeof import('./src/components/floating-paper.vue')['default']
+    HomeNav: typeof import('./src/components/home-nav.vue')['default']
+    Homepage: typeof import('./src/page/homePage.vue')['default']
+    LoginPage: typeof import('./src/page/loginPage.vue')['default']
+    PaperCard: typeof import('./src/components/paper-card.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }
