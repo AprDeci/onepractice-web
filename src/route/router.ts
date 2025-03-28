@@ -6,6 +6,12 @@ const routes = [
     },
     {
         path: '/',component: () => import("@/page/homePage.vue")
+    },
+    {
+        path: '/test',component: () => import("@/test/testPage.vue")
+    },
+    {
+        path: '/exam',component: () => import("@/page/examPage.vue")
     }
 ]
 

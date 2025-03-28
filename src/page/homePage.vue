@@ -2,6 +2,7 @@
 import floatingPaper from '../components/floating-paper.vue';
 import homeNav from '../components/home-nav.vue';
 import paperCard from '@/components/paper-card.vue';
+import pagiNation from '../components/pagiNation.vue';
 
 const testPapers = [
     { id: 1, title: "IELTS Academic Reading", level: "Advanced", questions: 40, time: 60, category: "Reading" },
@@ -17,6 +18,9 @@ const testPapers = [
     { id: 11, title: "Academic Vocabulary", level: "Advanced", questions: 40, time: 45, category: "Vocabulary" },
     { id: 12, title: "Phrasal Verbs Master", level: "Intermediate", questions: 30, time: 35, category: "Grammar" },
 ]
+const changePage = (page) => {
+    console.log(page)
+}
 </script>
 
 <template>
@@ -54,12 +58,7 @@ const testPapers = [
                 </div>
             </div>
             <div class="flex items-center justify-center mt-10 mb-10">
-                <div class="join">
-                    <button class="join-item btn">1</button>
-                    <button class="join-item btn btn-active">2</button>
-                    <button class="join-item btn">3</button>
-                    <button class="join-item btn">4</button>
-                </div>
+                <pagiNation :total="120" :page-size="12" @page-change="changePage"></pagiNation>
             </div>
             <footer className="bg-white border-t border-gray-100 py-8 mt-12">
                 <div className="container mx-auto px-4">

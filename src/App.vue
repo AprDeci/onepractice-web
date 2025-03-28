@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import loginpage from './page/loginPage.vue'
 </script>
 
 <template>

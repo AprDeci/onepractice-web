@@ -1,6 +1,18 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
+import { onMounted, ref } from 'vue';
+import { getUserInfo } from '../request/methods/user';
 const router = useRouter();
+const haslogin = localStorage.getItem('token') ? true : false;
+const userInfo = ref({
+    username: '',
+    userType: '',
+});
+onMounted(async () => {
+    const data = await getUserInfo()
+    userInfo.value.username = data.username;
+    userInfo.value.userType = data.userType;
+})
 </script>
 
 <template>
@@ -51,9 +63,12 @@ const router = useRouter();
                 </ul>
             </div>
         </div>
-        <div class="navbar-end gap-2 ">
+        <div class="navbar-end gap-2" v-if="!haslogin">
             <div class="btn" @click="router.push('/login')">Sign in</div>
             <div class="btn btn-primary" @click="router.push('/login')">Sign Up</div>
+        </div>
+        <div class="navbar-end gap-2" v-else>
+            <span class="name">{{ userInfo.username }}</span>
         </div>
     </div>
 </template>
