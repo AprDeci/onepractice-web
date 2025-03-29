@@ -22,6 +22,16 @@ export const register = (data) =>
 
         }
     )
+
+export const logout = () =>
+    httpclient.Get(
+        'user/logout',
+        {
+            meta:{
+                authRole: 'logout'
+            }
+        }
+    )
 export const getUserInfo = () =>
     httpclient.Get(
         'user/info'

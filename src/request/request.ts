@@ -2,12 +2,16 @@ import { createAlova } from 'alova';
 import adapterFetch from 'alova/fetch';
 import vueHook from 'alova/vue';
 import { createClientTokenAuthentication } from 'alova/client';
+import { fetchError,HttpRequestError,BusinessLogicError } from '../common/errors';
 
 const { onAuthRequired, onResponseRefreshToken } = createClientTokenAuthentication({    
     async login(response,method){
         const json = await response.clone().json()
         console.log(json)
         localStorage.setItem('token',json.data.token)
+    },
+    logout(response,method){
+        localStorage.removeItem('token')
     }
     // ...
   });
@@ -24,16 +28,16 @@ export const httpclient = createAlova({
     responded:onResponseRefreshToken({
         onSuccess: async(Response,method)=>{
             if(Response.status !== 200) {
-                throw new Error(Response.statusText)
+                throw new HttpRequestError(Response.statusText)
             }
             const json = await Response.json()
             if(json.code !== 200){
-                throw new Error(json.msg)
+                throw new BusinessLogicError(json.msg)
             }
             return json.data;
         },
         onError: (err,method) => {
-            alert(err.message);
+            throw new fetchError(err) 
         },
         onComplete: (method) => {
             
