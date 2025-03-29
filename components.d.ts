@@ -9,6 +9,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     A: typeof import('./src/components/a.vue')['default']
+    Alert: typeof import('./src/components/common/alert.vue')['default']
     AnswerBar: typeof import('./src/components/exam/answerBar.vue')['default']
     CommonPaper: typeof import('./src/components/exam/commonPaper.vue')['default']
     ExamNav: typeof import('./src/components/exam/examNav.vue')['default']
@@ -16,6 +17,9 @@ declare module 'vue' {
     HomeNav: typeof import('./src/components/home-nav.vue')['default']
     Homepage: typeof import('./src/page/homePage.vue')['default']
     LoginPage: typeof import('./src/page/loginPage.vue')['default']
+    Option: typeof import('./src/components/common/option.vue')['default']
+    Optiongroup: typeof import('./src/components/common/optiongroup.vue')['default']
+    OptionGroup: typeof import('./src/components/common/optionGroup.vue')['default']
     PagiNation: typeof import('./src/components/pagiNation.vue')['default']
     PaperCard: typeof import('./src/components/paper-card.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

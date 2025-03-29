@@ -1,66 +1,38 @@
 [
-    {
-        "label": "A",
-        "content": "Positive."
-    },
-    {
-        "label": "B",
-        "content": "Original."
-    },
-    {
-        "label": "C",
-        "content": "Important."
-    },
-    {
-        "label": "D",
-        "content": "Surprising."
-    },
-    {
-        "label": "A",
-        "content": "Dogs match their behavior with kids as much as with adults."
-    },
-    {
-        "label": "B",
-        "content": "Kids and adults alike find in dogs a source of attachment."
-    },
-    {
-        "label": "C",
-        "content": "Kids' attitude to dogs is influenced by adults."
-    },
-    {
-        "label": "D",
-        "content": "Dogs can help kids in many ways."
-    },
-    {
-        "label": "A",
-        "content": "Dogs pay much attention to the kids they live with."
-    },
-    {
-        "label": "B",
-        "content": "Dogs view both adults and kids as social companions."
-    },
-    {
-        "label": "C",
-        "content": "Kids differ from adults in their behavior towards dogs."
-    },
-    {
-        "label": "D",
-        "content": "Kids need to be aware of the risks in playing with dogs."
-    },
-    {
-        "label": "A",
-        "content": "Understanding dogs."
-    },
-    {
-        "label": "B",
-        "content": "Training dogs."
-    },
-    {
-        "label": "C",
-        "content": "Taking care of dogs."
-    },
-    {
-        "label": "D",
-        "content": "Associating with dogs."
-    }
+    [
+        {
+            "label": "A",
+            "content": "She is making a special effort to be recognized."
+        },
+        {
+            "label": "B",
+            "content": "She has been living in Fayetteville for 25 years."
+        },
+        {
+            "label": "C",
+            "content": "She has been driving a school bus ever since 2009."
+        },
+        {
+            "label": "D",
+            "content": "She is the longest-serving bus driver in Fayetteville."
+        }
+    ],
+    [
+        {
+            "label": "A",
+            "content": "The importance of their service to the city."
+        },
+        {
+            "label": "B",
+            "content": "The number of riders they serve in the city."
+        },
+        {
+            "label": "C",
+            "content": "The new proclamation issued early this week."
+        },
+        {
+            "label": "D",
+            "content": "The significance of the event to take place March 18."
+        }
+    ]
 ]

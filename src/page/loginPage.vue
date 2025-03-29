@@ -51,15 +51,19 @@ const sendregister = async () => {
         goodmessage.value = true
         message.value = "注册成功啦!五秒后自动切换登录页面"
         messageisout.value = true
+        setTimeout(() => {
+            messageisout.value = false
+            islogin.value = true;
+        }, 5000)
     } catch (error) {
         goodmessage.value = false
         message.value = error
         messageisout.value = true
+        setTimeout(() => {
+            messageisout.value = false
+        }, 5000)
     }
-    setTimeout(() => {
-        messageisout.value = false
-        islogin.value = true;
-    }, 5000)
+
 
 }
 const loginData = ref({

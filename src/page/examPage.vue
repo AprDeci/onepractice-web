@@ -2,6 +2,8 @@
 import { ref, onMounted } from 'vue'
 const openanswer = ref(false)
 import { Timer } from 'lucide-vue-next'
+import WritingCard from '../components/exam/writingCard.vue'
+import Optiongroup from '../components/common/optiongroup.vue'
 
 const time = ref(120 * 60)
 const startcooldown = () => {
@@ -40,7 +42,7 @@ const startcooldown = () => {
 onMounted(() => {
     startcooldown()
 })
-
+const showalert = ref(true)
 const sections = ["A", "B", "C", "D",]
 const selectedtab = ref(1)
 </script>
@@ -75,15 +77,16 @@ const selectedtab = ref(1)
         </div>
     </div>
     <div class="middle px-6">
-        <div class="my-8">
+        <div class="mt-8 mb-4">
             <div role="tablist" class="tabs tabs-box w-82 lg:w-105">
                 <a :class="{ 'tab-active': selectedtab === index }" role="tab" class="tab w-20 lg:w-25 h-12"
                     v-for="(section, index) in sections" :key="index" @click="selectedtab = index">Section{{ section
                     }}</a>
             </div>
         </div>
-        <div class="w-full border-solid border-black border mb-4">
-            <!-- Todo:题目展示 -->
+        <div class="w-full  mb-4">
+            <Optiongroup></Optiongroup>
+            <WritingCard></WritingCard>
         </div>
     </div>
     <footer>
