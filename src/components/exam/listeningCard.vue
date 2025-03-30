@@ -39,7 +39,6 @@ const getnext = () => {
                 <ListeningSingleCard v-for="(item, index) in exampleData" :key="index" :data="item"
                     v-show="activeId === index">
                 </ListeningSingleCard>
-
             </QuestionContainer>
         </div>
     </div>

@@ -7,7 +7,8 @@ import Optiongroup from '../components/common/optiongroup.vue'
 import ListeningCard from '../components/exam/listeningCard.vue'
 import ReadingclozeCard from '../components/exam/readingclozeCard.vue'
 import ReadingmtachCard from '../components/exam/readingmtachCard.vue'
-
+import ReadingreadCard from '../components/exam/readingreadCard.vue'
+import readingCard from '../components/exam/readingCard.vue'
 
 const time = ref(120 * 60)
 const startcooldown = () => {
@@ -89,7 +90,9 @@ const selectedtab = ref(1)
             </div>
         </div>
         <div class="w-full  mb-4">
-            <ReadingmtachCard></ReadingmtachCard>
+            <readingCard></readingCard>
+            <!-- <ReadingreadCard></ReadingreadCard> -->
+            <!-- <ReadingmtachCard></ReadingmtachCard> -->
             <!-- <ReadingclozeCard></ReadingclozeCard> -->
             <!-- <ListeningCard></ListeningCard> -->
             <!-- <WritingCard></WritingCard> -->

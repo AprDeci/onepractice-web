@@ -102,15 +102,16 @@ const saveanswer = (word) => {
 
             </div>
         </div>
+        <div ref="answerCard" class="answerCard card shadow-md grid grid-cols-2 gap-2 z-10 bg-amber-50"
+            :class="{ 'hidden': !isCardVisible, 'absolute': isCardVisible }"
+            :style="isCardVisible ? { top: `${clickPos.y + 20}px`, left: `${clickPos.x}px` } : {}">
+            <span class="px-3 py-1.5 bg-gray-100 rounded-md text-sm font-medium" @click="saveanswer(item)"
+                v-for="(item, index) in data.wordbank" :key="index">
+                {{ String.fromCharCode(65 + index) }}.{{ item }}
+            </span>
+        </div>
     </div>
-    <div ref="answerCard" class="answerCard card shadow-md grid grid-cols-2 gap-2 z-10 bg-amber-50"
-        :class="{ 'hidden': !isCardVisible, 'absolute': isCardVisible }"
-        :style="isCardVisible ? { top: `${clickPos.y + 20}px`, left: `${clickPos.x}px` } : {}">
-        <span class="px-3 py-1.5 bg-gray-100 rounded-md text-sm font-medium" @click="saveanswer(item)"
-            v-for="(item, index) in data.wordbank" :key="index">
-            {{ String.fromCharCode(65 + index) }}.{{ item }}
-        </span>
-    </div>
+
 
 
 </template>

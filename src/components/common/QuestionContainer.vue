@@ -17,9 +17,7 @@ const { isSwiping, direction } = useSwipe(container)
 // 如果
 </script>
 <template>
-    <div>
-        {{ direction ? direction : '-' }}
-    </div>
+
     <div class="relative w-full">
         <!-- Previous button -->
         <button
@@ -40,7 +38,7 @@ const { isSwiping, direction } = useSwipe(container)
         <!-- Next button -->
         <button
             class="cursor-pointer absolute -right-3 top-1/2 -translate-y-1/2 z-10 rounded-full opacity-80 hover:opacity-100 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-2 shadow-sm"
-            @click="$emit('next')" :disabled="!hasNext" :class="{ 'opacity-50 cursor-not-allowed': !hasNext }">
+            @click="$emit('next')" :disabled="!hasNext" :class="{ 'hidden opacity-50 cursor-not-allowed': !hasNext }">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-chevron-right">
