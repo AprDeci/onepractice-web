@@ -31,6 +31,7 @@ declare module 'vue' {
     ReadingclozeCard: typeof import('./src/components/exam/readingclozeCard.vue')['default']
     ReadingcLozeCard: typeof import('./src/components/exam/readingcLozeCard.vue')['default']
     ReadingclozeCardDemo: typeof import('./src/components/exam/readingclozeCard-demo.vue')['default']
+    ReadingmtachCard: typeof import('./src/components/exam/readingmtachCard.vue')['default']
     RedingcLozeCard: typeof import('./src/components/exam/redingcLozeCard.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

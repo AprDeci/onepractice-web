@@ -1,18 +1,21 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import data from '../../assets/example/cloze.json'
-import { onClickOutside, useElementVisibility } from '@vueuse/core'
+import { onClickOutside, useWindowSize } from '@vueuse/core'
 
 const selectedBlankNumber = ref<number | null>(null); // 记录当前点击的填空题编号
 const selectedWords = ref<Record<number, string>>({}); // 存储用户选择的答案
 const answerCard = ref(null)
-// const answerCardVisible = useElementVisibility(answerCard)
+const { width, height } = useWindowSize();
 const isCardVisible = ref(false);
 const clickPos = ref({ x: 0, y: 0 });
 onClickOutside(answerCard, (e) => {
     if (isCardVisible.value) {
         isCardVisible.value = false;
     }
+})
+const ismobile = computed(() => {
+    return width.value < height.value
 })
 const contentparsed = computed(() => {
     let content = data.content;
@@ -25,7 +28,6 @@ const contentparsed = computed(() => {
     return content;
 })
 const test = (e) => {
-    console.log(e.target.parentNode)
     if (e.target.nodeName == "SPAN" || e.target.parentNode.nodeName == "SPAN") {
         openAnswerwindow(e.pageX, e.pageY, e)
     }
@@ -34,16 +36,45 @@ const test = (e) => {
 const openAnswerwindow = (x: number, y: number, e) => {
     if (e.target instanceof HTMLElement && answerCard.value) {
         const blankNumber = parseInt(e.target.getAttribute("blank") || 0);
-        console.log(blankNumber)
         selectedBlankNumber.value = blankNumber;
-        clickPos.value = { x, y };
+        if (ismobile.value) {
+            // 根据设备width height 以及 点击的地方计算出一个合适的区域 不跳出屏幕外
+            // 弹窗尺寸（需根据实际UI设计调整）
+            const popupWidth = 300; // 弹窗宽度
+            const popupHeight = 200; // 弹窗高度
+            const margin = 20; // 最小边距
+
+            // 屏幕边界
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+
+            // 计算弹窗位置（确保不超出屏幕）
+            let popupX = x - popupWidth / 2;
+            let popupY = y;
+
+            // 水平边界检测
+            if (popupX < margin) {
+                popupX = margin;
+            } else if (popupX + popupWidth > screenWidth - margin) {
+                popupX = screenWidth - popupWidth - margin;
+            }
+
+            // 垂直边界检测（优先向下弹出，若空间不足则向上）
+            if (popupY + popupHeight > screenHeight - margin) {
+                popupY = y - popupHeight - 10; // 向上偏移
+                if (popupY < margin) popupY = margin; // 确保不超出顶部
+            }
+
+            clickPos.value = { x: popupX, y: popupY };
+        } else {
+            clickPos.value = { x, y };
+        }
         isCardVisible.value = true;
     }
 };
 
 const saveanswer = (word) => {
     if (selectedBlankNumber.value !== null) {
-        console.log(word);
         if (word) {
             selectedWords.value[selectedBlankNumber.value] = word; // 保存答案
             selectedBlankNumber.value = null; // 重置当前选中编号
@@ -72,10 +103,10 @@ const saveanswer = (word) => {
             </div>
         </div>
     </div>
-    <div ref="answerCard" class="answerCard card shadow-md grid grid-cols-2 gap-2 z-10"
+    <div ref="answerCard" class="answerCard card shadow-md grid grid-cols-2 gap-2 z-10 bg-amber-50"
         :class="{ 'hidden': !isCardVisible, 'absolute': isCardVisible }"
-        :style="isCardVisible ? { top: `${clickPos.x}px`, left: `${clickPos.y}px` } : {}">
-        <span class="px-3 py-1.5 bg-gray-100 rounded-full text-sm font-medium" @click="saveanswer(item)"
+        :style="isCardVisible ? { top: `${clickPos.y + 20}px`, left: `${clickPos.x}px` } : {}">
+        <span class="px-3 py-1.5 bg-gray-100 rounded-md text-sm font-medium" @click="saveanswer(item)"
             v-for="(item, index) in data.wordbank" :key="index">
             {{ String.fromCharCode(65 + index) }}.{{ item }}
         </span>
