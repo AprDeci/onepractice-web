@@ -11,6 +11,8 @@
   "dependencies": {
     "@formkit/vue": "^1.6.9",
     "@tailwindcss/vite": "^4.0.15",
+    "@vueuse/core": "^13.0.0",
+    "@vueuse/gesture": "^2.0.0",
     "alova": "^3.2.10",
     "daisyui": "^5.0.9",
     "lucide-vue-next": "^0.484.0",
