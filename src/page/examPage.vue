@@ -5,6 +5,7 @@ import { Timer } from 'lucide-vue-next'
 import WritingCard from '../components/exam/writingCard.vue'
 import Optiongroup from '../components/common/optiongroup.vue'
 import ListeningCard from '../components/exam/listeningCard.vue'
+import ReadingclozeCard from '../components/exam/readingclozeCard.vue'
 
 
 const time = ref(120 * 60)
@@ -87,6 +88,7 @@ const selectedtab = ref(1)
             </div>
         </div>
         <div class="w-full  mb-4">
+            <ReadingclozeCard></ReadingclozeCard>
             <ListeningCard></ListeningCard>
             <!-- <WritingCard></WritingCard> -->
         </div>
