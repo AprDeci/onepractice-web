@@ -53,61 +53,66 @@ const selectedtab = ref(1)
 </script>
 
 <template>
-    <div class="navbar bg-base-100 shadow-sm flex justify-between">
-        <div class="navbar-start hidden lg:flex">
-            <span class="text-xl mx-2">Exam Paper Name</span>
-        </div>
-        <div class="navbar-center">
-            <Timer />
-            <div>
-                <span class="countdown font-mono text-lg lg:text-2xl">
-                    <span id="cooldownh" style="--value:10;" aria-live="polite" aria-label="10">10</span>
-                    :
-                    <span id="cooldownm" style="--value:24;" aria-live="polite" aria-label="24">24</span>
-                    :
-                    <span id="cooldowns" style="--value:59;" aria-live="polite" aria-label="59">59</span>
-                </span>
-            </div>
-        </div>
-        <div class="navbar-end">
-            <a class="btn w-30 lg:w-34" @click="openanswer = !openanswer">View Answer</a>
-        </div>
-    </div>
-    <div :class="openanswer ? 'translate--x-0' : 'translate-x-full'"
-        class="transform duration-300 ease-in-out answer fixed -right-0 w-80 h-screen">
-        <div class="h-full px-4 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
-            <div class="answerbarhead">
-                <span class="text-2xl font-bold">Answer</span>
-            </div>
-        </div>
-    </div>
-    <div class="middle px-6">
-        <div class="mt-8 mb-4">
-            <div role="tablist" class="tabs tabs-box w-82 lg:w-105">
-                <a :class="{ 'tab-active': selectedtab === index }" role="tab" class="tab w-20 lg:w-25 h-12"
-                    v-for="(section, index) in sections" :key="index" @click="selectedtab = index">Section{{ section
-                    }}</a>
-            </div>
-        </div>
-        <div class="w-full  mb-4">
-            <readingCard></readingCard>
-            <!-- <ReadingreadCard></ReadingreadCard> -->
-            <!-- <ReadingmtachCard></ReadingmtachCard> -->
-            <!-- <ReadingclozeCard></ReadingclozeCard> -->
-            <!-- <ListeningCard></ListeningCard> -->
-            <!-- <WritingCard></WritingCard> -->
-        </div>
-    </div>
-    <footer>
-        <footer class="footer footer-horizontal bg-neutral-100 text-neutral-content items-center p-4 border">
-            <aside class="grid-flow-col items-center">
-                <div class="btn btn-sm lg:btn-md">Previous Section</div>
-                <div class="btn btn-sm lg:btn-md">Next Section</div>
-            </aside>
-            <nav class="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
-                <div class="btn btn-primary btn-sm lg:btn-md">submit</div>
-            </nav>
-        </footer>
-    </footer>
 
+    <div class="dark">
+        <div class=" navbar bg-base-100 shadow-sm flex justify-between">
+            <div class="navbar-start hidden lg:flex">
+                <span class="text-xl mx-2">Exam Paper Name</span>
+            </div>
+            <div class="navbar-center">
+                <Timer />
+                <div>
+                    <span class="countdown font-mono text-lg lg:text-2xl">
+                        <span id="cooldownh" style="--value:10;" aria-live="polite" aria-label="10">10</span>
+                        :
+                        <span id="cooldownm" style="--value:24;" aria-live="polite" aria-label="24">24</span>
+                        :
+                        <span id="cooldowns" style="--value:59;" aria-live="polite" aria-label="59">59</span>
+                    </span>
+                </div>
+
+            </div>
+            <div class="navbar-end">
+                <div class="btn w-26 btn-sm lg:w-34 btn-primary" @click="openanswer = !openanswer">View
+                    Answer</div>
+            </div>
+        </div>
+        <div :class="openanswer ? 'translate--x-0' : 'translate-x-full'"
+            class="transform duration-300 ease-in-out answer fixed -right-0 w-80 h-screen">
+            <div class="h-full px-4 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+                <div class="answerbarhead">
+                    <span class="text-2xl font-bold">Answer</span>
+                </div>
+            </div>
+        </div>
+        <div class="middle px-6">
+            <div class="mt-8 mb-4">
+                <div role="tablist" class="tabs tabs-box w-82 lg:w-105">
+                    <a :class="{ 'tab-active': selectedtab === index }" role="tab" class="tab w-20 lg:w-25 h-12"
+                        v-for="(section, index) in sections" :key="index" @click="selectedtab = index">Section{{
+                            section
+                        }}</a>
+                </div>
+            </div>
+            <div class="w-full  mb-4">
+                <readingCard></readingCard>
+                <!-- <ReadingreadCard></ReadingreadCard> -->
+                <!-- <ReadingmtachCard></ReadingmtachCard> -->
+                <!-- <ReadingclozeCard></ReadingclozeCard> -->
+                <!-- <ListeningCard></ListeningCard> -->
+                <!-- <WritingCard></WritingCard> -->
+            </div>
+        </div>
+        <footer>
+            <footer class="footer footer-horizontal bg-neutral-100 text-neutral-content items-center p-4 border">
+                <aside class="grid-flow-col items-center">
+                    <div class="btn btn-sm lg:btn-md">Previous Section</div>
+                    <div class="btn btn-sm lg:btn-md">Next Section</div>
+                </aside>
+                <nav class="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
+                    <div class="btn btn-primary btn-sm lg:btn-md">submit</div>
+                </nav>
+            </footer>
+        </footer>
+    </div>
 </template>

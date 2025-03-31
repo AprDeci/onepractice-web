@@ -2,16 +2,40 @@ import { createWebHashHistory,createRouter } from "vue-router";
 
 const routes = [
     {
-        path: '/login',component: () => import("@/page/loginPage.vue")
+        path: '/login',
+        name: 'login',
+        component: () => import("@/page/loginPage.vue")
     },
     {
-        path: '/',component: () => import("@/page/homePage.vue")
+        path: '/',
+        name: 'home',
+        component: () => import("@/page/homePage.vue")
     },
     {
-        path: '/test',component: () => import("@/test/testPage.vue")
+        path: '/exam',
+        children:[
+            {
+                path: 'introduce/:id',
+                props: true,
+                name: 'examintro',
+                component: () => import("@/page/examIntroducePage.vue")
+            },
+            {
+                path: 'page/:id',
+                props: true,
+                name: 'examPage',
+                component: () => import("@/page/examPage.vue")
+            }
+        ]
     },
     {
-        path: '/exam',component: () => import("@/page/examPage.vue")
+        path: '/404',
+        name: '404',
+        component: () => import("@/page/404.vue")
+    },
+    {
+        path: '/:pathMatch(.*)',
+        redirect: '/404'
     }
 ]
 

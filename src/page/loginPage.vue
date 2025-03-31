@@ -3,6 +3,7 @@ import { useRequest } from 'alova/client';
 import { ref } from 'vue';
 import { getEmailCaptcha } from '../request/methods/captcha';
 import { register, login } from '../request/methods/user';
+import { getallpaper } from '../request/methods/paper';
 import { motion, AnimatePresence } from "motion-v"
 
 const islogin = ref(false)
@@ -72,6 +73,7 @@ const loginData = ref({
 })
 const sendlogin = async () => {
     try {
+        await getallpaper();
         let data = await login(loginData.value.usernameOrEmail, loginData.value.password)
         goodmessage.value = true
         message.value = "登录成功啦!五秒后自动跳转首页"

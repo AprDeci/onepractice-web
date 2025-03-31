@@ -1,6 +1,13 @@
 @import "tailwindcss";
-@plugin "daisyui";
+@plugin "daisyui" {
+  themes: light --default, night --prefersdark;
+}
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+
+}
+@custom-variant dark (&:where(.dark, .dark *));
 :root{
   font-size: 16px;
-  
 }
