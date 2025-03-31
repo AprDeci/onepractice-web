@@ -27,7 +27,6 @@ const hasprev = computed(() => {
 </script>
 
 <template>
-    <div>{{ activetype }}</div>
     <QuestionContainer :has-next="hasnext" :has-prev="hasprev" @prev="getprev" @next="getnext">
         <ReadingcLozeCard v-show="activetype === 'cloze'"></ReadingcLozeCard>
         <ReadingmtachCard v-show="activetype === 'match'"></ReadingmtachCard>

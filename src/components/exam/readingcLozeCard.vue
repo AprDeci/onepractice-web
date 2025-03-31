@@ -1,117 +1,262 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
-import data from '../../assets/example/cloze.json'
+import { computed, ref, watch, onMounted } from 'vue'
 import { onClickOutside, useWindowSize } from '@vueuse/core'
+import { XIcon } from 'lucide-vue-next'
 
-const selectedBlankNumber = ref<number | null>(null); // 记录当前点击的填空题编号
-const selectedWords = ref<Record<number, string>>({}); // 存储用户选择的答案
+// Sample data - in a real app, this would be passed as a prop
+import data from '../../assets/example/cloze.json'
+
+const selectedBlankNumber = ref<number | null>(null); // Current blank number
+const selectedWords = ref<Record<number, string>>({}); // User's answers
 const answerCard = ref(null)
+const blankRefs = ref<Record<number, HTMLElement | null>>({})
 const { width, height } = useWindowSize();
 const isCardVisible = ref(false);
-const clickPos = ref({ x: 0, y: 0 });
-onClickOutside(answerCard, (e) => {
+const cardPosition = ref({ top: '0px', left: '0px' });
+
+// Track if we should position the card above or below the blank
+const positionAbove = ref(false);
+
+// Close the answer card when clicking outside
+onClickOutside(answerCard, () => {
     if (isCardVisible.value) {
         isCardVisible.value = false;
     }
 })
-const ismobile = computed(() => {
-    return width.value < height.value
+
+const isMobile = computed(() => {
+    return width.value < 768; // Using a standard breakpoint for mobile
 })
-const contentparsed = computed(() => {
+
+// Parse content to highlight blanks and show selected answers
+const contentParsed = computed(() => {
     let content = data.content;
     content = content.replace(/_(\d+)_/g, (match, number) => {
-        const word = selectedWords.value[parseInt(number)];
+        const blankNumber = parseInt(number);
+        const word = selectedWords.value[blankNumber];
+
         return word
-            ? `<span class="underline cursor-pointer bg-blue-50 relative" blank blank=${number}>${word}<span blank=${number} class="left-0 top-0 absolute h-full w-full"></span></span>`
-            : `<span class="underline cursor-pointer" blank=${number}>${number}</span>`;
+            ? `<span class="inline-block relative border-b-2 border-blue-400 px-1 mx-1 bg-blue-50 dark:bg-blue-300 dark:text-base-content cursor-pointer" data-blank="${blankNumber}">
+          <span class="blank-number absolute -top-5 left-1/2 transform -translate-x-1/2 text-xs font-bold text-blue-600 bg-blue-100 px-1.5 py-0.5 rounded">${blankNumber}</span>
+          ${word}
+          <span class="absolute inset-0" data-blank="${blankNumber}"></span>
+        </span>`
+            : `<span class="inline-block relative border-b-2 border-gray-400 px-1 mx-1 min-w-[80px] cursor-pointer" data-blank="${blankNumber}">
+          <span class="blank-number absolute -top-0 left-1/2 transform -translate-x-1/2 text-xs font-bold text-blue-600 bg-blue-100 px-1.5 py-0.5 rounded">${blankNumber}</span>
+          ________
+          <span class="absolute inset-0" data-blank="${blankNumber}"></span>
+        </span>`;
     });
     return content;
 })
-const test = (e) => {
-    if (e.target.nodeName == "SPAN" || e.target.parentNode.nodeName == "SPAN") {
-        openAnswerwindow(e.pageX, e.pageY, e)
+
+// Handle click on the content area
+const handleContentClick = (e: MouseEvent) => {
+    // Find if we clicked on a blank or its child
+    let target = e.target as HTMLElement;
+    let blankNumber: number | null = null;
+
+    // Traverse up to find the blank element
+    while (target && !blankNumber) {
+        const attr = target.getAttribute('data-blank');
+        if (attr) {
+            blankNumber = parseInt(attr);
+            break;
+        }
+        target = target.parentElement as HTMLElement;
+    }
+
+    if (blankNumber) {
+        openAnswerWindow(e, blankNumber);
     }
 }
 
-const openAnswerwindow = (x: number, y: number, e) => {
-    if (e.target instanceof HTMLElement && answerCard.value) {
-        const blankNumber = parseInt(e.target.getAttribute("blank") || 0);
-        selectedBlankNumber.value = blankNumber;
-        if (ismobile.value) {
-            // 根据设备width height 以及 点击的地方计算出一个合适的区域 不跳出屏幕外
-            // 弹窗尺寸（需根据实际UI设计调整）
-            const popupWidth = 300; // 弹窗宽度
-            const popupHeight = 200; // 弹窗高度
-            const margin = 20; // 最小边距
+// Calculate and position the answer card
+const openAnswerWindow = (e: MouseEvent, blankNumber: number) => {
+    selectedBlankNumber.value = blankNumber;
 
-            // 屏幕边界
-            const screenWidth = window.innerWidth;
-            const screenHeight = window.innerHeight;
+    // Get the clicked element's position
+    const blankElement = document.querySelector(`[data-blank="${blankNumber}"]`) as HTMLElement;
+    if (!blankElement) return;
 
-            // 计算弹窗位置（确保不超出屏幕）
-            let popupX = x - popupWidth / 2;
-            let popupY = y;
+    const blankRect = blankElement.getBoundingClientRect();
+    const cardWidth = 320; // Estimated card width
+    const cardHeight = 200; // Estimated card height
 
-            // 水平边界检测
-            if (popupX < margin) {
-                popupX = margin;
-            } else if (popupX + popupWidth > screenWidth - margin) {
-                popupX = screenWidth - popupWidth - margin;
-            }
+    // Calculate available space
+    const spaceBelow = window.innerHeight - blankRect.bottom;
+    const spaceAbove = blankRect.top;
 
-            // 垂直边界检测（优先向下弹出，若空间不足则向上）
-            if (popupY + popupHeight > screenHeight - margin) {
-                popupY = y - popupHeight - 10; // 向上偏移
-                if (popupY < margin) popupY = margin; // 确保不超出顶部
-            }
+    // Determine if card should appear above or below
+    positionAbove.value = spaceBelow < cardHeight && spaceAbove > cardHeight;
 
-            clickPos.value = { x: popupX, y: popupY };
-        } else {
-            clickPos.value = { x, y };
-        }
-        isCardVisible.value = true;
+    // Calculate horizontal position (centered on blank when possible)
+    let left = blankRect.left + (blankRect.width / 2) - (cardWidth / 2);
+
+    // Ensure card doesn't go off-screen horizontally
+    const minLeft = 16; // Minimum margin from left edge
+    const maxLeft = window.innerWidth - cardWidth - 16; // Maximum left position
+    left = Math.max(minLeft, Math.min(left, maxLeft));
+
+    // Calculate vertical position
+    let top;
+    if (positionAbove.value) {
+        top = blankRect.top - cardHeight - 8; // Position above with 8px gap
+    } else {
+        top = blankRect.bottom + 8; // Position below with 8px gap
     }
-};
 
-const saveanswer = (word) => {
+    // Set position
+    cardPosition.value = {
+        top: `${top}px`,
+        left: `${left}px`
+    };
+
+    // Show the card
+    isCardVisible.value = true;
+}
+
+// Save the selected answer
+const saveAnswer = (word: string) => {
     if (selectedBlankNumber.value !== null) {
-        if (word) {
-            selectedWords.value[selectedBlankNumber.value] = word; // 保存答案
-            selectedBlankNumber.value = null; // 重置当前选中编号
-            if (answerCard.value) {
-                isCardVisible.value = false;
-            }
-        }
+        selectedWords.value[selectedBlankNumber.value] = word;
+        isCardVisible.value = false;
     }
-};
+}
 
+// Close the answer card
+const closeAnswerCard = () => {
+    isCardVisible.value = false;
+}
+
+// Check if a word is already used in another blank
+const isWordUsed = (word: string): boolean => {
+    return Object.values(selectedWords.value).includes(word);
+}
+
+// Get the current word for the selected blank
+const getCurrentWord = computed(() => {
+    if (selectedBlankNumber.value === null) return null;
+    return selectedWords.value[selectedBlankNumber.value];
+})
+
+// After component mounts, collect references to all blanks
+onMounted(() => {
+    // Find all blank elements and store references
+    const blankElements = document.querySelectorAll('[data-blank]');
+    blankElements.forEach((el) => {
+        const blankNumber = parseInt(el.getAttribute('data-blank') || '0');
+        if (blankNumber) {
+            blankRefs.value[blankNumber] = el as HTMLElement;
+        }
+    });
+})
 </script>
 
 <template>
-    <div class="card p-4 shadow-md max-w-4xl mx-auto">
-        <div class="title">
-            <div class="text-2xl font-bold text-gray-800 mb-4">Fill in the blanks</div>
-            <div class="mb-6 p-4 bg-blue-50 rounded-lg">
-                <p class="text-sm text-blue-700 font-medium">Choose the correct word from the word bank to complete each
-                    blank.</p>
-            </div>
-            <div class="content">
+    <div class="max-w-4xl mx-auto p-6 bg-base rounded-xl shadow-lg">
+        <h2 class="text-2xl font-bold bg-text-content mb-4">Fill in the blanks</h2>
+        <div class="mb-6 p-4 bg-blue-50 rounded-lg">
+            <p class="text-sm text-blue-700 font-medium">Choose the correct word from the word bank to complete each
+                blank.</p>
+        </div>
 
-                <div class="leading-loose text-lg tracking-wide hyphens-auto text-gray-800" @click="test"
-                    v-html="contentparsed"></div>
+        <!-- Reading passage with blanks -->
+        <div class="prose prose-lg max-w-none mb-8 relative">
+            <div class="text-base-content leading-relaxed text-gray-800 dark:text-base-content"
+                @click="handleContentClick" v-html="contentParsed"></div>
+        </div>
 
+        <!-- Word bank display -->
+        <div class="mt-8">
+            <h3 class="text-lg font-semibold text-gray-700 dark:text-base-content mb-3">Word Bank:</h3>
+            <div class="flex flex-wrap gap-2">
+                <span v-for="(word, index) in data.wordbank" :key="word"
+                    class="px-3 py-1.5 rounded-full text-sm font-medium " :class="{
+                        'bg-gray-100': !isWordUsed(word),
+                        'bg-gray-300 line-through': isWordUsed(word) && word !== getCurrentWord
+                    }">
+                    {{ word }}
+                </span>
             </div>
         </div>
-        <div ref="answerCard" class="answerCard card shadow-md grid grid-cols-2 gap-2 z-10 bg-amber-50"
-            :class="{ 'hidden': !isCardVisible, 'absolute': isCardVisible }"
-            :style="isCardVisible ? { top: `${clickPos.y + 20}px`, left: `${clickPos.x}px` } : {}">
-            <span class="px-3 py-1.5 bg-gray-100 rounded-md text-sm font-medium" @click="saveanswer(item)"
-                v-for="(item, index) in data.wordbank" :key="index">
-                {{ String.fromCharCode(65 + index) }}.{{ item }}
-            </span>
+
+        <!-- Answer selection card -->
+        <div v-if="isCardVisible" ref="answerCard"
+            class="fixed z-50 bg-white rounded-lg shadow-xl border border-gray-200 w-80"
+            :class="{ 'answer-card-above': positionAbove }" :style="{ top: cardPosition.top, left: cardPosition.left }">
+            <!-- Card header -->
+            <div class="flex justify-between items-center p-3 border-b bg-gray-50 rounded-t-lg">
+                <h4 class="font-medium text-gray-700">
+                    Select word for blank {{ selectedBlankNumber }}
+                </h4>
+                <button @click="closeAnswerCard" class="text-gray-500 hover:text-gray-700">
+                    <XIcon class="h-4 w-4" />
+                </button>
+            </div>
+
+            <!-- Card content -->
+            <div class="p-3">
+                <div class="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto">
+                    <button v-for="(word, index) in data.wordbank" :key="word" @click="saveAnswer(word)"
+                        class="px-3 py-2 text-left text-sm rounded transition-colors flex items-center" :class="{
+                            'bg-blue-100 font-medium': word === getCurrentWord,
+                            'hover:bg-blue-50': !isWordUsed(word) || word === getCurrentWord,
+                            'text-gray-400': isWordUsed(word) && word !== getCurrentWord,
+                            'cursor-not-allowed': isWordUsed(word) && word !== getCurrentWord
+                        }" :disabled="isWordUsed(word) && word !== getCurrentWord">
+                        <span
+                            class="inline-block w-5 h-5 rounded-full bg-gray-200 text-xs flex items-center justify-center mr-2">
+                            {{ String.fromCharCode(65 + index) }}
+                        </span>
+                        {{ word }}
+                    </button>
+                </div>
+
+                <div v-if="getCurrentWord" class="mt-3 pt-3 border-t">
+                    <button @click="saveAnswer('')"
+                        class="w-full px-3 py-2 text-left text-sm text-red-500 rounded hover:bg-red-50 transition-colors">
+                        Clear selection
+                    </button>
+                </div>
+            </div>
+
         </div>
     </div>
-
-
-
 </template>
+
+<style scoped>
+/* Custom styling for the component */
+:deep(.prose) {
+    color: #374151;
+    line-height: 1.8;
+}
+
+/* Add a subtle animation for the answer card */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+[ref="answerCard"] {
+    animation: fadeIn 0.2s ease-out;
+}
+
+/* Position the arrow for the card */
+.answer-card-above .absolute.w-4.h-4 {
+    bottom: auto;
+    top: 100%;
+    margin-top: -2px;
+    border-bottom: 1px solid #e5e7eb;
+    border-right: 1px solid #e5e7eb;
+    border-top: none;
+    border-left: none;
+}
+</style>

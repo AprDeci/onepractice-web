@@ -1,15 +1,19 @@
 <script setup lang="ts">
 import { ChartNoAxesColumnIncreasing, Clock4, FileText } from 'lucide-vue-next';
 import { watch } from 'vue';
+import { useRouter } from 'vue-router'
 interface Paper {
-    id: number
-    title: string
-    level: string
-    questions: number
-    time: number
-    category: string
-}
+    paperId: number
+    paperName: string
+    totalTime: number
+    type: string,
+    examYear: number,
+    examMonth: number,
+    level: string,
+    questioncount: number,
 
+}
+const router = useRouter()
 const { paper } = defineProps<{
     paper?: Paper
 }>()
@@ -29,10 +33,9 @@ const getLevelColor = (level: null | string) => {
         case "Advanced":
             return "bg-red-100 text-red-800"
         default:
-            return "bg-gray-100 text-gray-800"
+            return "bg-orange-100 text-orange-800"
     }
 }
-
 // Function to determine the background color based on category
 const getCategoryColor = (category: string) => {
     switch (category) {
@@ -52,29 +55,39 @@ const getCategoryColor = (category: string) => {
             return 'bg-gray-50 text-gray-700'
     }
 }
-const category = "Reading"
-const level = "Advanced"
+
+const getTypeColor = (type: string) => {
+    switch (type) {
+        case 'CET-4':
+            return 'bg-blue-50 text-blue-700'
+        case 'CET-6':
+            return 'bg-purple-50 text-purple-700'
+    }
+}
 </script>
 
 
 <template>
     <div>
-        <div
-            class="card card-border bg-base-86 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 ">
+        <div class="card  bg-base-90 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 "
+            @click="router.push(`/exam/introduce/${paper?.paperId}`)">
             <div class="card-title">
-                <div class="h-48 w-full rounded-t-md flex flex-col justify-center items-center relative">
-                    <div class="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-200 opacity-50 -z-10"></div>
-                    <div class="absolute top-3 right-3 w-12 h-12 border-t border-r border-gray-300"></div>
+                <div class="h-48 w-full rounded-box flex flex-col justify-center items-center relative px-5">
+                    <div
+                        class="absolute rounded-t-sm inset-0 bg-gradient-to-br from-gray-50 to-gray-200 opacity-50 -z-10">
+                    </div>
+                    <div class="absolute top-3 right-3 w-12 h-12 border-r border-t border-gray-300"></div>
                     <div class="absolute bottom-3 left-3 w-12 h-12 border-b border-l border-gray-300"></div>
                     <span
-                        :class="`inline-block px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(paper?.category)} mb-2`">
-                        {{ paper?.category }}
+                        :class="`inline-block px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(paper?.type)} mb-2`">
+                        {{ paper?.type }}
                     </span>
-                    <h3 class="font-bold text-lg text-gray-900 mb-1">CET-4 2025年 六月</h3>
+                    <h3 class="font-bold text-lg text-gray-900 mb-1">{{ paper?.examYear }}年{{ paper?.examMonth }}月 {{
+                        paper?.paperName }}</h3>
                     <div>
                         <span
                             :class="`inline-block px-2 py-1 rounded-full text-xs font-medium ${getLevelColor(paper?.level)}`">
-                            {{ paper?.level }}
+                            {{ paper?.level ? paper?.level : "投票人数过少" }}
                         </span>
                     </div>
                 </div>
@@ -86,7 +99,7 @@ const level = "Advanced"
                         <span>40 questions</span>
                     </div>
                     <div class="infodiv">
-                        <Clock4 :stroke-width="1.25" size="16" /><span>60 min</span>
+                        <Clock4 :stroke-width="1.25" size="16" /><span>{{ paper?.totalTime }} min</span>
                     </div>
                 </div>
                 <div class="divider mb-0.5 mt-0.5"></div>
