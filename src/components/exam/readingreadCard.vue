@@ -2,10 +2,15 @@
 import { ref, computed, onMounted } from 'vue'
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-vue-next'
 import type { QuestionsDO } from '../../interface/Question'
+import { useElementSize } from '@vueuse/core';
 
 const { question } = defineProps<{
     question: QuestionsDO
 }>()
+
+const leftpart = ref()
+const { width, height } = useElementSize(leftpart)
+
 
 interface Option {
     label: string
@@ -209,6 +214,7 @@ onMounted(() => {
 
 <template>
     <div class="max-w-6xl mx-auto p-6 bg-white rounded-xl shadow-lg">
+        {{ height }}
         <h2 class="text-2xl font-bold text-gray-800 mb-4">{{ question.partName }}: {{ question.sectionName }}
         </h2>
         <div class="mb-6 p-4 bg-blue-50 rounded-lg">
@@ -219,7 +225,7 @@ onMounted(() => {
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
             <!-- Reading passage section (7 columns on large screens) -->
             <div class="lg:col-span-7 order-1">
-                <div class="sticky top-4">
+                <div class="" ref="leftpart">
                     <div class="bg-gray-50 p-6 rounded-lg mb-4">
                         <div class="prose prose-sm max-w-none">
                             <div v-for="(paragraph, index) in formattedPassage" :key="`p-${index}`" class="mb-4">
@@ -247,7 +253,7 @@ onMounted(() => {
             </div>
 
             <!-- Questions section (5 columns on large screens) -->
-            <div class="lg:col-span-5 order-2">
+            <div class="lg:col-span-5 order-2 overflow-y-scroll" :style="{ height: `${height}px` }">
                 <div class="space-y-8">
                     <div v-for="(question, index) in questions" :key="`q-${index}`" :id="`question-${index}`"
                         class="bg-white border rounded-lg shadow-sm p-6"

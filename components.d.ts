@@ -10,6 +10,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     Alert: typeof import('./src/components/common/alert.vue')['default']
     AudioPlayer: typeof import('./src/components/common/audioPlayer.vue')['default']
+    copy: typeof import('./src/components/exam/writingCard copy.vue')['default']
     FloatingPaper: typeof import('./src/components/floating-paper.vue')['default']
     HomeNav: typeof import('./src/components/home-nav.vue')['default']
     ListeningCard: typeof import('./src/components/exam/listeningCard.vue')['default']
@@ -25,6 +26,8 @@ declare module 'vue' {
     ReadingreadCard: typeof import('./src/components/exam/readingreadCard.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Translation: typeof import('./src/components/exam/Translation.vue')['default']
+    TranslationCard: typeof import('./src/components/exam/TranslationCard.vue')['default']
     WritingCard: typeof import('./src/components/exam/writingCard.vue')['default']
   }
 }

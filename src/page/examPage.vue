@@ -4,6 +4,7 @@ import { Timer } from 'lucide-vue-next'
 import WritingCard from '../components/exam/writingCard.vue'
 import ListeningCard from '../components/exam/listeningCard.vue'
 import readingCard from '../components/exam/readingCard.vue'
+import TranslationCard from '../components/exam/TranslationCard.vue'
 import { getAllQuestionsBypaperIdSplitByPart } from '../request/methods/question'
 import { useRequest } from 'alova/client'
 
@@ -59,7 +60,8 @@ const cards = {
     'listening': ListeningCard,
     'reading': readingCard,
     'cloze': readingCard,
-    'translation': WritingCard,
+    'translation': TranslationCard
+
 }
 
 const changeTab = (card, index) => {
