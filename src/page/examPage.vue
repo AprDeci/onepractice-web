@@ -1,15 +1,18 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-const openanswer = ref(false)
 import { Timer } from 'lucide-vue-next'
 import WritingCard from '../components/exam/writingCard.vue'
-import Optiongroup from '../components/common/optiongroup.vue'
 import ListeningCard from '../components/exam/listeningCard.vue'
-import ReadingclozeCard from '../components/exam/readingclozeCard.vue'
-import ReadingmtachCard from '../components/exam/readingmtachCard.vue'
-import ReadingreadCard from '../components/exam/readingreadCard.vue'
 import readingCard from '../components/exam/readingCard.vue'
+import { getAllQuestionsBypaperIdSplitByPart } from '../request/methods/question'
+import { useRequest } from 'alova/client'
 
+const openanswer = ref(false)
+const { id } = defineProps<{
+    id: string
+}>()
+
+// 计时函数 - 待修改
 const time = ref(120 * 60)
 const startcooldown = () => {
     const cooldownh = document.getElementById('cooldownh')
@@ -44,12 +47,26 @@ const startcooldown = () => {
         }
     }, 1000)
 }
-onMounted(() => {
+const selectedtab = ref('writing')
+const selectedindex = ref(0)
+const { loading, data, send } = useRequest(getAllQuestionsBypaperIdSplitByPart(id))
+onMounted(async () => {
     startcooldown()
 })
-const showalert = ref(true)
-const sections = ["A", "B", "C", "D",]
-const selectedtab = ref(1)
+
+const cards = {
+    'writing': WritingCard,
+    'listening': ListeningCard,
+    'reading': readingCard,
+    'cloze': readingCard,
+    'translation': WritingCard,
+}
+
+const changeTab = (card, index) => {
+    selectedtab.value = card;
+    selectedindex.value = index;
+}
+
 </script>
 
 <template>
@@ -63,9 +80,9 @@ const selectedtab = ref(1)
                 <Timer />
                 <div>
                     <span class="countdown font-mono text-lg lg:text-2xl">
-                        <span id="cooldownh" style="--value:10;" aria-live="polite" aria-label="10">10</span>
+                        <span id="cooldownh" style="--value:2;" aria-live="polite" aria-label="2">2</span>
                         :
-                        <span id="cooldownm" style="--value:24;" aria-live="polite" aria-label="24">24</span>
+                        <span id="cooldownm" style="--value:0;" aria-live="polite" aria-label="0">0</span>
                         :
                         <span id="cooldowns" style="--value:59;" aria-live="polite" aria-label="59">59</span>
                     </span>
@@ -88,23 +105,21 @@ const selectedtab = ref(1)
         <div class="middle px-6">
             <div class="mt-8 mb-4">
                 <div role="tablist" class="tabs tabs-box w-82 lg:w-105">
-                    <a :class="{ 'tab-active': selectedtab === index }" role="tab" class="tab w-20 lg:w-25 h-12"
-                        v-for="(section, index) in sections" :key="index" @click="selectedtab = index">Section{{
-                            section
-                        }}</a>
+                    <a :class="{ 'tab-active': selectedtab === Part.questions[0].questionType }" role="tab"
+                        class="tab w-20 lg:w-25 h-12" v-for="(Part, index) in data.questionParts" :key="index"
+                        @click="changeTab(Part.questions[0].questionType, index)">{{
+                            Part.questions[0].partName }}</a>
                 </div>
             </div>
             <div class="w-full  mb-4">
-                <readingCard></readingCard>
-                <!-- <ReadingreadCard></ReadingreadCard> -->
-                <!-- <ReadingmtachCard></ReadingmtachCard> -->
-                <!-- <ReadingclozeCard></ReadingclozeCard> -->
-                <!-- <ListeningCard></ListeningCard> -->
-                <!-- <WritingCard></WritingCard> -->
+                <KeepAlive>
+                    <component :is="cards[selectedtab]" :data="data.questionParts[selectedindex]"></component>
+                </KeepAlive>
             </div>
         </div>
         <footer>
-            <footer class="footer footer-horizontal bg-neutral-100 text-neutral-content items-center p-4 border">
+            <footer
+                class="footer footer-horizontal bg-base-200 text-neutral-content items-center p-4 border dark:border-base-100">
                 <aside class="grid-flow-col items-center">
                     <div class="btn btn-sm lg:btn-md">Previous Section</div>
                     <div class="btn btn-sm lg:btn-md">Next Section</div>

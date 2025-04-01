@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { Info, CircleCheck } from 'lucide-vue-next';
+import type { QuestionPart } from '../../interface/Question';
+const { data } = defineProps<{ data: QuestionPart }>()
 const textinput = ref("")
 const wordcount = ref(0)
 watch(textinput, (text) => {
@@ -22,16 +24,9 @@ watch(textinput, (text) => {
 <template>
     <div class="card shadow-md px-4 py-4">
         <CardContent class="space-y-4">
-            <div class="bg-neutral-100 px-4 py-6 rounded-md mb-2">
+            <div class="bg-base-300 px-4 py-6 rounded-md mb-2">
                 <h3 class="font-medium mb-2">Writing Prompt:</h3>
-                <p>Writing Prompt:
-                    Suppose the business school of your university is conducting a survey to collect students' opinions
-                    on the
-                    express delivery service industry in China. You are to write a response about its recent development
-                    and
-                    its impact on people's lives. You will have 30 minutes to write the essay. You should write at least
-                    120
-                    words but no more than 180 words</p>
+                <p class="hyphens-auto text-base-content">{{ data.questions[0].content }}</p>
             </div>
         </CardContent>
         <textarea class="min-h-[300px] font-sans text-base leading-relaxed rounded-xl mb-4 p-3" v-model="textinput">

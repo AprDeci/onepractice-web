@@ -2,7 +2,8 @@
 import { computed } from 'vue';
 import { splitAnswer } from '@/common/utils';
 import OptionGroup from '../common/optionGroup.vue';
-const { data } = defineProps<{ data: any }>();
+import type { QuestionsDO } from '../../interface/Question';
+const { data } = defineProps<{ data: QuestionsDO }>();
 
 const optiongroups = computed(() => {
     return splitAnswer(data.options)

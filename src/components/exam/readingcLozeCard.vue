@@ -2,10 +2,11 @@
 import { computed, ref, watch, onMounted } from 'vue'
 import { onClickOutside, useWindowSize } from '@vueuse/core'
 import { XIcon } from 'lucide-vue-next'
+import type { QuestionsDO } from '../../interface/Question'
 
-// Sample data - in a real app, this would be passed as a prop
-import data from '../../assets/example/cloze.json'
-
+const { question } = defineProps<{
+    question: QuestionsDO
+}>()
 const selectedBlankNumber = ref<number | null>(null); // Current blank number
 const selectedWords = ref<Record<number, string>>({}); // User's answers
 const answerCard = ref(null)
@@ -30,7 +31,7 @@ const isMobile = computed(() => {
 
 // Parse content to highlight blanks and show selected answers
 const contentParsed = computed(() => {
-    let content = data.content;
+    let content = question.content;
     content = content.replace(/_(\d+)_/g, (match, number) => {
         const blankNumber = parseInt(number);
         const word = selectedWords.value[blankNumber];
@@ -171,7 +172,7 @@ onMounted(() => {
         <div class="mt-8">
             <h3 class="text-lg font-semibold text-gray-700 dark:text-base-content mb-3">Word Bank:</h3>
             <div class="flex flex-wrap gap-2">
-                <span v-for="(word, index) in data.wordbank" :key="word"
+                <span v-for="(word, index) in question.wordBank" :key="word"
                     class="px-3 py-1.5 rounded-full text-sm font-medium " :class="{
                         'bg-gray-100': !isWordUsed(word),
                         'bg-gray-300 line-through': isWordUsed(word) && word !== getCurrentWord
@@ -198,7 +199,7 @@ onMounted(() => {
             <!-- Card content -->
             <div class="p-3">
                 <div class="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto">
-                    <button v-for="(word, index) in data.wordbank" :key="word" @click="saveAnswer(word)"
+                    <button v-for="(word, index) in question.wordBank" :key="word" @click="saveAnswer(word)"
                         class="px-3 py-2 text-left text-sm rounded transition-colors flex items-center" :class="{
                             'bg-blue-100 font-medium': word === getCurrentWord,
                             'hover:bg-blue-50': !isWordUsed(word) || word === getCurrentWord,

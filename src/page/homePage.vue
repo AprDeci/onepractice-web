@@ -34,7 +34,6 @@ onMounted(async () => {
 
 <template>
     <main>
-
         <floatingPaper class="-z-1"></floatingPaper>
         <div class="">
             <homeNav :types="types"></homeNav>

@@ -1,6 +1,3 @@
-import {defineStore } from 'pinia'
-import { ref } from 'vue'
+import { defineStore } from "pinia";
 
-export const paperStore = defineStore('theme', {
-    const theme = ref('light'),
-})
+export const paperStore = defineStore("theme", {});

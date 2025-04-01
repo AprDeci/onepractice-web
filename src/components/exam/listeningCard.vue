@@ -4,6 +4,8 @@ import QuestionContainer from '../common/QuestionContainer.vue';
 import exampleData from '../../assets/example/listeningquestion.json'
 import ListeningSingleCard from './listeningSingleCard.vue';
 import { computed, ref } from 'vue';
+import type { QuestionPart } from '../../interface/Question';
+const { data } = defineProps<{ data: QuestionPart }>()
 const hasPrevSection = computed(() => {
     return activeId.value !== 0
 })
@@ -36,7 +38,7 @@ const getnext = () => {
         </div>
         <div class="options">
             <QuestionContainer :hasNext="hasNextSection" :hasPrev="hasPrevSection" @prev="getprev" @next="getnext">
-                <ListeningSingleCard v-for="(item, index) in exampleData" :key="index" :data="item"
+                <ListeningSingleCard v-for="(item, index) in data.questions" :key="index" :data="item"
                     v-show="activeId === index">
                 </ListeningSingleCard>
             </QuestionContainer>

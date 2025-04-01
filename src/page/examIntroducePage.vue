@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import {
+    House,
     Clock as ClockIcon,
     PlayCircle as PlayCircleIcon,
     Shuffle as ShuffleIcon,
@@ -129,9 +130,13 @@ onMounted(async () => {
                         </div>
                     </div>
                 </div>
-                <div class="p-6 border-t">
+                <div class="p-6 border-t flex-col flex gap-4">
                     <div class="btn btn-primary w-full" @click="handleStartExam">
                         Start Exam
+                        <ChevronRightIcon class="ml-2 h-4 w-4" />
+                    </div>
+                    <div class="btn btn-secondary w-full" @click="router.push('/')">
+                        Return home
                         <ChevronRightIcon class="ml-2 h-4 w-4" />
                     </div>
                 </div>
