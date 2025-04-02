@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { Timer } from 'lucide-vue-next'
 import WritingCard from '../components/exam/writingCard.vue'
 import ListeningCard from '../components/exam/listeningCard.vue'
 import readingCard from '../components/exam/readingCard.vue'
 import TranslationCard from '../components/exam/TranslationCard.vue'
-import { getAllQuestionsBypaperIdSplitByPart } from '../request/methods/question'
+import { getAllQuestionsBypaperIdSplitByPart, getAnswersByPaperId } from '../request/methods/question'
 import { useRequest } from 'alova/client'
-
+import { usepaperStore } from '../store/paperStore'
+const paperStore = usepaperStore()
 const openanswer = ref(false)
 const { id } = defineProps<{
     id: string
@@ -51,6 +52,10 @@ const startcooldown = () => {
 const selectedtab = ref('writing')
 const selectedindex = ref(0)
 const { loading, data, send } = useRequest(getAllQuestionsBypaperIdSplitByPart(id))
+const { loading: answerload, data: answerdata } = useRequest(getAnswersByPaperId(id))
+watch(answerdata, () => {
+    paperStore.currentPaperAnswer = answerdata.value
+})
 onMounted(async () => {
     startcooldown()
 })

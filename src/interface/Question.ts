@@ -36,3 +36,13 @@ export interface matchingData {
   paragraphs: Record<string, string>;
   items: readitem[];
 }
+
+export interface answer {
+  index: number;
+  answer: string;
+}
+
+export interface AnswerDTO {
+  paperId: number;
+  answers: answer[];
+}

@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 
 export const usepaperStore = defineStore("paper", () => {
-  const answers = ref({});
+  const currentPaperAnswer = ref({});
 
-  return { answers };
+  return { currentPaperAnswer };
 });
