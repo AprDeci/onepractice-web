@@ -22,17 +22,29 @@ watch(textinput, (text) => {
 </script>
 
 <template>
-    <div class="card shadow-md px-4 py-4">
+    <div class="max-w-4xl mx-auto card shadow-md px-4 py-4">
+        <div>
+            <h2 class="text-2xl font-bold text-gray-800 mb-2  dark:text-base-content">Writing</h2>
+            <div class="mb-6 p-4 bg-blue-50 rounded-lg">
+                <p class="text-sm text-blue-700 font-medium">
+                    Translate the following text into English. Your translation should be accurate, fluent and
+                    idiomatic.
+                </p>
+            </div>
+        </div>
         <CardContent class="space-y-4">
-            <div class="bg-base-300 px-4 py-6 rounded-md mb-2">
-                <h3 class="font-medium mb-2">Writing Prompt:</h3>
+            <h2 class="text-xl font-bold text-gray-800 mb-2  dark:text-base-content">Writing Prompt</h2>
+            <div class="bg-base-200 px-4 py-6 rounded-md mb-2">
                 <p class="hyphens-auto text-base-content">{{ data.questions[0].content }}</p>
             </div>
         </CardContent>
-        <textarea class="min-h-[300px] font-sans text-base leading-relaxed rounded-xl mb-4 p-3" v-model="textinput">
+        <h2 class="mt-3 text-xl font-bold text-gray-800 mb-2  dark:text-base-content">Your Writing</h2>
+        <textarea
+            class=" w-full min-h-[300px] p-4 border rounded-lg focus:ring-2 focus:ring-blue-300 focus:border-blue-300 outline-none resize-y"
+            v-model="textinput">
 
-        </textarea>
-        <div class="flex flex-col lg:flex-row lg:justify-between">
+            </textarea>
+        <div class="flex flex-col lg:flex-row lg:justify-between mt-3">
             <div class="text-orange-400"><span>{{ wordcount }}</span>
                 words
                 <progress class="progress progress-warning w-56" :value="wordcount / (120 / 100)" max="100"></progress>

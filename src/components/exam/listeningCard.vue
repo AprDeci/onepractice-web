@@ -31,7 +31,7 @@ const getnext = () => {
 </script>
 
 <template>
-    <div class="listening-card card shadow-sm p-4  flex gap-3">
+    <div class="max-w-4xl m-auto listening-card card shadow-sm p-4  flex gap-3 ">
         <div class="player">
             <AudioPlayer audioSrc="src/components/exam/2024年12月四级听力音频第1套.MP3" trackTitle=" "></AudioPlayer>
 

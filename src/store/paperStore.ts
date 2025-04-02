@@ -1,5 +1,8 @@
-import {defineStore } from 'pinia'
+import { defineStore } from "pinia";
+import { ref } from "vue";
 
-export const paperStore = defineStore('paper', {
-    
-})
+export const usepaperStore = defineStore("paper", () => {
+  const answers = ref({});
+
+  return { answers };
+});
