@@ -3,6 +3,9 @@ import { ref, computed, onMounted } from 'vue'
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-vue-next'
 import type { QuestionsDO } from '../../interface/Question'
 import { useElementSize } from '@vueuse/core';
+import { usepaperStore } from '../../store/paperStore';
+
+const paperSotre = usepaperStore()
 
 const { question } = defineProps<{
     question: QuestionsDO
@@ -153,8 +156,8 @@ const questions = computed(() => {
     const splitQuestions = question.readingSplitQuestion
     const allOptions = question.options
 
-    // Extract the starting question number from the correctAnswer string
-    const startingQuestionNumber = parseInt(question.correctAnswer.split('.')[0]) || 46
+    // 起始编号
+    const startingQuestionNumber = question.correctAnswer[0].index
 
     // Group options into sets of 4 for each question
     for (let i = 0; i < splitQuestions.length; i++) {
@@ -183,7 +186,8 @@ const getQuestionNumber = (index: number) => {
 }
 
 // Select an answer
-const selectAnswer = (questionIndex: number, optionLabel: string) => {
+const selectAnswer = (questionIndex: number, optionLabel: string, answerIndex: number) => {
+    paperSotre.updateCurrentUserAnswer(answerIndex, optionLabel)
     selectedAnswers.value[questionIndex] = optionLabel
 }
 
@@ -196,13 +200,6 @@ const scrollToQuestion = (questionIndex: number) => {
     }
 }
 
-// Navigate between questions (for mobile)
-const navigateQuestion = (direction: number) => {
-    const newIndex = currentQuestionIndex.value + direction
-    if (newIndex >= 0 && newIndex < questions.value.length) {
-        scrollToQuestion(newIndex)
-    }
-}
 
 // Scroll to first question on mount
 onMounted(() => {
@@ -214,7 +211,6 @@ onMounted(() => {
 
 <template>
     <div class="max-w-6xl mx-auto p-6 bg-white rounded-xl shadow-lg">
-        {{ height }}
         <h2 class="text-2xl font-bold text-gray-800 mb-4">{{ question.partName }}: {{ question.sectionName }}
         </h2>
         <div class="mb-6 p-4 bg-blue-50 rounded-lg">
@@ -269,7 +265,7 @@ onMounted(() => {
 
                         <div class="space-y-3 pl-9">
                             <div v-for="option in question.options" :key="`${index}-${option.label}`"
-                                @click="selectAnswer(index, option.label)"
+                                @click="selectAnswer(index, option.label, getQuestionNumber(index))"
                                 class="flex items-start p-3 rounded-md cursor-pointer transition-colors" :class="{
                                     'bg-blue-50 border border-blue-200': selectedAnswers[index] === option.label,
                                     'hover:bg-gray-50 border border-transparent': selectedAnswers[index] !== option.label

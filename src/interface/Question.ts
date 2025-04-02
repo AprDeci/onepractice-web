@@ -6,7 +6,7 @@ export interface QuestionsDO {
   questionType: string; // writing,listening,cloza,matching,reading,translation
   questionOrder: number;
   content: string; // 题目内容或要求
-  correctAnswer: string; // 统一答案存储
+  correctAnswer: answer[]; // 统一答案存储
   readingSplitQuestion: string[]; // 阅读理解分题专用
   options: option[]; // 选择题选项，格式: [{"label":"A","content":"选项内容"},...]
   wordBank: string[]; // 选词填空的单词库，格式: ["word1", "word2", ...]

@@ -2,7 +2,9 @@
 import { ref, computed, watch } from 'vue'
 import { ChevronDownIcon } from 'lucide-vue-next'
 import type { QuestionsDO } from '../../interface/Question'
+import { usepaperStore } from '../../store/paperStore';
 
+const paperSotre = usepaperStore()
 const { question } = defineProps<{
     question: QuestionsDO
 }>()
@@ -28,6 +30,7 @@ const toggleDropdown = (itemId: number) => {
 
 // Select a paragraph for an item
 const selectParagraph = (itemId: number, paragraphKey: string) => {
+    paperSotre.updateCurrentUserAnswer(itemId, paragraphKey)
     selections.value[itemId] = paragraphKey
     currentItem.value = null
     highlightedParagraph.value = null
@@ -35,6 +38,7 @@ const selectParagraph = (itemId: number, paragraphKey: string) => {
 
 // Clear a selection
 const clearSelection = (itemId: number) => {
+    paperSotre.updateCurrentUserAnswer(itemId, '')
     delete selections.value[itemId]
     currentItem.value = null
     highlightedParagraph.value = null

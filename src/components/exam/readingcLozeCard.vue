@@ -3,7 +3,8 @@ import { computed, ref, watch, onMounted } from 'vue'
 import { onClickOutside, useWindowSize } from '@vueuse/core'
 import { XIcon } from 'lucide-vue-next'
 import type { QuestionsDO } from '../../interface/Question'
-
+import { usepaperStore } from '../../store/paperStore'
+const paperStore = usepaperStore()
 const { question } = defineProps<{
     question: QuestionsDO
 }>()
@@ -118,10 +119,12 @@ const openAnswerWindow = (e: MouseEvent, blankNumber: number) => {
 }
 
 // Save the selected answer
-const saveAnswer = (word: string) => {
+const saveAnswer = (word: string, index: number) => {
     if (selectedBlankNumber.value !== null) {
+        paperStore.updateCurrentUserAnswer(selectedBlankNumber.value, String.fromCharCode(65 + index));
         selectedWords.value[selectedBlankNumber.value] = word;
         isCardVisible.value = false;
+
     }
 }
 
@@ -199,7 +202,7 @@ onMounted(() => {
             <!-- Card content -->
             <div class="p-3">
                 <div class="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto">
-                    <button v-for="(word, index) in question.wordBank" :key="word" @click="saveAnswer(word)"
+                    <button v-for="(word, index) in question.wordBank" :key="word" @click="saveAnswer(word, index)"
                         class="px-3 py-2 text-left text-sm rounded transition-colors flex items-center" :class="{
                             'bg-blue-100 font-medium': word === getCurrentWord,
                             'hover:bg-blue-50': !isWordUsed(word) || word === getCurrentWord,

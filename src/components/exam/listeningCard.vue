@@ -38,7 +38,7 @@ const getnext = () => {
         </div>
         <div class="options">
             <QuestionContainer :hasNext="hasNextSection" :hasPrev="hasPrevSection" @prev="getprev" @next="getnext">
-                <ListeningSingleCard v-for="(item, index) in data.questions" :key="index" :data="item"
+                <ListeningSingleCard v-for="(item, index) in data.questions" :key="index" :question="item"
                     v-show="activeId === index">
                 </ListeningSingleCard>
             </QuestionContainer>
