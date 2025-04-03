@@ -5,7 +5,8 @@ import type { QuestionsDO } from '../../interface/Question'
 import { useElementSize } from '@vueuse/core';
 import { usepaperStore } from '../../store/paperStore';
 
-const paperSotre = usepaperStore()
+
+const paperStore = usepaperStore()
 
 const { question } = defineProps<{
     question: QuestionsDO
@@ -187,7 +188,7 @@ const getQuestionNumber = (index: number) => {
 
 // Select an answer
 const selectAnswer = (questionIndex: number, optionLabel: string, answerIndex: number) => {
-    paperSotre.updateCurrentUserAnswer(answerIndex, optionLabel)
+    paperStore.updateCurrentUserAnswer(answerIndex, optionLabel)
     selectedAnswers.value[questionIndex] = optionLabel
 }
 
@@ -205,6 +206,14 @@ const scrollToQuestion = (questionIndex: number) => {
 onMounted(() => {
     // Initialize with the first question
     currentQuestionIndex.value = 0
+
+    // 初始化答案
+    const firstIndex = getQuestionNumber(0);
+
+    for (let i = 0; i < questions.value.length; i++) {
+        selectedAnswers.value[i] = paperStore.getUserAnswer(i + firstIndex)
+    }
+
 })
 </script>
 

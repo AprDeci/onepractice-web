@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { ChevronDownIcon } from 'lucide-vue-next'
 import type { QuestionsDO } from '../../interface/Question'
 import { usepaperStore } from '../../store/paperStore';
@@ -85,6 +85,13 @@ watch(currentItem, (newValue) => {
         highlightedParagraph.value = null
     } else {
         highlightedParagraph.value = selections.value[newValue] || null
+    }
+})
+onMounted(() => {
+    const firstIndex = question.matchingData[0].id
+    // 初始化已经选择的答案
+    for (let i = 0; i < question.matchingData.length; i++) {
+        selections.value[firstIndex + i] = paperSotre.getUserAnswer(firstIndex + i)
     }
 })
 </script>

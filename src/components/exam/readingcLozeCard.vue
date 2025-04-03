@@ -26,9 +26,6 @@ onClickOutside(answerCard, () => {
     }
 })
 
-const isMobile = computed(() => {
-    return width.value < 768; // Using a standard breakpoint for mobile
-})
 
 // Parse content to highlight blanks and show selected answers
 const contentParsed = computed(() => {
@@ -124,7 +121,6 @@ const saveAnswer = (word: string, index: number) => {
         paperStore.updateCurrentUserAnswer(selectedBlankNumber.value, String.fromCharCode(65 + index));
         selectedWords.value[selectedBlankNumber.value] = word;
         isCardVisible.value = false;
-
     }
 }
 
@@ -154,6 +150,16 @@ onMounted(() => {
             blankRefs.value[blankNumber] = el as HTMLElement;
         }
     });
+    // 刷新后初始化答案 
+    const firstindex: number = parseInt(Object.keys(blankRefs.value)[0]);
+    for (let i = 0; i < Object.keys(blankRefs.value).length; i++) {
+        const blanknum = firstindex + i;
+        const label = paperStore.getUserAnswer(blanknum);
+        if (label === undefined) continue
+        console.log(label)
+        const wordindex = label.charCodeAt() - 65;
+        selectedWords.value[blanknum] = question.wordBank[wordindex];
+    }
 })
 </script>
 
