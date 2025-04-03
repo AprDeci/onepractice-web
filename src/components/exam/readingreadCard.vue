@@ -3,7 +3,7 @@ import { ref, computed, onMounted } from 'vue'
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-vue-next'
 import type { QuestionsDO } from '../../interface/Question'
 import { useElementSize } from '@vueuse/core';
-import { usepaperStore } from '../../store/paperStore';
+import { usepaperStore } from '../../store/paperStore.ts';
 
 
 const paperStore = usepaperStore()
@@ -71,7 +71,7 @@ const getQuestionNumber = (index: number) => {
 
 // Select an answer
 const selectAnswer = (questionIndex: number, optionLabel: string, answerIndex: number) => {
-    paperStore.updateCurrentUserAnswer(answerIndex, optionLabel)
+    paperStore.updateUserAnswer(answerIndex, optionLabel)
     selectedAnswers.value[questionIndex] = optionLabel
 }
 

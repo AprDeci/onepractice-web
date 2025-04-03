@@ -3,7 +3,7 @@ import { computed, ref, watch, onMounted } from 'vue'
 import { onClickOutside, useWindowSize } from '@vueuse/core'
 import { XIcon } from 'lucide-vue-next'
 import type { QuestionsDO } from '../../interface/Question'
-import { usepaperStore } from '../../store/paperStore'
+import { usepaperStore } from '../../store/paperStore.ts'
 const paperStore = usepaperStore()
 const { question } = defineProps<{
     question: QuestionsDO
@@ -118,7 +118,7 @@ const openAnswerWindow = (e: MouseEvent, blankNumber: number) => {
 // Save the selected answer
 const saveAnswer = (word: string, index: number) => {
     if (selectedBlankNumber.value !== null) {
-        paperStore.updateCurrentUserAnswer(selectedBlankNumber.value, String.fromCharCode(65 + index));
+        paperStore.updateUserAnswer(selectedBlankNumber.value, String.fromCharCode(65 + index));
         selectedWords.value[selectedBlankNumber.value] = word;
         isCardVisible.value = false;
     }

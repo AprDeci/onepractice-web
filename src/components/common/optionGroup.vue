@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { usepaperStore } from '../../store/paperStore';
+import { usepaperStore } from '../../store/paperStore.ts';
 const selected = defineModel();
 const paperSotre = usepaperStore();
 const { options, index } = defineProps<{
@@ -10,7 +10,7 @@ const { options, index } = defineProps<{
 }>();
 const selectoption = (label: string) => {
     selected.value = label
-    paperSotre.updateCurrentUserAnswer(index, label)
+    paperSotre.updateUserAnswer(index, label)
 }
 onMounted(() => {
     selected.value = paperSotre.getUserAnswer(index)

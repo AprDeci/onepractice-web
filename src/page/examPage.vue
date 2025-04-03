@@ -7,9 +7,8 @@ import readingCard from '../components/exam/readingCard.vue'
 import TranslationCard from '../components/exam/TranslationCard.vue'
 import { getAllQuestionsBypaperIdSplitByPart, getAnswersByPaperId } from '../request/methods/question'
 import { useRequest } from 'alova/client'
-import { usepaperStore } from '../store/paperStore'
+import { usepaperStore } from '../store/paperStore.ts'
 const paperStore = usepaperStore()
-const openanswer = ref(false)
 const { id } = defineProps<{
     id: string
 }>()
@@ -53,7 +52,7 @@ const selectedtab = ref('writing')
 const selectedindex = ref(0)
 const { loading, data, send } = useRequest(getAllQuestionsBypaperIdSplitByPart(id))
 const { loading: answerload, data: answerdata } = useRequest(getAnswersByPaperId(id)).onSuccess(e => {
-    paperStore.setCurrentPaperAnswer(e.data.answers, e.data.paperId)
+    paperStore.setCurrentPaper(id, answerdata.value.answers)
 })
 onMounted(async () => {
     startcooldown()
