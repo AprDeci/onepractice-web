@@ -24,6 +24,11 @@ export const usepaperStore = defineStore(
       return papersData.value[currentPaperId.value]?.correctAnswers || {};
     });
 
+    const currentTimestamp = computed(() => {
+      if (!currentPaperId.value) return 0;
+      return papersData.value[currentPaperId.value]?.timestamp || 0;
+    });
+
     //   当前试卷得分
     const currentScore = computed(() => {
       const userAnswers = currentUserAnswers.value;
@@ -32,6 +37,18 @@ export const usepaperStore = defineStore(
       return Object.keys(userAnswers).reduce((score, index) => {
         return score + (userAnswers[index] === correctAnswers[index] ? 1 : 0);
       }, 0);
+    });
+
+    // 记录用户答案正确错误
+
+    const currentAnswerStatus = computed(() => {
+      const userAnswers = currentUserAnswers.value;
+      const correctAnswers = currentCorrectAnswers.value;
+
+      return Object.keys(userAnswers).reduce((acc, index) => {
+        acc[index] = userAnswers[index] === correctAnswers[index];
+        return acc;
+      }, {});
     });
 
     //   设置当前试卷正确答案
@@ -80,16 +97,26 @@ export const usepaperStore = defineStore(
       }
     };
 
+    const cleancurrentUserAnswer = () => {
+      if (!currentPaperId.value) return;
+      papersData.value[currentPaperId.value].userAnswers = {};
+      // 刷新时间戳->刷新组件
+      papersData.value[currentPaperId.value].timestamp = Date.now();
+    };
+
     return {
       papersData,
       currentPaperId,
       currentUserAnswers,
       currentCorrectAnswers,
       currentScore,
+      currentAnswerStatus,
+      currentTimestamp,
       setCurrentPaper,
       updateUserAnswer,
       getUserAnswer,
-      cleanupOldData
+      cleanupOldData,
+      cleancurrentUserAnswer
     };
   },
   {

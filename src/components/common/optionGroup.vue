@@ -5,7 +5,7 @@ const selected = defineModel();
 const paperSotre = usepaperStore();
 const { options, index } = defineProps<{
     options: any[]
-    index: string
+    index: number
 
 }>();
 const selectoption = (label: string) => {

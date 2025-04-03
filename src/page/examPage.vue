@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, } from 'vue'
 import { Timer } from 'lucide-vue-next'
+import { useRouter } from 'vue-router'
 import WritingCard from '../components/exam/writingCard.vue'
 import ListeningCard from '../components/exam/listeningCard.vue'
 import readingCard from '../components/exam/readingCard.vue'
@@ -12,6 +13,8 @@ const paperStore = usepaperStore()
 const { id } = defineProps<{
     id: string
 }>()
+
+const router = useRouter()
 
 // 计时函数 - 待修改
 const time = ref(120 * 60)
@@ -67,11 +70,15 @@ const cards = {
 
 }
 
-const changeTab = (card, index) => {
+const changeTab = (card, index: number) => {
     selectedtab.value = card;
     selectedindex.value = index;
 }
 
+const cleanAnswer = () => {
+    paperStore.cleancurrentUserAnswer();
+    location.reload();
+}
 </script>
 
 <template>
@@ -80,7 +87,7 @@ const changeTab = (card, index) => {
         <div class="drawer-content">
             <div class=" navbar bg-base-100 shadow-sm flex justify-between">
                 <div class="navbar-start hidden lg:flex">
-                    <span class="text-xl mx-2">Exam Paper Name</span>
+                    <span class="text-xl mx-2 cursor-pointer" @click="router.push('/')">One Practice</span>
                 </div>
                 <div class="navbar-center">
                     <Timer />
@@ -90,12 +97,12 @@ const changeTab = (card, index) => {
                             :
                             <span id="cooldownm" style="--value:0;" aria-live="polite" aria-label="0">0</span>
                             :
-                            <span id="cooldowns" style="--value:59;" aria-live="polite" aria-label="59">59</span>
+                            <span id="cooldowns" style="--value:0;" aria-live="polite" aria-label="0">0</span>
                         </span>
                     </div>
-                    <div class="navbar-end">
-                        <label for="my-drawer-4" class="drawer-button btn btn-primary">Open drawer</label>
-                    </div>
+                </div>
+                <div class="navbar-end">
+                    <label for="my-drawer-4" class="drawer-button btn btn-primary">Open drawer</label>
                 </div>
             </div>
 
@@ -110,7 +117,8 @@ const changeTab = (card, index) => {
                 </div>
                 <div class="w-full  mb-4">
                     <KeepAlive>
-                        <component :is="cards[selectedtab]" :data="data.questionParts[selectedindex]"></component>
+                        <component :is="cards[selectedtab]" :data="data.questionParts[selectedindex]">
+                        </component>
                     </KeepAlive>
                 </div>
             </div>
@@ -160,14 +168,6 @@ const changeTab = (card, index) => {
                                 <span class="text-xs text-gray-500 mt-1.5">{{ answer.index }}</span>
                             </div>
 
-                            <!-- 悬浮提示 -->
-                            <div
-                                class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                                <div class="absolute inset-0 bg-white bg-opacity-80 rounded-lg"></div>
-                                <button class="relative z-10 text-xs text-blue-600 hover:text-blue-800">
-                                    Go to
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -176,10 +176,11 @@ const changeTab = (card, index) => {
                 <div class="p-5 border-t border-gray-100 bg-gray-50">
                     <div class="flex justify-between items-center">
                         <div class="text-sm">
-                            <span class="font-medium">{{ 12 }}</span> / {{ answerdata.answers.length }}
+                            <span class="font-medium">{{ Object.keys(paperStore.currentUserAnswers).length }}</span> /
+                            {{ answerdata.answers.length }}
                             answered
                         </div>
-                        <button class="text-xs text-gray-500 hover:text-red-500 transition-colors">
+                        <button class="text-xs text-gray-500 hover:text-red-500 transition-colors" @click="cleanAnswer">
                             Clear all
                         </button>
                     </div>
@@ -187,7 +188,8 @@ const changeTab = (card, index) => {
                     <!-- 进度条 -->
                     <div class="mt-2 h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
                         <div class="h-full bg-blue-500 rounded-full transition-all duration-500"
-                            :style="{ width: `${(12 / answerdata.answers.length) * 100}%` }"></div>
+                            :style="{ width: `${(Object.keys(paperStore.currentUserAnswers).length / answerdata.answers.length) * 100}%` }">
+                        </div>
                     </div>
                 </div>
             </div>
