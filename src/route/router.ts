@@ -25,6 +25,11 @@ const routes = [
         props: true,
         name: "examPage",
         component: () => import("@/page/examPage.vue")
+      },
+      {
+        path: "result",
+        name: "examResult",
+        component: () => import("@/page/examResultPage.vue")
       }
     ]
   },
@@ -32,10 +37,6 @@ const routes = [
     path: "/404",
     name: "404",
     component: () => import("@/page/404.vue")
-  },
-  {
-    path: "/test",
-    component: () => import("@/components/exam/examResult.vue")
   },
   {
     path: "/:pathMatch(.*)",

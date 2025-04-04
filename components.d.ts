@@ -12,6 +12,8 @@ declare module 'vue' {
     AudioPlayer: typeof import('./src/components/common/audioPlayer.vue')['default']
     copy: typeof import('./src/components/exam/writingCard copy.vue')['default']
     ExamResult: typeof import('./src/components/exam/examResult.vue')['default']
+    ExamResult2: typeof import('./src/components/exam/examResult2.vue')['default']
+    ExamResultPage: typeof import('./src/components/exam/examResultPage.vue')['default']
     FloatingPaper: typeof import('./src/components/floating-paper.vue')['default']
     HomeNav: typeof import('./src/components/home-nav.vue')['default']
     ListeningCard: typeof import('./src/components/exam/listeningCard.vue')['default']

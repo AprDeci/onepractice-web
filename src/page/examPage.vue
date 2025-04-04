@@ -130,7 +130,8 @@ const cleanAnswer = () => {
                         <div class="btn btn-sm lg:btn-md">Next Section</div>
                     </aside>
                     <nav class="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
-                        <div class="btn btn-primary btn-sm lg:btn-md">submit</div>
+                        <div class="btn btn-primary btn-sm lg:btn-md" @click="router.push({ name: 'examResult' })">submit
+                        </div>
                     </nav>
                 </footer>
             </footer>

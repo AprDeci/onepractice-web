@@ -104,6 +104,14 @@ export const usepaperStore = defineStore(
       papersData.value[currentPaperId.value].timestamp = Date.now();
     };
 
+    const getLength = (key: string) => {
+      if (key === "userAnswer") {
+        return Object.keys(currentUserAnswers).length;
+      }
+      if (key === "correctAnswer") {
+        return Object.keys(currentCorrectAnswers).length;
+      }
+    };
     return {
       papersData,
       currentPaperId,
@@ -116,7 +124,8 @@ export const usepaperStore = defineStore(
       updateUserAnswer,
       getUserAnswer,
       cleanupOldData,
-      cleancurrentUserAnswer
+      cleancurrentUserAnswer,
+      getLength
     };
   },
   {
