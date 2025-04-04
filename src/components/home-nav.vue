@@ -44,7 +44,7 @@ onMounted(async () => {
                 </ul>
             </div>
             <div class="navbar-start">
-                <a class="btn btn-ghost text-xl pl-0 lg:pl-4">One Practice</a>
+                <a class="btn btn-ghost text-xl pl-0 lg:pl-4" @click="router.push('/')">One Practice</a>
             </div>
         </div>
         <!-- 横屏 -->

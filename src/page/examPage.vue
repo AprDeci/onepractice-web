@@ -82,7 +82,7 @@ const cleanAnswer = () => {
 }
 
 const submit = async () => {
-    const data = await saveRecord(paperStore.currentPaperId, "test", 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, 0)
+    const data = await saveRecord(paperStore.currentPaperId, "test", 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, Object.keys(paperStore.currentCorrectAnswers).length, 0)
     console.log(data)
     router.push({ name: 'examResult' });
 }

@@ -6,6 +6,7 @@ export const saveRecord = (
   isfinished: number,
   answers: any[],
   score: number,
+  totalscore: number,
   timespend: number
 ) =>
   httpclient.Post("/record/save", {
@@ -14,6 +15,7 @@ export const saveRecord = (
     isfinished: isfinished,
     answers: answers,
     score: score,
+    totalscore: totalscore,
     timespend: timespend
   });
 

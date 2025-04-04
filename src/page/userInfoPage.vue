@@ -43,7 +43,7 @@ const { data: records } = useRequest(getRecords(7))
                         <table class="table table-pin-rows table-pin-cols">
                             <thead>
                                 <tr>
-                                    <th>Paper Name</th>
+                                    <th class="">Paper Name</th>
                                     <td>Date</td>
                                     <td>Score</td>
                                     <td>status</td>
@@ -51,7 +51,7 @@ const { data: records } = useRequest(getRecords(7))
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="i in 5" :key="i">
+                                <tr v-for="(record, index) in records" :key="index">
                                     <th>
                                         <div class="flex gap-1">
                                             <div
@@ -59,20 +59,29 @@ const { data: records } = useRequest(getRecords(7))
                                                 <BookA :size="28" color="#6f98ce" />
                                             </div>
                                             <div class="flex flex-col gap-1">
-                                                <span>Paper Name</span>
-                                                <span class="text-[12px] text-gray-400">CET-4</span>
+                                                <span>{{ record.paperName }}</span>
+                                                <span class="text-[12px] text-gray-400">{{ record.paperType }}</span>
                                             </div>
                                         </div>
                                     </th>
                                     <td>2025.3.21</td>
-                                    <td>12/54</td>
+                                    <td>{{ record.score }}/{{ record.totalscore }}</td>
                                     <td>
-                                        <div class="inline-grid *:[grid-area:1/1]">
-                                            <div class="status status-success animate-ping"></div>
-                                            <div class="status status-success"></div>
-                                        </div> Finished
+                                        <div v-if="record.isfinished === 1">
+                                            <div class="inline-grid *:[grid-area:1/1]">
+                                                <div class="status status-success animate-ping"></div>
+                                                <div class="status status-success"></div>
+                                                <span>Finished</span>
+                                            </div>
+                                        </div>
+                                        <div v-else>
+                                            <div class="inline-grid *:[grid-area:1/1]">
+                                                <div class="status status-success animate-ping"></div>
+                                                <div class="status status-success"></div>
+                                            </div> <span>Unfinished</span>
+                                        </div>
                                     </td>
-                                    <td class="text-blue-500 cursor-pointer">Review</td>
+                                    <th class="text-blue-500 cursor-pointer">Review</th>
                                 </tr>
                             </tbody>
                         </table>
@@ -82,6 +91,9 @@ const { data: records } = useRequest(getRecords(7))
             <div class="charts card shadow-md bg-base-100 px-4 py-6 flex flex-col gap-4">
                 <div>
                     <span class="text-xl lg:text-2xl font-bold">statistics</span>
+                </div>
+                <div>
+                    <span class="text-[16px] text-gray-400">待开发~</span>
                 </div>
             </div>
         </div>
