@@ -3,10 +3,11 @@ import { computed, ref } from 'vue'
 import { ChevronRight } from 'lucide-vue-next'
 import { usepaperStore } from '../store/paperStore'
 import { pxValue, useElementSize } from '@vueuse/core'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 const paperStore = usepaperStore()
 const rightx = ref(0)
 const score = ref(0)
-// 开局让score从0递增到80
 const timer = setInterval(() => {
     if (score.value < paperStore.currentScore) {
         score.value++
@@ -78,7 +79,7 @@ const { width: rwidth } = useElementSize(rightcard)
                     </div>
                 </div>
                 <div class="mt-7">
-                    <div class="btn btn-primary w-full"> Return Home
+                    <div class="btn btn-primary w-full" @click="router.push('/')"> Return Home
                         <ChevronRight :size="18" />
                     </div>
                 </div>

@@ -34,9 +34,18 @@ const routes = [
     ]
   },
   {
+    path: "/userInfo",
+    name: "userInfo",
+    component: () => import("@/page/userInfoPage.vue")
+  },
+  {
     path: "/404",
     name: "404",
     component: () => import("@/page/404.vue")
+  },
+  {
+    path: "/test",
+    component: () => import("@/page/userInfoPage2.vue")
   },
   {
     path: "/:pathMatch(.*)",

@@ -9,6 +9,7 @@ import TranslationCard from '../components/exam/TranslationCard.vue'
 import { getAllQuestionsBypaperIdSplitByPart, getAnswersByPaperId } from '../request/methods/question'
 import { useRequest } from 'alova/client'
 import { usepaperStore } from '../store/paperStore.ts'
+import { saveRecord } from '../request/methods/record.ts'
 const paperStore = usepaperStore()
 const { id } = defineProps<{
     id: string
@@ -79,6 +80,12 @@ const cleanAnswer = () => {
     paperStore.cleancurrentUserAnswer();
     location.reload();
 }
+
+const submit = async () => {
+    const data = await saveRecord(paperStore.currentPaperId, "test", 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, 0)
+    console.log(data)
+    router.push({ name: 'examResult' });
+}
 </script>
 
 <template>
@@ -130,7 +137,8 @@ const cleanAnswer = () => {
                         <div class="btn btn-sm lg:btn-md">Next Section</div>
                     </aside>
                     <nav class="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
-                        <div class="btn btn-primary btn-sm lg:btn-md" @click="router.push({ name: 'examResult' })">submit
+                        <div class="btn btn-primary btn-sm lg:btn-md" @click="submit">
+                            submit
                         </div>
                     </nav>
                 </footer>
