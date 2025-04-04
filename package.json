@@ -13,6 +13,7 @@
     "@vueuse/core": "^13.0.0",
     "@vueuse/gesture": "^2.0.0",
     "alova": "^3.2.10",
+    "chart.js": "^4.4.8",
     "daisyui": "^5.0.9",
     "lucide-vue-next": "^0.484.0",
     "motion-v": "^0.13.1",
