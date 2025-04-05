@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch, } from 'vue'
+import { ref, onMounted, watch, beforeUnmount } from 'vue'
 import { Timer } from 'lucide-vue-next'
 import { useRouter } from 'vue-router'
 import WritingCard from '../components/exam/writingCard.vue'
@@ -52,13 +52,13 @@ const cleanAnswer = () => {
 }
 
 const submit = async () => {
-    await saveRecord(paperStore.currentPaperId, "test", 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, Object.keys(paperStore.currentCorrectAnswers).length, 0)
+    await saveRecord(paperStore.currentPaperId, mode, paperStore.currentUserAnswersLength === paperStore.currentCorrectAnswersLength ? 1 : 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, Object.keys(paperStore.currentCorrectAnswers).length, 0)
     router.push({ name: 'examResult' });
 
 }
 
 const counterzero = () => {
-    console.log(111)
+    submit()
 }
 </script>
 
@@ -97,12 +97,16 @@ const counterzero = () => {
                     </KeepAlive>
                 </div>
             </div>
-            <footer>
+            <footer class="sticky bottom-0 w-full">
                 <footer
-                    class="footer footer-horizontal bg-base-200 text-neutral-content items-center p-4 border dark:border-base-100">
+                    class="footer flex justify-between footer-horizontal bg-base-200 text-neutral-content items-center p-4 border dark:border-base-100">
                     <aside class="grid-flow-col items-center">
-                        <div class="btn btn-sm lg:btn-md">Previous Section</div>
-                        <div class="btn btn-sm lg:btn-md">Next Section</div>
+                        <div class="btn btn-sm lg:btn-md" v-show="selectedindex > 0"
+                            @click="changeTab(data.questionParts[selectedindex - 1].questions[0].questionType, selectedindex - 1)">
+                            Previous Section</div>
+                        <div class="btn btn-sm lg:btn-md" v-show="selectedindex < data.questionParts.length - 1"
+                            @click="changeTab(data.questionParts[selectedindex + 1].questions[0].questionType, selectedindex + 1)">
+                            Next Section</div>
                     </aside>
                     <nav class="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
                         <div class="btn btn-primary btn-sm lg:btn-md" @click="showAlert = !showAlert">
@@ -165,7 +169,7 @@ const counterzero = () => {
                                     <span class="text-sm font-medium">{{ answer.answer || '?' }}</span>
                                     <!-- 遮罩层 -->
                                     <div v-if="mode === 'simulation' && showBlur"
-                                        class="answerblur w-full h-full absolute backdrop-blur-sm hover:backdrop-blur-[0px]">
+                                        class="rounded-lg answerblur w-full h-full absolute backdrop-blur-sm hover:backdrop-blur-[0px]">
                                     </div>
                                 </div>
 

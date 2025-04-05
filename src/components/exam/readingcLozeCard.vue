@@ -27,7 +27,7 @@ onClickOutside(answerCard, () => {
 })
 
 
-// Parse content to highlight blanks and show selected answers
+// 生成html
 const contentParsed = computed(() => {
     let content = question.content;
     content = content.replace(/_(\d+)_/g, (match, number) => {
@@ -36,7 +36,7 @@ const contentParsed = computed(() => {
 
         return word
             ? `<span class="inline-block relative border-b-2 border-blue-400 px-1 mx-1 bg-blue-50 dark:bg-blue-300 dark:text-base-content cursor-pointer" data-blank="${blankNumber}">
-          <span class="blank-number absolute -top-5 left-1/2 transform -translate-x-1/2 text-xs font-bold text-blue-600 bg-blue-100 px-1.5 py-0.5 rounded">${blankNumber}</span>
+          <span class="blank-number relative  transform -translate-x-1/2 text-xs font-bold text-blue-600 bg-blue-100 px-1.5 py-0.5 rounded">${blankNumber}</span>
           ${word}
           <span class="absolute inset-0" data-blank="${blankNumber}"></span>
         </span>`
@@ -191,7 +191,7 @@ onMounted(() => {
             </div>
         </div>
 
-        <!-- Answer selection card -->
+        <!-- 答案卡片 -->
         <div v-if="isCardVisible" ref="answerCard"
             class="fixed z-50 bg-white rounded-lg shadow-xl border border-gray-200 w-80"
             :class="{ 'answer-card-above': positionAbove }" :style="{ top: cardPosition.top, left: cardPosition.left }">
@@ -205,7 +205,7 @@ onMounted(() => {
                 </button>
             </div>
 
-            <!-- Card content -->
+            <!-- 答案卡片-->
             <div class="p-3">
                 <div class="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto">
                     <button v-for="(word, index) in question.wordBank" :key="word" @click="saveAnswer(word, index)"
@@ -236,13 +236,11 @@ onMounted(() => {
 </template>
 
 <style scoped>
-/* Custom styling for the component */
 :deep(.prose) {
     color: #374151;
     line-height: 1.8;
 }
 
-/* Add a subtle animation for the answer card */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -259,7 +257,6 @@ onMounted(() => {
     animation: fadeIn 0.2s ease-out;
 }
 
-/* Position the arrow for the card */
 .answer-card-above .absolute.w-4.h-4 {
     bottom: auto;
     top: 100%;

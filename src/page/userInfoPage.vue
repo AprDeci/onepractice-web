@@ -5,9 +5,17 @@ import { useRequest } from 'alova/client';
 import { getUserInfo } from '../request/methods/user';
 import { getRecords } from '../request/methods/record';
 import { BookA } from 'lucide-vue-next';
+import { timestamp } from '@vueuse/core';
 const { data: userinfo } = useRequest(getUserInfo)
 const { data: records } = useRequest(getRecords(7))
-
+// 通过时间戳计算当时日期
+const getDate = (timestamp: number) => {
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    return `${year}-${month}-${day}`;
+}
 </script>
 
 <template>
@@ -43,7 +51,7 @@ const { data: records } = useRequest(getRecords(7))
                         <table class="table table-pin-rows table-pin-cols">
                             <thead>
                                 <tr>
-                                    <th class="">Paper Name</th>
+                                    <th class="min-w-60 lg:min-w-55">Paper Name</th>
                                     <td>Date</td>
                                     <td>Score</td>
                                     <td>status</td>
@@ -64,7 +72,7 @@ const { data: records } = useRequest(getRecords(7))
                                             </div>
                                         </div>
                                     </th>
-                                    <td>2025.3.21</td>
+                                    <td>{{ getDate(record.timestamp * 1000) }}</td>
                                     <td>{{ record.score }}/{{ record.totalscore }}</td>
                                     <td>
                                         <div v-if="record.isfinished === 1">

@@ -4,13 +4,13 @@ import { onMounted, ref } from 'vue';
 import { getUserInfo } from '../request/methods/user';
 import { useRequest } from 'alova/client';
 import { getAllPaperTypes } from '../request/methods/paper';
+import { types } from '../common/paper';
 const router = useRouter();
 const haslogin = localStorage.getItem('token') ? true : false;
 const userInfo = ref({
     username: '',
     userType: '',
 });
-const { data: types } = useRequest(getAllPaperTypes)
 onMounted(async () => {
     if (localStorage.getItem("token")) {
         const data = await getUserInfo()
