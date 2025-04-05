@@ -46,3 +46,14 @@ export interface AnswerDTO {
   paperId: number;
   answers: answer[];
 }
+
+export interface PaperData {
+  paperName: string;
+  examYear: number;
+  examMonth: number;
+  paperType: string;
+  paperTime: number;
+  difficulty: null | number; // 或根据实际需要改为可选属性 difficulty?: number;
+  sectionCount: number;
+  sectionQuestionCount: number[];
+}

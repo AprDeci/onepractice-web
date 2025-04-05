@@ -11,13 +11,16 @@ import { useRequest } from 'alova/client'
 import { usepaperStore } from '../store/paperStore.ts'
 import { saveRecord } from '../request/methods/record.ts'
 import { motion, AnimatePresence } from 'motion-v'
+import { Times } from '../common/examMode.ts'
 const paperStore = usepaperStore()
-const { id } = defineProps<{
-    id: string
+const { id, mode } = defineProps<{
+    id: string,
+    mode: string
 }>()
 
+const showBlur = ref(true)
 const router = useRouter()
-const seconds = ref(0)
+const seconds = Times[paperStore.currentPaperType] * 60
 const selectedtab = ref('writing')
 const selectedindex = ref(0)
 const { loading, data, send } = useRequest(getAllQuestionsBypaperIdSplitByPart(id))
@@ -49,7 +52,7 @@ const cleanAnswer = () => {
 }
 
 const submit = async () => {
-    const data = await saveRecord(paperStore.currentPaperId, "test", 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, Object.keys(paperStore.currentCorrectAnswers).length, 0)
+    await saveRecord(paperStore.currentPaperId, "test", 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, Object.keys(paperStore.currentCorrectAnswers).length, 0)
     router.push({ name: 'examResult' });
 
 }
@@ -63,14 +66,15 @@ const counterzero = () => {
     <div class="drawer drawer-end">
         <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content">
-
             <div class=" navbar bg-base-100 shadow-sm flex justify-between">
                 <div class="navbar-start hidden lg:flex">
                     <span class="text-xl mx-2 cursor-pointer" @click="router.push('/')">One Practice</span>
                 </div>
                 <div class="navbar-center">
                     <Timer />
-                    <CounterReverse @todo="counterzero" :seconds="seconds"></CounterReverse>
+                    <CounterReverse v-if="mode === 'simulation'" @todo="counterzero" :seconds="seconds">
+                    </CounterReverse>
+                    <Counter v-if="mode === 'free'"></Counter>
                 </div>
                 <div class="navbar-end">
                     <label for="my-drawer-4" class="drawer-button btn btn-primary">Open drawer</label>
@@ -136,7 +140,11 @@ const counterzero = () => {
                 <!-- 侧边栏标题 -->
                 <div class="p-5 border-b border-gray-100">
                     <h2 class="text-lg font-medium">Answer Sheet</h2>
-                    <p class="text-xs text-gray-500 mt-1">Track your progress</p>
+                    <div class="flex justify-between">
+                        <p class="text-xs text-gray-500 mt-1">Track your progress</p>
+                        <p class="text-xs text-blue-200 hover:text-blue-400 cursor-pointer"
+                            @click="showBlur = !showBlur">View All</p>
+                    </div>
                 </div>
 
                 <!-- 答案网格 -->
@@ -148,13 +156,17 @@ const counterzero = () => {
                                 'has-answer': answer.answer
                             }">
                                 <!-- 答案卡片 -->
-                                <div class="w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200 shadow-sm group-hover:shadow-md"
+                                <div class="relative w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200 shadow-sm group-hover:shadow-md"
                                     :class="[
                                         answer.answer ? 'bg-blue-50 text-blue-600 border border-blue-200' : 'bg-gray-50 border border-gray-200',
                                         answer.isCorrect === true ? 'bg-green-50 text-green-600 border border-green-200' : '',
                                         answer.isCorrect === false ? 'bg-red-50 text-red-600 border border-red-200' : ''
                                     ]">
                                     <span class="text-sm font-medium">{{ answer.answer || '?' }}</span>
+                                    <!-- 遮罩层 -->
+                                    <div v-if="mode === 'simulation' && showBlur"
+                                        class="answerblur w-full h-full absolute backdrop-blur-sm hover:backdrop-blur-[0px]">
+                                    </div>
                                 </div>
 
                                 <!-- 题号 -->

@@ -4,6 +4,7 @@ import type { answer } from "../interface/Question";
 
 interface paperdata {
   paperId: string;
+  paperType: string;
   userAnswers: answer[] | null;
   correctAnswers: answer[] | null;
   timestamp: number;
@@ -58,6 +59,11 @@ export const usepaperStore = defineStore(
     const currentUserAnswersLength = computed(() => {
       return Object.keys(currentUserAnswers.value).length;
     });
+    // 当前试卷类型
+    const currentPaperType = computed(() => {
+      if (!currentPaperId.value) return "";
+      return papersData.value[currentPaperId.value]?.paperType || "";
+    });
 
     //   设置当前试卷正确答案
     const setCurrentPaper = (paperId, correctAnswers) => {
@@ -76,6 +82,10 @@ export const usepaperStore = defineStore(
       } else {
         papersData.value[paperId].lastActive = Date.now();
       }
+    };
+    // 当前试卷类型
+    const setCurrentPaperType = (paperId, paperType) => {
+      papersData.value[paperId].paperType = paperType;
     };
 
     //   记录用户答案
@@ -122,7 +132,9 @@ export const usepaperStore = defineStore(
       currentUserAnswersLength,
       currentCorrectAnswersLength,
       currentTimestamp,
+      currentPaperType,
       setCurrentPaper,
+      setCurrentPaperType,
       updateUserAnswer,
       getUserAnswer,
       cleanupOldData,

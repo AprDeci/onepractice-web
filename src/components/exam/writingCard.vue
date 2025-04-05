@@ -27,8 +27,7 @@ watch(textinput, (text) => {
             <h2 class="text-2xl font-bold text-gray-800 mb-2  dark:text-base-content">Writing</h2>
             <div class="mb-6 p-4 bg-blue-50 rounded-lg">
                 <p class="text-sm text-blue-700 font-medium">
-                    Translate the following text into English. Your translation should be accurate, fluent and
-                    idiomatic.
+                    Write an English essay according to the requirements, your essay needs to use the correct words and complete sentence meaning.
                 </p>
             </div>
         </div>

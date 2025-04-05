@@ -21,7 +21,7 @@ const routes = [
         component: () => import("@/page/examIntroducePage.vue")
       },
       {
-        path: "page/:id",
+        path: "page/:id/:mode",
         props: true,
         name: "examPage",
         component: () => import("@/page/examPage.vue")
@@ -45,7 +45,7 @@ const routes = [
   },
   {
     path: "/test",
-    component: () => import("@/page/userInfoPage2.vue")
+    component: () => import("@/page/test.vue")
   },
   {
     path: "/:pathMatch(.*)",

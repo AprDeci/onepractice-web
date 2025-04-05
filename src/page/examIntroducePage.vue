@@ -10,39 +10,19 @@ import {
 } from 'lucide-vue-next'
 import { useRouter } from 'vue-router';
 import { getPaperIntro } from '../request/methods/paper';
-
+import { useRequest } from 'alova/client';
+import { usepaperStore } from '../store/paperStore';
 const { id } = defineProps<{
     id: string
 }>()
-interface PaperData {
-    paperName: string;
-    examYear: number;
-    examMonth: number;
-    paperType: string;
-    paperTime: number;
-    difficulty: null | number; // 或根据实际需要改为可选属性 difficulty?: number;
-    sectionCount: number;
-    sectionQuestionCount: number[];
-}
-const paperdata = ref<PaperData>({
-    paperName: '',
-    examYear: 0,
-    examMonth: 0,
-    paperType: '',
-    paperTime: 0,
-    difficulty: null,
-    sectionCount: 0,
-    sectionQuestionCount: []
-})
+
+const paperStore = usepaperStore()
 
 const router = useRouter();
-const examMode = ref<'timed' | 'simulation' | 'free'>('timed')
+const examMode = ref<'timed' | 'simulation' | 'free'>('simulation')
 
 const handleStartExam = () => {
-    // Handle exam start based on selected mode
-    console.log(`Starting exam in ${examMode.value} mode`)
-    // Navigate to exam page with the selected mode
-    router.push({ name: 'examPage', query: { id: id } })
+    router.push({ name: 'examPage', params: { id: id, mode: examMode.value } })
 }
 
 const getDifficultyColor = (difficulty: string): string => {
@@ -54,14 +34,12 @@ const getDifficultyColor = (difficulty: string): string => {
     }
 }
 
-const capitalizeFirstLetter = (string: string): string => {
-    return string.charAt(0).toUpperCase() + string.slice(1)
-}
 
-onMounted(async () => {
-    let data = await getPaperIntro(id);
-    paperdata.value = data;
+const { data: paperdata } = useRequest(getPaperIntro(id)).onSuccess(e => {
+    paperStore.setCurrentPaperType(id, e.data.paperType)
 })
+
+
 
 </script>
 
@@ -96,12 +74,12 @@ onMounted(async () => {
                 <div class="p-6">
                     <div class="space-y-4">
                         <div class="flex items-center space-x-2 mb-4">
-                            <input type="radio" id="timed" value="timed" v-model="examMode"
+                            <input disabled type="radio" id="timed" value="timed" v-model="examMode"
                                 class="h-4 w-4 text-blue-600 focus:ring-blue-500" />
                             <label for="timed" class="flex items-center gap-2 cursor-pointer">
                                 <ClockIcon class="h-4 w-4" />
                                 <div>
-                                    <p class="font-medium">Timed Mode</p>
+                                    <p class="font-medium text-gray-400">Timed Mode(Undeveloped)</p>
                                     <p class="text-sm text-gray-500">Strict time limits for each section</p>
                                 </div>
                             </label>
@@ -113,7 +91,8 @@ onMounted(async () => {
                                 <PlayCircleIcon class="h-4 w-4" />
                                 <div>
                                     <p class="font-medium">Simulation Mode</p>
-                                    <p class="text-sm text-gray-500">Full exam experience with breaks</p>
+                                    <p class="text-sm text-gray-500">The full exam, countdown corresponding time, can
+                                        exit halfway</p>
                                 </div>
                             </label>
                         </div>
