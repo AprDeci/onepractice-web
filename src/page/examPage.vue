@@ -10,54 +10,21 @@ import { getAllQuestionsBypaperIdSplitByPart, getAnswersByPaperId } from '../req
 import { useRequest } from 'alova/client'
 import { usepaperStore } from '../store/paperStore.ts'
 import { saveRecord } from '../request/methods/record.ts'
+import { motion, AnimatePresence } from 'motion-v'
 const paperStore = usepaperStore()
 const { id } = defineProps<{
     id: string
 }>()
 
 const router = useRouter()
-
-// 计时函数 - 待修改
-const time = ref(120 * 60)
-const startcooldown = () => {
-    const cooldownh = document.getElementById('cooldownh')
-    const cooldownm = document.getElementById('cooldownm')
-    const cooldowns = document.getElementById('cooldowns')
-    // 将time(单位为秒)转换为小时、分钟和秒
-    let seconds = 59; // 初始化秒数为59
-    const interval = setInterval(() => {
-        let counter = time.value;
-        let hours = Math.floor(time.value / 60 / 60);
-        let minutes = Math.floor(time.value / 60) % 60;
-
-        if (counter > 0) {
-            time.value--;
-            seconds--; // 秒数减1
-            if (seconds < 0) {
-                seconds = 59; // 当秒数减到0时重置为59
-            }
-        }
-
-        if (cooldownh) {
-            cooldownh.style.setProperty('--value', hours.toString())
-        }
-        if (cooldownm) {
-            cooldownm.style.setProperty('--value', minutes.toString())
-        }
-        if (cooldowns) {
-            cooldowns.style.setProperty('--value', seconds.toString())
-        }
-        if (counter === 0) {
-            clearInterval(interval)
-        }
-    }, 1000)
-}
+const seconds = ref(0)
 const selectedtab = ref('writing')
 const selectedindex = ref(0)
 const { loading, data, send } = useRequest(getAllQuestionsBypaperIdSplitByPart(id))
 const { loading: answerload, data: answerdata } = useRequest(getAnswersByPaperId(id)).onSuccess(e => {
     paperStore.setCurrentPaper(id, answerdata.value.answers)
 })
+const showAlert = ref(false)
 onMounted(async () => {
     startcooldown()
 })
@@ -83,8 +50,12 @@ const cleanAnswer = () => {
 
 const submit = async () => {
     const data = await saveRecord(paperStore.currentPaperId, "test", 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, Object.keys(paperStore.currentCorrectAnswers).length, 0)
-    console.log(data)
     router.push({ name: 'examResult' });
+
+}
+
+const counterzero = () => {
+    console.log(111)
 }
 </script>
 
@@ -92,21 +63,14 @@ const submit = async () => {
     <div class="drawer drawer-end">
         <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content">
+
             <div class=" navbar bg-base-100 shadow-sm flex justify-between">
                 <div class="navbar-start hidden lg:flex">
                     <span class="text-xl mx-2 cursor-pointer" @click="router.push('/')">One Practice</span>
                 </div>
                 <div class="navbar-center">
                     <Timer />
-                    <div>
-                        <span class="countdown font-mono text-lg lg:text-2xl">
-                            <span id="cooldownh" style="--value:2;" aria-live="polite" aria-label="2">2</span>
-                            :
-                            <span id="cooldownm" style="--value:0;" aria-live="polite" aria-label="0">0</span>
-                            :
-                            <span id="cooldowns" style="--value:0;" aria-live="polite" aria-label="0">0</span>
-                        </span>
-                    </div>
+                    <CounterReverse @todo="counterzero" :seconds="seconds"></CounterReverse>
                 </div>
                 <div class="navbar-end">
                     <label for="my-drawer-4" class="drawer-button btn btn-primary">Open drawer</label>
@@ -137,10 +101,30 @@ const submit = async () => {
                         <div class="btn btn-sm lg:btn-md">Next Section</div>
                     </aside>
                     <nav class="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
-                        <div class="btn btn-primary btn-sm lg:btn-md" @click="submit">
+                        <div class="btn btn-primary btn-sm lg:btn-md" @click="showAlert = !showAlert">
                             submit
                         </div>
                     </nav>
+                    <AnimatePresence>
+                        <motion.div :initial="{ y: 20, opacity: 0 }" :animate="{ y: 0, opacity: 1 }"
+                            :exit="{ opacity: 1, y: [0, 20, -1000], scaleY: [1, 0.4, 0], scaleX: [1, 0.7, 0], transition: { duration: 0.8, times: [0, 0.6, 0.8] } }"
+                            :transition="{
+                                duration: 0.4,
+                            }" v-if="showAlert" role="alert"
+                            class="absolute right-2  bottom-20 alert alert-vertical sm:alert-horizontal">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                class="stroke-info h-6 w-6 shrink-0">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span>确认提交吗? <span
+                                    v-if="paperStore.currentUserAnswersLength != paperStore.currentCorrectAnswersLength">您还没有做完所有题目</span></span>
+                            <div class="flex gap-2">
+                                <button @click="showAlert = false" class="btn btn-sm">不交不交</button>
+                                <button @click="submit" class="btn btn-sm btn-primary">交!</button>
+                            </div>
+                        </motion.div>
+                    </AnimatePresence>
                 </footer>
             </footer>
         </div>
@@ -203,5 +187,6 @@ const submit = async () => {
                 </div>
             </div>
         </div>
+
     </div>
 </template>

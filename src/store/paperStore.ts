@@ -51,6 +51,14 @@ export const usepaperStore = defineStore(
       }, {});
     });
 
+    const currentCorrectAnswersLength = computed(() => {
+      return Object.keys(currentCorrectAnswers.value).length;
+    });
+
+    const currentUserAnswersLength = computed(() => {
+      return Object.keys(currentUserAnswers.value).length;
+    });
+
     //   设置当前试卷正确答案
     const setCurrentPaper = (paperId, correctAnswers) => {
       currentPaperId.value = paperId;
@@ -104,14 +112,6 @@ export const usepaperStore = defineStore(
       papersData.value[currentPaperId.value].timestamp = Date.now();
     };
 
-    const getLength = (key: string) => {
-      if (key === "userAnswer") {
-        return Object.keys(currentUserAnswers).length;
-      }
-      if (key === "correctAnswer") {
-        return Object.keys(currentCorrectAnswers).length;
-      }
-    };
     return {
       papersData,
       currentPaperId,
@@ -119,13 +119,14 @@ export const usepaperStore = defineStore(
       currentCorrectAnswers,
       currentScore,
       currentAnswerStatus,
+      currentUserAnswersLength,
+      currentCorrectAnswersLength,
       currentTimestamp,
       setCurrentPaper,
       updateUserAnswer,
       getUserAnswer,
       cleanupOldData,
-      cleancurrentUserAnswer,
-      getLength
+      cleancurrentUserAnswer
     };
   },
   {

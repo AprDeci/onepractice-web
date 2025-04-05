@@ -9,8 +9,11 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Alert: typeof import('./src/components/common/alert.vue')['default']
+    AnimatePresence: typeof import('motion-v')['AnimatePresence']
     AudioPlayer: typeof import('./src/components/common/audioPlayer.vue')['default']
     copy: typeof import('./src/components/exam/writingCard copy.vue')['default']
+    Counter: typeof import('./src/components/common/counter.vue')['default']
+    CounterReverse: typeof import('./src/components/common/counterReverse.vue')['default']
     ExamResult: typeof import('./src/components/exam/examResult.vue')['default']
     ExamResult2: typeof import('./src/components/exam/examResult2.vue')['default']
     ExamResultPage: typeof import('./src/components/exam/examResultPage.vue')['default']
