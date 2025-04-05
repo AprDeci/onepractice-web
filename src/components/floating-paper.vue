@@ -28,7 +28,7 @@ const paperColors = [
 // 创建初始纸片（减少数量并优化分布）
 const createInitialPapers = (): Paper[] => {
     const initialPapers: Paper[] = []
-    const paperCount = 15 // 从25减少到15
+    const paperCount = 10 // 从25减少到15
 
     for (let i = 0; i < paperCount; i++) {
         initialPapers.push({
