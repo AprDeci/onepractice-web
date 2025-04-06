@@ -69,6 +69,7 @@ export const usepaperStore = defineStore(
     const setCurrentPaper = (paperId, correctAnswers) => {
       currentPaperId.value = paperId;
 
+      // 之前没有值 进入试卷
       if (!papersData.value[paperId]) {
         papersData.value[paperId] = {
           userAnswers: {},
@@ -79,13 +80,35 @@ export const usepaperStore = defineStore(
           timestamp: Date.now(),
           lastActive: Date.now()
         };
+      } else if (!papersData.value[paperId].correctAnswers) {
+        // 缓存删除 从历史记录进入 已经设置好useranswers
+        papersData.value[paperId] = {
+          correctAnswers: correctAnswers.reduce((acc, item) => {
+            acc[item.index] = item.answer;
+            return acc;
+          }, {}),
+          timestamp: Date.now(),
+          lastActive: Date.now()
+        };
       } else {
+        // 之前有值 重新进入试卷
         papersData.value[paperId].lastActive = Date.now();
       }
     };
     // 当前试卷类型
     const setCurrentPaperType = (paperId, paperType) => {
       papersData.value[paperId].paperType = paperType;
+    };
+
+    // 设置用户做题答案
+    const setUserAnswer = (paperId, answer) => {
+      if (!papersData.value[paperId]) {
+        papersData.value[paperId] = {
+          userAnswers: answer
+        };
+      } else {
+        papersData.value[paperId].userAnswers = answer;
+      }
     };
 
     //   记录用户答案
@@ -106,7 +129,7 @@ export const usepaperStore = defineStore(
     };
 
     //   清理过期的试卷数据
-    const cleanupOldData = (maxAge = 30 * 24 * 60 * 60 * 1000) => {
+    const cleanupOldData = (maxAge = 2 * 60 * 60 * 1000) => {
       const now = Date.now();
       for (const paperId in papersData.value) {
         if (now - papersData.value[paperId].timestamp > maxAge) {
@@ -135,6 +158,7 @@ export const usepaperStore = defineStore(
       currentPaperType,
       setCurrentPaper,
       setCurrentPaperType,
+      setUserAnswer,
       updateUserAnswer,
       getUserAnswer,
       cleanupOldData,

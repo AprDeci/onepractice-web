@@ -5,16 +5,28 @@ import { useRequest } from 'alova/client';
 import { getUserInfo } from '../request/methods/user';
 import { getRecords } from '../request/methods/record';
 import { BookA } from 'lucide-vue-next';
+import { usepaperStore } from '../store/paperStore';
+import { useRouter } from 'vue-router';
 import { timestamp } from '@vueuse/core';
 const { data: userinfo } = useRequest(getUserInfo)
 const { data: records } = useRequest(getRecords(7))
+const paperStore = usepaperStore();
+const router = useRouter();
 // 通过时间戳计算当时日期
 const getDate = (timestamp: number) => {
-    const date = new Date(timestamp);
+    const date = new Date(timestamp / 1000);
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const day = date.getDate();
     return `${year}-${month}-${day}`;
+}
+const Continue = (index: number) => {
+    // 跟随记录继续写
+    const recorddata = records.value[index]
+    // 跳转试卷页面 设置当前试卷id和当前用户答案
+    paperStore.setCurrentPaperType(recorddata.paperId, recorddata.paperType)
+    paperStore.setUserAnswer(recorddata.paperId, JSON.parse(recorddata.answers))
+    router.push({ name: 'examPage', params: { id: recorddata.paperId, mode: recorddata.type } })
 }
 </script>
 
@@ -68,28 +80,36 @@ const getDate = (timestamp: number) => {
                                             </div>
                                             <div class="flex flex-col gap-1">
                                                 <span>{{ record.paperName }}</span>
-                                                <span class="text-[12px] text-gray-400">{{ record.paperType }}</span>
+                                                <div class="rounded-sm w-fit px-2" :class="{
+                                                    'bg-purple-200': record.paperType == 'CET-4',
+                                                    'bg-pink-200': record.paperType == 'CET-6',
+                                                }">
+                                                    <span class="text-[12px] text-gray-400">{{
+                                                        record.paperType }}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </th>
                                     <td>{{ getDate(record.timestamp * 1000) }}</td>
                                     <td>{{ record.score }}/{{ record.totalscore }}</td>
                                     <td>
-                                        <div v-if="record.isfinished === 1">
+                                        <div class="flex items-center gap-2" v-if="record.isfinished === 1">
                                             <div class="inline-grid *:[grid-area:1/1]">
                                                 <div class="status status-success animate-ping"></div>
                                                 <div class="status status-success"></div>
-                                                <span>Finished</span>
-                                            </div>
+
+                                            </div> <span>Finished</span>
                                         </div>
-                                        <div v-else>
+                                        <div class="flex items-center gap-2" v-else>
                                             <div class="inline-grid *:[grid-area:1/1]">
-                                                <div class="status status-success animate-ping"></div>
-                                                <div class="status status-success"></div>
+                                                <div class="status status-warning animate-ping"></div>
+                                                <div class="status status-warning"></div>
                                             </div> <span>Unfinished</span>
                                         </div>
                                     </td>
-                                    <th class="text-blue-500 cursor-pointer">Review</th>
+                                    <th v-if="record.isfinished === 1" class="text-blue-500 cursor-pointer">Review</th>
+                                    <th @click="Continue(index)" v-else class="text-blue-500 cursor-pointer">Continue
+                                    </th>
                                 </tr>
                             </tbody>
                         </table>

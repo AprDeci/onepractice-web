@@ -13,7 +13,9 @@ import type { PaperQueryDTO } from '../interface/Paper';
 // const { data: papers } = useRequest(getallpaper)
 const type = ref('');
 const year = ref(0);
-
+const years = [
+    2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013, 2012, 2011, 2010
+];
 const { loading, data: papers, isLastPage, page, pageSize, pageCount, total } = usePagination((page, pageSize) => getPaperswithQueryBypage(page, pageSize, type.value, year.value),
     {
         initialData: {
@@ -42,10 +44,10 @@ const changePage = (newval: number) => {
                 <div>
                     <section className="container mx-auto px-4 py-10">
                         <div className="flex justify-between items-center mb-8 gap-2">
-                            <div class="flex-col items-center">
+                            <div class="flex-col items-center relative bottom-5 lg:bottom-0">
                                 <h1 className="text-2xl md:text-3xl font-bold mr-5">Available Papers</h1>
-                                <div class="flex gap-2 items-center mt-2" v-if="type != '' || year != 0">
-                                    <span class="text-gray-400 ml-10">Conditions:</span>
+                                <div class="absolute flex gap-2 items-center top-[130%]" v-if="type != '' || year != 0">
+                                    <span class="hidden text-gray-400 lg:block">Conditions:</span>
                                     <div v-if="type != ''" @click="type = ''"
                                         class="group badge badge-outline badge-accent badge-sm cursor-pointer">{{ type
                                         }}
@@ -64,11 +66,10 @@ const changePage = (newval: number) => {
                                     <option v-for="(atype, index) in types" :key="index">{{ atype
                                     }}</option>
                                 </select>
-                                <select className="px-3 py-2 border border-gray-200 rounded-md text-sm">
-                                    <option>All Years</option>
+                                <select v-model="year" className="px-3 py-2 border border-gray-200 rounded-md text-sm">
+                                    <option value="0">All Years</option>
                                     <!-- 从2024到2010 -->
-
-
+                                    <option v-for="i in years" :key="i">{{ i }}</option>
                                 </select>
                             </div>
                         </div>

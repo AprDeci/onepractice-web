@@ -20,7 +20,7 @@ const { id, mode } = defineProps<{
 
 const showBlur = ref(true)
 const router = useRouter()
-const seconds = Times[paperStore.currentPaperType] * 60
+const seconds = Times[paperStore.currentPaperType] * 60 | 125
 const selectedtab = ref('writing')
 const selectedindex = ref(0)
 const { loading, data, send } = useRequest(getAllQuestionsBypaperIdSplitByPart(id))
@@ -28,9 +28,6 @@ const { loading: answerload, data: answerdata } = useRequest(getAnswersByPaperId
     paperStore.setCurrentPaper(id, answerdata.value.answers)
 })
 const showAlert = ref(false)
-onMounted(async () => {
-    startcooldown()
-})
 
 const cards = {
     'writing': WritingCard,
@@ -65,6 +62,8 @@ const counterzero = () => {
 <template>
     <div class="drawer drawer-end">
         <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
+
+
         <div class="drawer-content">
             <div class=" navbar bg-base-100 shadow-sm flex justify-between">
                 <div class="navbar-start hidden lg:flex">
@@ -83,11 +82,12 @@ const counterzero = () => {
 
             <div class="middle px-6">
                 <div class="mt-8 mb-4">
-                    <div role="tablist" class="tabs tabs-box w-82 lg:w-105">
-                        <a :class="{ 'tab-active': selectedtab === Part.questions[0].questionType }" role="tab"
+                    <div role="tablist" class="tabs tabs-box"
+                        :style="`width: ${data.questionParts.length * 26 / 4}rem`">
+                        <div :class="{ 'tab-active': selectedtab === Part.questions[0].questionType }" role="tab"
                             class="tab w-20 lg:w-25 h-12" v-for="(Part, index) in data.questionParts" :key="index"
                             @click="changeTab(Part.questions[0].questionType, index)">{{
-                                Part.questions[0].partName }}</a>
+                                Part.questions[0].partName }}</div>
                     </div>
                 </div>
                 <div class="w-full  mb-4">

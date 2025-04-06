@@ -1,4 +1,5 @@
 import { createWebHashHistory, createRouter } from "vue-router";
+import { usepaperStore } from "../store/paperStore";
 
 const routes = [
   {
@@ -56,4 +57,12 @@ const routes = [
 export const router = createRouter({
   history: createWebHashHistory(),
   routes
+});
+
+// 路由守卫
+router.beforeEach(async (to, from) => {
+  const paperStore = usepaperStore();
+  // 清理过期数据
+  paperStore.cleanupOldData();
+  return true;
 });

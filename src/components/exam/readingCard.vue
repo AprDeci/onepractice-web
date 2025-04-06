@@ -14,8 +14,8 @@ const reorderedData = computed(() => {
     return [
         data.questions.find(item => item.questionType === "cloze"),      // 完形填空
         data.questions.find(item => item.questionType === "matching"),   // 匹配题
-        data.questions.find(item => item.questionType === "reading" && item.questionId === 15), // 阅读1
-        data.questions.find(item => item.questionType === "reading" && item.questionId === 16)  // 阅读2
+        data.questions.find(item => item.questionType === "reading" && item.questionOrder === 3), // 阅读1
+        data.questions.find(item => item.questionType === "reading" && item.questionOrder === 4)  // 阅读2
     ]
 })
 const getprev = () => {
@@ -38,6 +38,7 @@ const hasprev = computed(() => {
 </script>
 
 <template>
+
     <QuestionContainer :has-next="hasnext" :has-prev="hasprev" @prev="getprev" @next="getnext">
         <ReadingcLozeCard v-show="activetype === 'cloze'" :question="reorderedData[0]"></ReadingcLozeCard>
         <ReadingmtachCard v-show="activetype === 'match'" :question="reorderedData[1]"></ReadingmtachCard>
