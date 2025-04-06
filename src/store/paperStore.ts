@@ -145,6 +145,11 @@ export const usepaperStore = defineStore(
       papersData.value[currentPaperId.value].timestamp = Date.now();
     };
 
+    const cleanAll = () => {
+      papersData.value = {};
+      currentPaperId.value = null;
+    };
+
     return {
       papersData,
       currentPaperId,
@@ -162,7 +167,8 @@ export const usepaperStore = defineStore(
       updateUserAnswer,
       getUserAnswer,
       cleanupOldData,
-      cleancurrentUserAnswer
+      cleancurrentUserAnswer,
+      cleanAll
     };
   },
   {

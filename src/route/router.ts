@@ -1,11 +1,20 @@
 import { createWebHashHistory, createRouter } from "vue-router";
 import { usepaperStore } from "../store/paperStore";
 
+const hasLogin = () => {
+  return localStorage.getItem("token") !== null;
+};
+
 const routes = [
   {
     path: "/login",
     name: "login",
     component: () => import("@/page/loginPage.vue")
+  },
+  {
+    path: "/register",
+    name: "register",
+    component: () => import("@/page/registerPage.vue")
   },
   {
     path: "/",
@@ -37,7 +46,10 @@ const routes = [
   {
     path: "/userInfo",
     name: "userInfo",
-    component: () => import("@/page/userInfoPage.vue")
+    component: () => import("@/page/userInfoPage.vue"),
+    meta: {
+      requiredAuth: true
+    }
   },
   {
     path: "/404",
@@ -64,5 +76,10 @@ router.beforeEach(async (to, from) => {
   const paperStore = usepaperStore();
   // 清理过期数据
   paperStore.cleanupOldData();
+  if (to.meta.requiredAuth && !hasLogin()) {
+    return {
+      path: "/login"
+    };
+  }
   return true;
 });

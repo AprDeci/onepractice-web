@@ -10,7 +10,7 @@ interface Paper {
     examYear: number,
     examMonth: number,
     level: string,
-    questioncount: number,
+    questionCount: number,
 
 }
 const router = useRouter()
@@ -96,7 +96,7 @@ const getTypeColor = (type: string) => {
                 <div class="flex items-center justify-between">
                     <div class="infodiv">
                         <FileText :size="16" :stroke-width="1.25" />
-                        <span>40 questions</span>
+                        <span>{{ paper?.questionCount }}题</span>
                     </div>
                     <div class="infodiv">
                         <Clock4 :stroke-width="1.25" size="16" /><span>{{ paper?.totalTime }} min</span>

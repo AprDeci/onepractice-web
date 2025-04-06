@@ -4,8 +4,10 @@ import { onMounted, ref } from 'vue';
 import { getUserInfo } from '../request/methods/user';
 import { useRequest } from 'alova/client';
 import { getAllPaperTypes } from '../request/methods/paper';
+import { usepaperStore } from '../store/paperStore';
 import { types } from '../common/paper';
 const router = useRouter();
+const paperStore = usepaperStore();
 const haslogin = localStorage.getItem('token') ? true : false;
 const userInfo = ref({
     username: '',
@@ -18,6 +20,12 @@ onMounted(async () => {
         userInfo.value.userType = data.userType;
     }
 })
+
+const logout = () => {
+    localStorage.removeItem('token');
+    paperStore.cleanAll();
+    location.reload();
+}
 </script>
 
 <template>
@@ -51,7 +59,7 @@ onMounted(async () => {
         <div class="hidden lg:contents">
             <div class="navbar-center">
                 <ul class="menu menu-horizontal px-1 gap-6">
-                    <li><a class="text-sm font-medium transition-colors">All Tests</a>
+                    <li><a @click="router.push('/')" class="text-sm font-medium transition-colors">All Tests</a>
                     </li>
                     <li>
                         <details>
@@ -63,7 +71,7 @@ onMounted(async () => {
                         </details>
                     </li>
                     <li><a>Difficulty</a></li>
-                    <li><a href="">My progress</a></li>
+                    <li><a href="" @click="router.push({ name: 'userInfo' })">My progress</a></li>
                 </ul>
             </div>
             <div class="theme ml-5">
@@ -85,14 +93,20 @@ onMounted(async () => {
                 </label>
             </div>
         </div>
-        <div class="navbar-end" v-if="!haslogin">
+        <div class="navbar-end flex gap-5" v-if="!haslogin">
             <div class="btn" @click="router.push('/login')">Sign in</div>
-            <div class="btn btn-primary" @click="router.push('/login')">Sign Up</div>
+            <div class="btn btn-primary" @click="router.push('/register')">Sign Up</div>
         </div>
         <div class="navbar-end" v-else>
-            <div @click="router.push({ name: 'userInfo' })"
-                class="hover:bg-gray-100 mr-10 w-20 flex justify-center items-center h-10 rounded-sm cursor-pointer">
-                <span class="name">{{ userInfo.username }}</span>
+            <div
+                class="hover:bg-gray-100 mr-10 w-20 flex justify-center items-center h-10 rounded-sm cursor-pointer rounded-lg">
+                <details class="dropdown  dropdown-center">
+                    <summary class="select-none">{{ userInfo.username }}</summary>
+                    <ul class="menu dropdown-content bg-base-100 rounded-box w-30 z-1 p-2 shadow-sm">
+                        <li><a>My Space</a></li>
+                        <li><a @click="logout" class="text-red-500">Log Out</a></li>
+                    </ul>
+                </details>
             </div>
         </div>
     </div>
