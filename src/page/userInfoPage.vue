@@ -14,7 +14,7 @@ const paperStore = usepaperStore();
 const router = useRouter();
 // 通过时间戳计算当时日期
 const getDate = (timestamp: number) => {
-    const date = new Date(timestamp / 1000);
+    const date = new Date(timestamp);
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const day = date.getDate();
@@ -24,9 +24,9 @@ const Continue = (index: number) => {
     // 跟随记录继续写
     const recorddata = records.value[index]
     // 跳转试卷页面 设置当前试卷id和当前用户答案
-    paperStore.setCurrentPaperType(recorddata.paperId, recorddata.paperType)
+    paperStore.setCurrentPaperType(recorddata.paperType)
     paperStore.setUserAnswer(recorddata.paperId, JSON.parse(recorddata.answers))
-    router.push({ name: 'examPage', params: { id: recorddata.paperId, mode: recorddata.type } })
+    router.push({ name: 'examPageContinue', params: { id: recorddata.paperId, mode: recorddata.type, recordId: recorddata.recordId } })
 }
 </script>
 
@@ -80,17 +80,23 @@ const Continue = (index: number) => {
                                             </div>
                                             <div class="flex flex-col gap-1">
                                                 <span>{{ record.paperName }}</span>
-                                                <div class="rounded-sm w-fit px-2" :class="{
-                                                    'bg-purple-200': record.paperType == 'CET-4',
-                                                    'bg-pink-200': record.paperType == 'CET-6',
-                                                }">
-                                                    <span class="text-[12px] text-gray-400">{{
-                                                        record.paperType }}</span>
+                                                <div class="flex gap-1 items-center">
+                                                    <div class="rounded-sm w-fit px-2" :class="{
+                                                        'bg-purple-200': record.paperType == 'CET-4',
+                                                        'bg-pink-200': record.paperType == 'CET-6',
+                                                    }">
+                                                        <span class="text-[12px] text-gray-400">{{
+                                                            record.paperType }}</span>
+
+                                                    </div>
+                                                    <div class="lg:hidden text-gray-400 text-xs timeline-middle">
+                                                        {{ getDate(record.timestamp) }}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </th>
-                                    <td>{{ getDate(record.timestamp * 1000) }}</td>
+                                    <td>{{ getDate(record.timestamp) }}</td>
                                     <td>{{ record.score }}/{{ record.totalscore }}</td>
                                     <td>
                                         <div class="flex items-center gap-2" v-if="record.isfinished === 1">

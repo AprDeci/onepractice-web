@@ -37,6 +37,12 @@ const routes = [
         component: () => import("@/page/examPage.vue")
       },
       {
+        path: "page/:id/:mode/:recordId",
+        props: true,
+        name: "examPageContinue",
+        component: () => import("@/page/examPage.vue")
+      },
+      {
         path: "result",
         name: "examResult",
         component: () => import("@/page/examResultPage.vue")

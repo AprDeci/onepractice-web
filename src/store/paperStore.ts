@@ -4,7 +4,6 @@ import type { answer } from "../interface/Question";
 
 interface paperdata {
   paperId: string;
-  paperType: string;
   userAnswers: answer[] | null;
   correctAnswers: answer[] | null;
   timestamp: number;
@@ -12,9 +11,12 @@ interface paperdata {
 export const usepaperStore = defineStore(
   "paperStore",
   () => {
+    // state
     const papersData = ref<Record<number, paperdata>>({}); // 所有试卷数据 { paperId: { userAnswers, correctAnswers, timestamp } }
     const currentPaperId = ref<number | null>(null); // 当前试卷ID
+    const currentPaperType = ref<string | null>(null);
 
+    // getter
     const currentUserAnswers = computed(() => {
       if (!currentPaperId.value) return {};
       return papersData.value[currentPaperId.value]?.userAnswers || {};
@@ -59,17 +61,12 @@ export const usepaperStore = defineStore(
     const currentUserAnswersLength = computed(() => {
       return Object.keys(currentUserAnswers.value).length;
     });
-    // 当前试卷类型
-    const currentPaperType = computed(() => {
-      if (!currentPaperId.value) return "";
-      return papersData.value[currentPaperId.value]?.paperType || "";
-    });
-
-    //   设置当前试卷正确答案
+    //   设置当前试卷正确答案 初始化
+    // 初始化
     const setCurrentPaper = (paperId, correctAnswers) => {
       currentPaperId.value = paperId;
 
-      // 之前没有值 进入试卷
+      // 之前没有值 进入试卷 (不可能没值 从paperinfo/userinfo)
       if (!papersData.value[paperId]) {
         papersData.value[paperId] = {
           userAnswers: {},
@@ -82,22 +79,20 @@ export const usepaperStore = defineStore(
         };
       } else if (!papersData.value[paperId].correctAnswers) {
         // 缓存删除 从历史记录进入 已经设置好useranswers
-        papersData.value[paperId] = {
-          correctAnswers: correctAnswers.reduce((acc, item) => {
-            acc[item.index] = item.answer;
-            return acc;
-          }, {}),
-          timestamp: Date.now(),
-          lastActive: Date.now()
-        };
+        papersData.value[paperId].correctAnswers = correctAnswers.reduce((acc, item) => {
+          acc[item.index] = item.answer;
+          return acc;
+        }, {});
+        papersData.value[paperId].timestamp = Date.now();
+        papersData.value[paperId].lastActive = Date.now();
       } else {
         // 之前有值 重新进入试卷
         papersData.value[paperId].lastActive = Date.now();
       }
     };
     // 当前试卷类型
-    const setCurrentPaperType = (paperId, paperType) => {
-      papersData.value[paperId].paperType = paperType;
+    const setCurrentPaperType = (paperType: string) => {
+      currentPaperType.value = paperType;
     };
 
     // 设置用户做题答案

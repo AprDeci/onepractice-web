@@ -9,13 +9,14 @@ import TranslationCard from '../components/exam/TranslationCard.vue'
 import { getAllQuestionsBypaperIdSplitByPart, getAnswersByPaperId } from '../request/methods/question'
 import { useRequest } from 'alova/client'
 import { usepaperStore } from '../store/paperStore.ts'
-import { saveRecord } from '../request/methods/record.ts'
+import { saveRecord, updateRecord } from '../request/methods/record.ts'
 import { motion, AnimatePresence } from 'motion-v'
 import { Times } from '../common/examMode.ts'
 const paperStore = usepaperStore()
-const { id, mode } = defineProps<{
+const { id, mode, recordId } = defineProps<{
     id: string,
     mode: string
+    recordId?: string
 }>()
 
 const showBlur = ref(true)
@@ -49,7 +50,19 @@ const cleanAnswer = () => {
 }
 
 const submit = async () => {
-    await saveRecord(paperStore.currentPaperId, mode, paperStore.currentUserAnswersLength === paperStore.currentCorrectAnswersLength ? 1 : 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, Object.keys(paperStore.currentCorrectAnswers).length, 0)
+    // 没做题不让提交
+    if (paperStore.currentUserAnswersLength === 0) {
+        router.push({ name: 'examResult' });
+        return ''
+    }
+    if (recordId) {
+
+        await updateRecord(recordId, paperStore.currentPaperId, mode, paperStore.currentUserAnswersLength === paperStore.currentCorrectAnswersLength ? 1 : 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, Object.keys(paperStore.currentCorrectAnswers).length, 0);
+
+    } else {
+
+        await saveRecord(paperStore.currentPaperId, mode, paperStore.currentUserAnswersLength === paperStore.currentCorrectAnswersLength ? 1 : 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, Object.keys(paperStore.currentCorrectAnswers).length, 0);
+    }
     router.push({ name: 'examResult' });
 
 }

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
+import { loadRouteLocation, useRouter } from 'vue-router';
 import { onMounted, ref } from 'vue';
 import { getUserInfo } from '../request/methods/user';
-import { useRequest } from 'alova/client';
-import { getAllPaperTypes } from '../request/methods/paper';
 import { usepaperStore } from '../store/paperStore';
 import { types } from '../common/paper';
+import { Armchair, LogOut } from 'lucide-vue-next';
+import { logout } from '../request/methods/user';
 const router = useRouter();
 const paperStore = usepaperStore();
 const haslogin = localStorage.getItem('token') ? true : false;
@@ -21,10 +21,10 @@ onMounted(async () => {
     }
 })
 
-const logout = () => {
-    localStorage.removeItem('token');
+const postlogout = async () => {
+    await logout();
     paperStore.cleanAll();
-    location.reload();
+    location.reload()
 }
 </script>
 
@@ -102,9 +102,15 @@ const logout = () => {
                 class="hover:bg-gray-100 mr-10 w-20 flex justify-center items-center h-10 rounded-sm cursor-pointer rounded-lg">
                 <details class="dropdown  dropdown-center">
                     <summary class="select-none">{{ userInfo.username }}</summary>
-                    <ul class="menu dropdown-content bg-base-100 rounded-box w-30 z-1 p-2 shadow-sm">
-                        <li><a>My Space</a></li>
-                        <li><a @click="logout" class="text-red-500">Log Out</a></li>
+                    <ul class="menu dropdown-content bg-base-100 rounded-box w-32 lg:w-35 z-1 p-2 shadow-sm">
+                        <li>
+                            <a @click="router.push({ name: 'userInfo' })">
+                                <Armchair :size="14" :stroke-width="1.5" />My Space
+                            </a>
+                        </li>
+                        <li><a @click="postlogout" class="text-red-500">
+                                <LogOut :size="14" color="#ff2424" />Log Out
+                            </a></li>
                     </ul>
                 </details>
             </div>

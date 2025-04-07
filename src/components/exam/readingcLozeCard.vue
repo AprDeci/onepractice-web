@@ -156,7 +156,6 @@ onMounted(() => {
         const blanknum = firstindex + i;
         const label = paperStore.getUserAnswer(blanknum);
         if (label === undefined) continue
-        console.log(label)
         const wordindex = label.charCodeAt() - 65;
         selectedWords.value[blanknum] = question.wordBank[wordindex];
     }

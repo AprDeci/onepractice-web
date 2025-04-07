@@ -7,10 +7,9 @@ import { fetchError, HttpRequestError, BusinessLogicError } from "../common/erro
 const { onAuthRequired, onResponseRefreshToken } = createClientTokenAuthentication({
   async login(response, method) {
     const json = await response.clone().json();
-    console.log(json);
     localStorage.setItem("token", json.data.token);
   },
-  logout(response, method) {
+  async logout(response, method) {
     localStorage.removeItem("token");
   }
   // ...
