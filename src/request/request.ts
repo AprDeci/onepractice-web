@@ -30,6 +30,10 @@ export const httpclient = createAlova({
         throw new HttpRequestError(Response.statusText);
       }
       const json = await Response.json();
+      if (json.code === 10005) {
+        localStorage.removeItem("token");
+        location.href = "/login";
+      }
       if (json.code !== 200) {
         throw new BusinessLogicError(json.msg);
       }

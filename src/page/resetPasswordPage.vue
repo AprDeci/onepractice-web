@@ -62,6 +62,7 @@ const { data: resetdata, loading: resetLoading, send: sendPassword } = useReques
 
 <template>
     <main class="">
+        <div class="absolute left-2 cursor-pointer z-1" @click="router.push('/')">Home</div>
         <div class="partone flex justify-center items-center h-dvh">
             <!-- 消息弹窗 -->
             <AnimatePresence>
@@ -85,7 +86,7 @@ const { data: resetdata, loading: resetLoading, send: sendPassword } = useReques
             <!-- 登陆 -->
             <div class="login-card card h-auto w-80 lg:w-100 bg-base-100 shadow-xl px-5 py-5 flex flex-col gap-5">
                 <div class="card-title">重置密码</div>
-                <div class="w-full">
+                <div class="w-full flex flex-col gap-2">
                     <!-- 验证码界面 -->
                     <fieldset v-if="!verifed" class="fieldset relative">
                         <label class="fieldset-label text-sm">Email</label>
@@ -117,6 +118,9 @@ const { data: resetdata, loading: resetLoading, send: sendPassword } = useReques
                         </div>
                         <div class="btn btn-primary" @click="sendPassword">确认</div>
                     </fieldset>
+                    <div class="w-full flex flex-col ">
+                        <div class="btn" @click="router.push('/login')">返回登录</div>
+                    </div>
                 </div>
             </div>
         </div>

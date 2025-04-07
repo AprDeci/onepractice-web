@@ -74,6 +74,7 @@ const sendregister = async () => {
 
 <template>
     <main class="">
+        <div class="absolute left-2 cursor-pointer z-1" @click="router.push('/')">Home</div>
         <div class="partone flex justify-center items-center h-dvh">
             <!-- 消息弹窗 -->
             <AnimatePresence>

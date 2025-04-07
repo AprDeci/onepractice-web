@@ -76,6 +76,7 @@ const sendlogin = async () => {
 
 <template>
     <main class="">
+        <div class="absolute left-2 cursor-pointer z-1" @click="router.push('/')">Home</div>
         <div class="partone flex justify-center items-center h-dvh">
             <!-- 消息弹窗 -->
             <AnimatePresence>
@@ -97,7 +98,7 @@ const sendlogin = async () => {
                 </motion.div>
             </AnimatePresence>
             <!-- 登陆 -->
-            <div class="login-card card h-auto w-80 bg-base-100 shadow-xl">
+            <div class="login-card card h-auto w-80  bg-base-100 shadow-xl">
                 <div class="card-title mt-6 ml-5">登陆</div>
                 <!-- name of each tab group should be unique -->
                 <div class="tabs tabs-border">
@@ -129,7 +130,11 @@ const sendlogin = async () => {
                                 <p class="validator-hint hidden">
                                     必须大于八个字符,包括数字,小写字母,大写字母
                                 </p>
+
                             </fieldset>
+                            <div class="text-gray-500 hover:text-gray-800 cursor-pointer " @click="router.push({
+                                name: 'resetPassword'
+                            })">忘记密码?</div>
                             <button class="btn btn-primary btn-md mt-2" @click=sendlogin>登陆</button>
                             <button class="btn btn-ghost" @click="router.push({ name: 'register' })">切换为注册</button>
                         </div>
