@@ -5,8 +5,11 @@ export const getEmailCaptcha = (email: string) =>
     params: {
       email
     },
-    meta: {
-      authRole: null
-    },
     timeout: 60000
+  });
+
+export const verifyEmailCaptcha = (email: string, captcha: string) =>
+  httpclient.Post("/captcha/email/resetverify", {
+    email: email,
+    code: captcha
   });

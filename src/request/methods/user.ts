@@ -33,3 +33,9 @@ export const logout = () =>
     }
   );
 export const getUserInfo = () => httpclient.Get("user/info");
+
+export const resetPassword = (email, newpassword) =>
+  httpclient.Post("user/resetpassword", {
+    email: email,
+    password: newpassword
+  });
