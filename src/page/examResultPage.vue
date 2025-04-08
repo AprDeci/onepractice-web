@@ -4,6 +4,7 @@ import { ChevronRight } from 'lucide-vue-next'
 import { usepaperStore } from '../store/paperStore'
 import { pxValue, useElementSize } from '@vueuse/core'
 import { useRouter } from 'vue-router'
+import Rating from '../components/common/rating.vue'
 const router = useRouter()
 const paperStore = usepaperStore()
 const rightx = ref(0)
@@ -61,6 +62,7 @@ const { width: rwidth } = useElementSize(rightcard)
             </div>
             <div class="bottom">
                 <div class="flex-col">
+                    <Rating class="relative bottom-7"></Rating>
                     <div class="flex justify-between mb-4">
                         <span class="text-base-content">Correct Answer</span>
                         <span class="text-base-content">{{ paperStore.currentScore }}/{{
@@ -75,7 +77,7 @@ const { width: rwidth } = useElementSize(rightcard)
                         <span class="text-base-content">Time Spent</span>
                         <span class="text-base-content">{{ ((Date.now() - paperStore.currentTimestamp) / 1000 /
                             60).toFixed(0)
-                            }}min</span>
+                        }}min</span>
                     </div>
                 </div>
                 <div class="mt-7">
@@ -105,6 +107,7 @@ const { width: rwidth } = useElementSize(rightcard)
                 </div>
             </div>
         </div>
+
     </div>
 </template>
 

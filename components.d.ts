@@ -25,6 +25,7 @@ declare module 'vue' {
     PaperCard: typeof import('./src/components/paper-card.vue')['default']
     QuestionCarousel: typeof import('./src/components/common/QuestionCarousel.vue')['default']
     QuestionContainer: typeof import('./src/components/common/QuestionContainer.vue')['default']
+    Rating: typeof import('./src/components/common/rating.vue')['default']
     ReadingCard: typeof import('./src/components/exam/readingCard.vue')['default']
     ReadingcLozeCard: typeof import('./src/components/exam/readingcLozeCard.vue')['default']
     ReadingmtachCard: typeof import('./src/components/exam/readingmtachCard.vue')['default']
