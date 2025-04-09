@@ -179,8 +179,8 @@ const counterzero = () => {
                                 <div class="relative w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200 shadow-sm group-hover:shadow-md"
                                     :class="[
                                         answer.answer ? 'bg-blue-50 text-blue-600 border border-blue-200' : 'bg-gray-50 border border-gray-200',
-                                        answer.isCorrect === true ? 'bg-green-50 text-green-600 border border-green-200' : '',
-                                        answer.isCorrect === false ? 'bg-red-50 text-red-600 border border-red-200' : ''
+                                        answer.answer === paperStore.currentUserAnswers[answer.index] && mode === 'free' ? 'bg-green-50 text-green-600 border border-green-200' : '',
+                                        answer.answer != paperStore.currentUserAnswers[answer.index] && mode === 'free' && paperStore.currentUserAnswers[answer.index] ? 'bg-red-50 text-red-600 border border-red-200' : ''
                                     ]">
                                     <span class="text-sm font-medium">{{ answer.answer || '?' }}</span>
                                     <!-- 遮罩层 -->
