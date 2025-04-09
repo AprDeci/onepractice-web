@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { ChevronRight } from 'lucide-vue-next'
 import { usepaperStore } from '../store/paperStore'
-import { pxValue, useElementSize } from '@vueuse/core'
 import { useRouter } from 'vue-router'
 import Rating from '../components/common/rating.vue'
+import { submitRating, getVoteByUserIdandPaperId } from '../request/methods/vote'
+import { useRequest } from 'alova/client'
 const router = useRouter()
 const paperStore = usepaperStore()
-const rightx = ref(0)
 const score = ref(0)
 const timer = setInterval(() => {
     if (score.value < paperStore.currentScore) {
@@ -18,14 +18,18 @@ const timer = setInterval(() => {
 }, 20)
 const leftcard = ref()
 const rightcard = ref()
-const { width: originlwidth, height } = useElementSize(leftcard)
-const { width: rwidth } = useElementSize(rightcard)
-
+const ratingvalue = ref<number>(0)
+const updaterating = async (n: number) => {
+    ratingvalue.value = n;
+    await submitRating(paperStore.currentPaperId as number, n.toString())
+}
+const { data: voterating } = useRequest(() => getVoteByUserIdandPaperId(paperStore.currentPaperId as number, 0)).onSuccess((res) => {
+    if (res.data) ratingvalue.value = res.data.rating
+})
 </script>
 
 <template>
     <div class="lg:absolute main flex flex-col lg:flex-row h-full w-full items-center justify-center gap-5" ref="scope">
-
         <div class="card shadow-md w-80 lg:w-110  px-6 py-8 rounded-2xl bg-base-100" ref=leftcard>
             <div class="header flex justify-between">
                 <span class="text-2xl font-bold ">Exam Result</span>
@@ -61,23 +65,31 @@ const { width: rwidth } = useElementSize(rightcard)
                 </div>
             </div>
             <div class="bottom">
-                <div class="flex-col">
-                    <Rating class="relative bottom-7"></Rating>
-                    <div class="flex justify-between mb-4">
+                <div class="flex-col flex gap-4">
+                    <div class="flex flex-col items-center w-full justify-center">
+                        <div class="flex gap-1 items-center w-full justify-center">
+                            <span class="text-xs text-gray-500">easy</span>
+                            <Rating v-model="ratingvalue" @update="updaterating"
+                                :hasvoted="ratingvalue == 0 ? false : true" class=""></Rating>
+                            <span class="text-xs text-gray-500">not easy</span>
+                        </div>
+                        <div><span class="text-xs text-gray-500">每个用户只能投票一次,请认真评分</span></div>
+                    </div>
+                    <div class="flex justify-between">
                         <span class="text-base-content">Correct Answer</span>
                         <span class="text-base-content">{{ paperStore.currentScore }}/{{
                             Object.keys(paperStore.currentCorrectAnswers).length }}</span>
                     </div>
-                    <div class="flex justify-between mb-4">
+                    <div class="flex justify-between">
                         <span class="text-base-content">Accuracy</span>
                         <span class="text-base-content">{{ (paperStore.currentScore /
                             Object.keys(paperStore.currentUserAnswers).length).toFixed(4) * 100 }}%</span>
                     </div>
-                    <div class="flex justify-between mb-4">
+                    <div class="flex justify-between">
                         <span class="text-base-content">Time Spent</span>
                         <span class="text-base-content">{{ ((Date.now() - paperStore.currentTimestamp) / 1000 /
                             60).toFixed(0)
-                        }}min</span>
+                            }}min</span>
                     </div>
                 </div>
                 <div class="mt-7">

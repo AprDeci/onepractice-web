@@ -3,6 +3,7 @@ import adapterFetch from "alova/fetch";
 import vueHook from "alova/vue";
 import { createClientTokenAuthentication } from "alova/client";
 import { fetchError, HttpRequestError, BusinessLogicError } from "../common/errors";
+import { useRouter } from "vue-router";
 
 const { onAuthRequired, onResponseRefreshToken } = createClientTokenAuthentication({
   async login(response, method) {
@@ -32,7 +33,10 @@ export const httpclient = createAlova({
       const json = await Response.json();
       if (json.code === 10005) {
         localStorage.removeItem("token");
-        location.href = "/login";
+        const router = window.appRouter;
+        if (router) {
+          router.push({ name: "login" });
+        }
       }
       if (json.code !== 200) {
         throw new BusinessLogicError(json.msg);

@@ -2,6 +2,9 @@
 import { ChartNoAxesColumnIncreasing, Clock4, FileText } from 'lucide-vue-next';
 import { watch } from 'vue';
 import { useRouter } from 'vue-router'
+import { useRequest } from 'alova/client';
+import { getVoteBypaperId } from '../request/methods/vote';
+import { getPaperdifficult } from '../common/paper';
 interface Paper {
     paperId: number
     paperName: string
@@ -11,6 +14,8 @@ interface Paper {
     examMonth: number,
     level: string,
     questionCount: number,
+    number: number,
+    rating: number
 
 }
 const router = useRouter()
@@ -18,11 +23,7 @@ const { paper } = defineProps<{
     paper?: Paper
 }>()
 
-watch(() => paper, (newPaper) => {
-    if (newPaper) {
-        console.log(newPaper)
-    }
-})
+
 
 const getLevelColor = (level: null | string) => {
     switch (level) {
@@ -86,8 +87,8 @@ const getTypeColor = (type: string) => {
                         paper?.paperName }}</h3>
                     <div>
                         <span
-                            :class="`inline-block px-2 py-1 rounded-full text-xs font-medium ${getLevelColor(paper?.level)}`">
-                            {{ paper?.level ? paper?.level : "投票人数过少" }}
+                            :class="`inline-block px-2 py-1 rounded-full text-xs font-medium ${getLevelColor(getPaperdifficult(paper?.rating))}`">
+                            {{ paper?.rating && paper?.number > 5 ? paper?.rating : "评分人数过少" }}
                         </span>
                     </div>
                 </div>

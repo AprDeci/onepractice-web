@@ -1,4 +1,4 @@
-import { createWebHashHistory, createRouter } from "vue-router";
+import { createWebHashHistory, createRouter, createWebHistory } from "vue-router";
 import { usepaperStore } from "../store/paperStore";
 
 const hasLogin = () => {
@@ -78,7 +78,7 @@ const routes = [
 ];
 
 export const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes
 });
 
@@ -89,7 +89,7 @@ router.beforeEach(async (to, from) => {
   paperStore.cleanupOldData();
   if (to.meta.requiredAuth && !hasLogin()) {
     return {
-      path: "/login"
+      name: "login"
     };
   }
   return true;

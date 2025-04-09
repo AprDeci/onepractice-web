@@ -12,6 +12,7 @@ import { useRouter } from 'vue-router';
 import { getPaperIntro } from '../request/methods/paper';
 import { useRequest } from 'alova/client';
 import { usepaperStore } from '../store/paperStore';
+import Rating from '../components/common/rating.vue';
 const { id } = defineProps<{
     id: string
 }>()
@@ -119,39 +120,7 @@ const { data: paperdata } = useRequest(getPaperIntro(id)).onSuccess(e => {
                         <ChevronRightIcon class="ml-2 h-4 w-4" />
                     </div>
                 </div>
-                <div class="p-6 ">
-                    <div class="card shadow-md w-full flex gap-3 py-4 px-2 justify-center items-center">
-                        <div>Difficulty Rating</div>
-                        <div>
-                            <span class="text-xs text-gray-500">easy</span>
-                            <div class="rating rating-lg rating-half mr-1">
-                                <input type="radio" name="rating-11" class="rating-hidden" />
-                                <input type="radio" name="rating-11" class="mask mask-star-2 mask-half-1 bg-primary"
-                                    aria-label="0.5 star" />
-                                <input type="radio" name="rating-11" class="mask mask-star-2 mask-half-2 bg-primary"
-                                    aria-label="1 star" />
-                                <input type="radio" name="rating-11" class="mask mask-star-2 mask-half-1 bg-primary"
-                                    aria-label="1.5 star" checked="checked" />
-                                <input type="radio" name="rating-11" class="mask mask-star-2 mask-half-2 bg-primary"
-                                    aria-label="2 star" />
-                                <input type="radio" name="rating-11" class="mask mask-star-2 mask-half-1 bg-primary"
-                                    aria-label="2.5 star" />
-                                <input type="radio" name="rating-11" class="mask mask-star-2 mask-half-2 bg-primary"
-                                    aria-label="3 star" />
-                                <input type="radio" name="rating-11" class="mask mask-star-2 mask-half-1 bg-primary"
-                                    aria-label="3.5 star" />
-                                <input type="radio" name="rating-11" class="mask mask-star-2 mask-half-2 bg-primary"
-                                    aria-label="4 star" />
-                                <input type="radio" name="rating-11" class="mask mask-star-2 mask-half-1 bg-primary"
-                                    aria-label="4.5 star" />
-                                <input type="radio" name="rating-11" class="mask mask-star-2 mask-half-2 bg-primary"
-                                    aria-label="5 star" />
-                            </div>
-                            <span class="text-xs text-gray-500">no easy</span>
-                        </div>
-                        <div class="text-xs text-gray-500">评分只能打一次,请认真打出你认为的难度</div>
-                    </div>
-                </div>
+
             </div>
 
             <div class="bg-base-100 shadow-lg card">

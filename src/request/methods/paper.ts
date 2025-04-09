@@ -5,7 +5,7 @@ export const getallpaper = () => httpclient.Get("/paper/all");
 
 export const getPaperswithQueryBypage = (page, size, type, year) =>
   httpclient.Post(
-    "/paper/getPaperwithQuerys",
+    "/paper/getPaperandRatingWithQuerys",
     {
       page,
       size,

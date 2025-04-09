@@ -5,6 +5,7 @@ import { router } from "./route/router";
 import pinia from "./store/index.js";
 import { GesturePlugin } from "@vueuse/gesture";
 const app = createApp(App);
+window.appRouter = router;
 app.use(router);
 app.use(GesturePlugin);
 app.use(pinia);
