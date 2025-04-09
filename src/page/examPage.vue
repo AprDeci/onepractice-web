@@ -113,7 +113,7 @@ const counterzero = () => {
                     </KeepAlive>
                 </div>
             </div>
-            <footer class="sticky bottom-0 w-full">
+            <footer class="fixed bottom-0 w-full">
                 <footer
                     class="footer flex justify-between footer-horizontal bg-base-200 text-neutral-content items-center p-4 border dark:border-base-100">
                     <aside class="grid-flow-col items-center">
