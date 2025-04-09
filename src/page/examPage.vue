@@ -12,6 +12,7 @@ import { usepaperStore } from '../store/paperStore.ts'
 import { saveRecord, updateRecord } from '../request/methods/record.ts'
 import { motion, AnimatePresence } from 'motion-v'
 import { Times } from '../common/examMode.ts'
+import { useElementSize } from '@vueuse/core'
 const paperStore = usepaperStore()
 const { id, mode, recordId } = defineProps<{
     id: string,
@@ -19,6 +20,8 @@ const { id, mode, recordId } = defineProps<{
     recordId?: string
 }>()
 
+const tab = ref()
+const tabwidth = useElementSize(tab).width
 const showBlur = ref(true)
 const router = useRouter()
 const seconds = Times[paperStore.currentPaperType] * 60 | 125
@@ -74,6 +77,7 @@ const counterzero = () => {
 
 <template>
     <div class="drawer drawer-end">
+        {{ tabwidth }}
         <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
 
 
@@ -96,10 +100,10 @@ const counterzero = () => {
             <div class="middle px-6">
                 <div class="mt-8 mb-4">
                     <div role="tablist" class="tabs tabs-box"
-                        :style="`width: ${data.questionParts.length * 26 / 4}rem`">
-                        <div :class="{ 'tab-active': selectedtab === Part.questions[0].questionType }" role="tab"
-                            class="tab w-20 lg:w-25 h-12" v-for="(Part, index) in data.questionParts" :key="index"
-                            @click="changeTab(Part.questions[0].questionType, index)">{{
+                        :style="`width: ${data.questionParts.length * (tabwidth + 36)}px`">
+                        <div ref="tab" :class="{ 'tab-active': selectedtab === Part.questions[0].questionType }"
+                            role="tab" class="tab w-20 lg:w-25 h-12" v-for="(Part, index) in data.questionParts"
+                            :key="index" @click="changeTab(Part.questions[0].questionType, index)">{{
                                 Part.questions[0].partName }}</div>
                     </div>
                 </div>
