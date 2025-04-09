@@ -77,7 +77,6 @@ const counterzero = () => {
 
 <template>
     <div class="drawer drawer-end">
-        {{ tabwidth }}
         <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
 
 
