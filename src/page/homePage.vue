@@ -46,6 +46,7 @@ const changePage = (newval: number) => {
                         <div className="flex justify-between items-center mb-8 gap-2">
                             <div class="flex-col items-center relative bottom-5 lg:bottom-0">
                                 <h1 className="text-2xl md:text-3xl font-bold mr-5">Available Papers</h1>
+                                <h4 class="text-blue-400 font-bold">预览版</h4>
                                 <div class="absolute flex gap-2 items-center top-[130%]" v-if="type != '' || year != 0">
                                     <span class="hidden text-gray-400 lg:block">Conditions:</span>
                                     <div v-if="type != ''" @click="type = ''"

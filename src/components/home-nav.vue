@@ -121,8 +121,8 @@ const setdark = () => {
             </div>
         </div>
         <div class="navbar-end flex gap-5" v-if="!haslogin">
-            <div class="btn" @click="router.push('/login')">Sign in</div>
-            <div class="btn btn-primary" @click="router.push('/register')">Sign Up</div>
+            <div class="btn" @click="router.push('/login')" data-umami-event="登陆按钮">Sign in</div>
+            <div class="btn btn-primary" @click="router.push('/register')" data-umami-event="注册按钮">Sign Up</div>
         </div>
         <div class="navbar-end" v-else>
             <div
@@ -132,10 +132,10 @@ const setdark = () => {
                     <ul class="menu dropdown-content bg-base-100 rounded-box w-32 lg:w-35 z-1 p-2 shadow-sm">
                         <li>
                             <a @click="router.push({ name: 'userInfo' })">
-                                <Armchair :size="14" :stroke-width="1.5" />My Space
+                                <Armchair :size="14" :stroke-width="1.5" data-umami-event="myspace" />My Space
                             </a>
                         </li>
-                        <li><a @click="postlogout" class="text-red-500">
+                        <li><a @click="postlogout" class="text-red-500" data-umami-event="logout">
                                 <LogOut :size="14" color="#ff2424" />Log Out
                             </a></li>
                     </ul>
