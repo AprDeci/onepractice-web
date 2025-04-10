@@ -35,8 +35,8 @@ const contentParsed = computed(() => {
         const word = selectedWords.value[blankNumber];
 
         return word
-            ? `<span class="inline-block relative border-b-2 border-blue-400 px-1 mx-1 bg-blue-50 dark:bg-blue-300 dark:text-base-content cursor-pointer" data-blank="${blankNumber}">
-          <span class="blank-number relative  transform -translate-x-1/2 text-xs font-bold text-blue-600 bg-blue-100 px-1.5 py-0.5 rounded">${blankNumber}</span>
+            ? `<span class="dark:text-gray-200 inline-block relative border-b-2 border-blue-400 px-1 mx-1 bg-blue-50 dark:bg-blue-300 dark:text-base-content cursor-pointer" data-blank="${blankNumber}">
+          <span class=" blank-number relative  transform -translate-x-1/2 text-xs font-bold text-blue-600 bg-blue-100 px-1.5 py-0.5 rounded">${blankNumber}</span>
           ${word}
           <span class="absolute inset-0" data-blank="${blankNumber}"></span>
         </span>`
@@ -163,7 +163,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="max-w-4xl mx-auto p-6 bg-base rounded-xl shadow-lg">
+    <div class="max-w-4xl mx-auto p-6 bg-base-100 rounded-xl shadow-lg">
         <h2 class="text-2xl font-bold bg-text-content mb-4">Fill in the blanks</h2>
         <div class="mb-6 p-4 bg-blue-50 rounded-lg">
             <p class="text-sm text-blue-700 font-medium">Choose the correct word from the word bank to complete each
@@ -182,8 +182,8 @@ onMounted(() => {
             <div class="flex flex-wrap gap-2">
                 <span v-for="(word, index) in question.wordBank" :key="word"
                     class="px-3 py-1.5 rounded-full text-sm font-medium " :class="{
-                        'bg-gray-100': !isWordUsed(word),
-                        'bg-gray-300 line-through': isWordUsed(word) && word !== getCurrentWord
+                        'bg-gray-100 dark:bg-blue-950': !isWordUsed(word),
+                        'bg-gray-300 dark:bg-blue-950 line-through': isWordUsed(word) && word !== getCurrentWord
                     }">
                     {{ word }}
                 </span>
@@ -192,11 +192,11 @@ onMounted(() => {
 
         <!-- 答案卡片 -->
         <div v-if="isCardVisible" ref="answerCard"
-            class="fixed z-50 bg-white rounded-lg shadow-xl border border-gray-200 w-80"
+            class="fixed z-50 bg-white dark:bg-base-200 rounded-lg shadow-xl border border-gray-200 w-80"
             :class="{ 'answer-card-above': positionAbove }" :style="{ top: cardPosition.top, left: cardPosition.left }">
             <!-- Card header -->
-            <div class="flex justify-between items-center p-3 border-b bg-gray-50 rounded-t-lg">
-                <h4 class="font-medium text-gray-700">
+            <div class="flex justify-between items-center p-3 border-b bg-gray-50 dark:bg-base-300 rounded-t-lg">
+                <h4 class="font-medium text-gray-700 dark:text-gray-400">
                     Select word for blank {{ selectedBlankNumber }}
                 </h4>
                 <button @click="closeAnswerCard" class="text-gray-500 hover:text-gray-700">
@@ -215,7 +215,7 @@ onMounted(() => {
                             'cursor-not-allowed': isWordUsed(word) && word !== getCurrentWord
                         }" :disabled="isWordUsed(word) && word !== getCurrentWord">
                         <span
-                            class="inline-block w-5 h-5 rounded-full bg-gray-200 text-xs flex items-center justify-center mr-2">
+                            class="inline-block text-center w-5 h-5 rounded-full bg-gray-200 dark:bg-gray-900 text-xs flex items-center justify-center mr-2">
                             {{ String.fromCharCode(65 + index) }}
                         </span>
                         {{ word }}

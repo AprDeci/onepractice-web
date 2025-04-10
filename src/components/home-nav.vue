@@ -26,6 +26,17 @@ const postlogout = async () => {
     paperStore.cleanAll();
     location.reload()
 }
+
+const setdark = () => {
+    if (localStorage.getItem('isdark') == 'true') {
+        localStorage.setItem('isdark', 'false');
+        document.querySelector('html').setAttribute('data-theme', "light");
+    } else {
+        localStorage.setItem('isdark', 'true');
+        document.querySelector('html').setAttribute('data-theme', "dim");
+    }
+
+}
 </script>
 
 <template>
@@ -77,7 +88,7 @@ const postlogout = async () => {
             <div class="theme ml-5">
                 <label class=" swap swap-rotate">
                     <!-- this hidden checkbox controls the state -->
-                    <input type="checkbox" class="theme-controller" value="night" />
+                    <input type="checkbox" class="theme-controller" value="night" @change="setdark" />
 
                     <!-- sun icon -->
                     <svg class="swap-off h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">

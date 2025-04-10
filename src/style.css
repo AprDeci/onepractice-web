@@ -1,13 +1,14 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: light --default, night --prefersdark;
+  themes: light --default, dim --prefersdark;
 }
 @plugin "daisyui/theme" {
   name: "light";
   default: true;
+  --color-base-title: oklch(98% 0.02 240);
 
 }
-@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant dark (&:where([data-theme=dim], [data-theme=dim] *));
 :root{
   font-size: 16px;
 }

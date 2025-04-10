@@ -114,7 +114,7 @@ onMounted(() => {
                     <div class="colheightcontainer space-y-4  overflow-y-auto pr-2 article-container">
                         <div v-for="(paragraph, key) in questionJsoncontent.paragraphs" :key="key"
                             class="p-2 lg:p-4 rounded-lg transition-all duration-200 " :class="{
-                                'bg-white  border shadow-sm': true,
+                                'bg-white dark:bg-gray-800  border shadow-sm': true,
                                 'border-blue-300 bg-blue-50': highlightedParagraph === key,
                                 'border-green-300 bg-green-50': isParagraphSelected(key)
                             }">
@@ -127,7 +127,8 @@ onMounted(() => {
                                     }">
                                     {{ key }}
                                 </span>
-                                <p class="text-gray-700 leading-relaxed" v-html="highlightSearchText(paragraph)"></p>
+                                <p class="text-gray-700 dark:text-base-content leading-relaxed"
+                                    v-html="highlightSearchText(paragraph)"></p>
                             </div>
 
                             <div v-if="isParagraphSelected(key)" class="mt-3 pl-9">
@@ -147,7 +148,7 @@ onMounted(() => {
                     <h3 class="text-lg font-bold mb-4">Statements</h3>
                     <div class="colheightcontainer space-y-4  overflow-y-auto">
                         <div v-for="item in question.matchingData" :key="item.id"
-                            class="p-2 lg:p-4 bg-white border rounded-lg shadow-sm" :class="{
+                            class="p-2 lg:p-4 bg-white dark:bg-gray-800 border rounded-lg shadow-sm" :class="{
                                 'border-blue-300': currentItem === item.id,
                                 'border-green-300 bg-green-50': selections[item.id]
                             }">
@@ -156,7 +157,7 @@ onMounted(() => {
                                     class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-200 text-gray-700 font-bold text-sm mr-2 flex-shrink-0">
                                     {{ item.id }}
                                 </span>
-                                <p class="text-gray-700">{{ item.content }}</p>
+                                <p class="text-gray-700 dark:text-base-content">{{ item.content }}</p>
                             </div>
 
                             <div class="pl-9">
@@ -164,7 +165,7 @@ onMounted(() => {
                                     <span class="text-sm text-gray-500 mr-2">Select paragraph:</span>
                                     <div class="relative">
                                         <button @click="toggleDropdown(item.id)"
-                                            class="inline-flex items-center justify-between w-24 px-3 py-2 text-sm border rounded-md bg-white"
+                                            class="inline-flex items-center justify-between w-24 px-3 py-2 text-sm border rounded-md bg-white dark:bg-gray-700"
                                             :class="{
                                                 'border-blue-300 ring-2 ring-blue-100': currentItem === item.id,
                                                 'border-green-300 bg-green-50': selections[item.id]
@@ -174,7 +175,7 @@ onMounted(() => {
                                         </button>
 
                                         <div v-if="currentItem === item.id"
-                                            class="absolute z-10 mt-1 w-40 bg-white border border-gray-200 rounded-md shadow-lg py-1">
+                                            class="absolute z-10 mt-1 w-40 bg-white dark:bg-gray-700  border border-gray-200 rounded-md shadow-lg py-1">
                                             <button v-if="selections[item.id]" @click="clearSelection(item.id)"
                                                 class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">
                                                 Clear selection
@@ -182,13 +183,13 @@ onMounted(() => {
 
                                             <button v-for="(_, paragraphKey) in questionJsoncontent.paragraphs"
                                                 :key="paragraphKey" @click="selectParagraph(item.id, paragraphKey)"
-                                                class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center"
+                                                class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center dark:hover:bg-gray-900"
                                                 :class="{
                                                     'font-medium': selections[item.id] === paragraphKey,
                                                     'text-gray-400': isParagraphUsedElsewhere(paragraphKey, item.id)
                                                 }">
                                                 <span
-                                                    class="inline-flex items-center justify-center h-5 w-5 rounded-full bg-gray-200 text-gray-700 text-xs mr-2"
+                                                    class="inline-flex items-center justify-center h-5 w-10 rounded-full bg-gray-200 text-gray-700 text-xs mr-2"
                                                     :class="{
                                                         'bg-green-200': selections[item.id] === paragraphKey
                                                     }">

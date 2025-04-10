@@ -110,11 +110,12 @@ onUnmounted(() => {
 })
 </script>
 <template>
-    <div class="w-full max-w-full bg-white rounded-xl shadow-md px-4 py-3 border border-gray-100">
+    <div class="w-full max-w-full bg-base-100 rounded-xl shadow-md px-4 py-3 border border-gray-100 dark:border-0">
         <div class="flex flex-col gap-2">
             <!-- Progress and time indicators -->
             <div class="flex items-center gap-3">
-                <span class="text-xs font-mono text-gray-600 min-w-[40px]">{{ formatTime(currentTime) }}</span>
+                <span class="text-xs font-mono text-gray-600 dark:text-base-content min-w-[40px]">{{
+                    formatTime(currentTime) }}</span>
 
                 <div class="relative flex-1 h-1.5 bg-gray-100 rounded-full cursor-pointer group" ref="progressBarRef"
                     @click="seek">
@@ -124,16 +125,17 @@ onUnmounted(() => {
                         :style="{ left: `${progress}%`, transform: `translateX(-50%) translateY(-50%)` }"></div>
                 </div>
 
-                <span class="text-xs font-mono text-gray-600 min-w-[40px] text-right">{{ formatTime(duration) }}</span>
+                <span class="text-xs font-mono text-gray-600 min-w-[40px] dark:text-base-content text-right">{{
+                    formatTime(duration) }}</span>
             </div>
 
             <!-- Controls -->
             <div class="flex items-center justify-between">
                 <button
-                    class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+                    class="flex items-center justify-center w-10 h-10 rounded-full dark:bg-base-300 bg-gray-100 hover:bg-gray-200 transition-colors"
                     @click="togglePlay" :aria-label="isPlaying ? 'Pause' : 'Play'">
-                    <PauseIcon v-if="isPlaying" class="w-5 h-5 text-gray-800" />
-                    <PlayIcon v-else class="w-5 h-5 text-gray-800" />
+                    <PauseIcon v-if="isPlaying" class="w-5 h-5 text-gray-800 dark:text-base-content" />
+                    <PlayIcon v-else class="w-5 h-5 text-gray-800 dark:text-base-content" />
                 </button>
 
                 <div class="flex items-center gap-2">

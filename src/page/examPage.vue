@@ -80,8 +80,8 @@ const counterzero = () => {
         <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
 
 
-        <div class="drawer-content">
-            <div class=" navbar bg-base-100 shadow-sm flex justify-between">
+        <div class="drawer-content dark:bg-base-200">
+            <div class=" navbar  border-1 border-base-300 shadow-sm flex justify-between">
                 <div class="navbar-start hidden lg:flex">
                     <span class="text-xl mx-2 cursor-pointer" @click="router.push('/')">One Practice</span>
                 </div>
@@ -96,7 +96,7 @@ const counterzero = () => {
                 </div>
             </div>
 
-            <div class="middle px-6">
+            <div class="middle px-6 ">
                 <div class="mt-8 mb-4">
                     <div role="tablist" class="tabs tabs-box"
                         :style="`width: ${data.questionParts.length * (tabwidth + 36)}px`">
@@ -113,7 +113,7 @@ const counterzero = () => {
                     </KeepAlive>
                 </div>
             </div>
-            <footer class="fixed bottom-0 w-full">
+            <footer class="sticky bottom-0 w-full">
                 <footer
                     class="footer flex justify-between footer-horizontal bg-base-200 text-neutral-content items-center p-4 border dark:border-base-100">
                     <aside class="grid-flow-col items-center">

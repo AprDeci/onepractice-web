@@ -102,8 +102,9 @@ onMounted(() => {
 
 
 <template>
-    <div class="max-w-6xl mx-auto p-6 bg-white rounded-xl shadow-lg">
-        <h2 class="text-2xl font-bold text-gray-800 mb-4">{{ question.partName }}: {{ question.sectionName }}
+    <div class="max-w-6xl mx-auto p-6 bg-white dark:bg-base-200 rounded-xl shadow-lg">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4 dark:text-gray-200">{{ question.partName }}: {{
+            question.sectionName }}
         </h2>
         <div class="mb-6 p-4 bg-blue-50 rounded-lg">
             <p class="text-sm text-blue-700 font-medium">Read the passage carefully and answer the questions that
@@ -114,15 +115,15 @@ onMounted(() => {
             <!-- Reading passage section (7 columns on large screens) -->
             <div class="lg:col-span-7 order-1">
                 <div class="" ref="leftpart">
-                    <div class="bg-gray-50 p-6 rounded-lg mb-4">
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg mb-4">
                         <div class="prose prose-sm max-w-none">
                             <div v-for="(paragraph, index) in formattedPassage" :key="`p-${index}`" class="mb-4">
-                                <p class="leading-relaxed text-gray-800">{{ paragraph }}</p>
+                                <p class="leading-relaxed text-gray-800 dark:text-base-content">{{ paragraph }}</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-gray-50 p-4 rounded-lg hidden lg:block">
+                    <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg hidden lg:block">
                         <h4 class="text-sm font-medium text-gray-500 mb-2">Your Progress</h4>
                         <div class="flex space-x-2">
                             <button v-for="(_, index) in questions" :key="`nav-${index}`"
@@ -144,7 +145,7 @@ onMounted(() => {
             <div class="lg:col-span-5 order-2 overflow-y-scroll" :style="{ height: `${height}px` }">
                 <div class="space-y-8">
                     <div v-for="(question, index) in questions" :key="`q-${index}`" :id="`question-${index}`"
-                        class="bg-white border rounded-lg shadow-sm p-6"
+                        class="bg-white dark:bg-gray-800 border rounded-lg shadow-sm p-3 lg:p-6"
                         :class="{ 'border-blue-300': currentQuestionIndex === index }"
                         @mouseenter="currentQuestionIndex = index">
                         <div class="flex items-start mb-4">
@@ -152,15 +153,15 @@ onMounted(() => {
                                 class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-200 text-gray-700 font-bold text-sm mr-3 flex-shrink-0">
                                 {{ getQuestionNumber(index) }}
                             </span>
-                            <h4 class="text-lg font-medium text-gray-800">{{ question.content }}</h4>
+                            <h4 class="text-lg font-medium text-gray-800 dark:text-gray-200">{{ question.content }}</h4>
                         </div>
 
-                        <div class="space-y-3 pl-9">
+                        <div class="space-y-3 lg:pl-9">
                             <div v-for="option in question.options" :key="`${index}-${option.label}`"
                                 @click="selectAnswer(index, option.label, getQuestionNumber(index))"
-                                class="flex items-start p-3 rounded-md cursor-pointer transition-colors" :class="{
+                                class="flex items-start p-1 lg:p-3 rounded-md cursor-pointer transition-colors" :class="{
                                     'bg-blue-50 border border-blue-200': selectedAnswers[index] === option.label,
-                                    'hover:bg-gray-50 border border-transparent': selectedAnswers[index] !== option.label
+                                    'hover:bg-gray-50 dark:hover:bg-gray-900 border border-transparent': selectedAnswers[index] !== option.label
                                 }">
                                 <div class="flex items-center justify-center h-6 w-6 rounded-full border-2 mr-3 flex-shrink-0"
                                     :class="{
@@ -169,7 +170,7 @@ onMounted(() => {
                                     }">
                                     <span class="text-sm font-bold">{{ option.label }}</span>
                                 </div>
-                                <p class="text-gray-700">{{ option.content }}</p>
+                                <p class="text-gray-700 dark:text-base-content">{{ option.content }}</p>
                             </div>
                         </div>
                     </div>

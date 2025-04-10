@@ -22,12 +22,13 @@ watch(textinput, (text) => {
 </script>
 
 <template>
-    <div class="max-w-4xl mx-auto card shadow-md px-4 py-4">
+    <div class="max-w-4xl mx-auto card shadow-md px-4 py-4 bg-base-100 border-base-300">
         <div>
             <h2 class="text-2xl font-bold text-gray-800 mb-2  dark:text-base-content">Writing</h2>
-            <div class="mb-6 p-4 bg-blue-50 rounded-lg">
-                <p class="text-sm text-blue-700 font-medium">
-                    Write an English essay according to the requirements, your essay needs to use the correct words and complete sentence meaning.
+            <div class="mb-6 p-4 bg-blue-50 dark:bg-blue-800 rounded-lg">
+                <p class="text-sm text-blue-700 dark:text-blue-50 font-medium">
+                    Write an English essay according to the requirements, your essay needs to use the correct words and
+                    complete sentence meaning.
                 </p>
             </div>
         </div>
