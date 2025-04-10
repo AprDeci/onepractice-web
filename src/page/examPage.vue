@@ -99,16 +99,16 @@ const counterzero = () => {
             <div class="middle px-6 ">
                 <div class="mt-8 mb-4">
                     <div role="tablist" class="tabs tabs-box"
-                        :style="`width: ${data.questionParts.length * (tabwidth + 36)}px`">
+                        :style="`width: ${data?.questionParts.length * (tabwidth + 36)}px`">
                         <div ref="tab" :class="{ 'tab-active': selectedtab === Part.questions[0].questionType }"
-                            role="tab" class="tab w-20 lg:w-25 h-12" v-for="(Part, index) in data.questionParts"
+                            role="tab" class="tab w-20 lg:w-25 h-12" v-for="(Part, index) in data?.questionParts"
                             :key="index" @click="changeTab(Part.questions[0].questionType, index)">{{
                                 Part.questions[0].partName }}</div>
                     </div>
                 </div>
                 <div class="w-full  mb-4">
                     <KeepAlive>
-                        <component :is="cards[selectedtab]" :data="data.questionParts[selectedindex]">
+                        <component :is="cards[selectedtab]" :data="data?.questionParts[selectedindex]">
                         </component>
                     </KeepAlive>
                 </div>
@@ -118,10 +118,10 @@ const counterzero = () => {
                     class="footer flex justify-between footer-horizontal bg-base-200 text-neutral-content items-center p-4 border dark:border-base-100">
                     <aside class="grid-flow-col items-center">
                         <div class="btn btn-sm lg:btn-md" v-show="selectedindex > 0"
-                            @click="changeTab(data.questionParts[selectedindex - 1].questions[0].questionType, selectedindex - 1)">
+                            @click="changeTab(data?.questionParts[selectedindex - 1].questions[0].questionType, selectedindex - 1)">
                             Previous Section</div>
-                        <div class="btn btn-sm lg:btn-md" v-show="selectedindex < data.questionParts.length - 1"
-                            @click="changeTab(data.questionParts[selectedindex + 1].questions[0].questionType, selectedindex + 1)">
+                        <div class="btn btn-sm lg:btn-md" v-show="selectedindex < data?.questionParts.length - 1"
+                            @click="changeTab(data?.questionParts[selectedindex + 1].questions[0].questionType, selectedindex + 1)">
                             Next Section</div>
                     </aside>
                     <nav class="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
@@ -170,7 +170,7 @@ const counterzero = () => {
                 <!-- 答案网格 -->
                 <div class="p-5 flex-1 overflow-y-auto">
                     <div class="grid grid-cols-4 lg:grid-cols-5 gap-3">
-                        <div v-for="answer in answerdata.answers" :key="answer.index" class="relative group">
+                        <div v-for="answer in answerdata?.answers" :key="answer.index" class="relative group">
                             <div class="flex flex-col items-center" :class="{
                                 'opacity-40': !answer.answer,
                                 'has-answer': answer.answer
@@ -203,7 +203,7 @@ const counterzero = () => {
                         <div class="text-sm">
                             <span class="font-medium text-base-content">{{
                                 Object.keys(paperStore.currentUserAnswers).length }}/
-                                {{ answerdata.answers.length }}
+                                {{ answerdata?.answers.length }}
                                 answered
                             </span>
                         </div>
@@ -216,7 +216,7 @@ const counterzero = () => {
                     <!-- 进度条 -->
                     <div class="mt-2 h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
                         <div class="h-full bg-blue-500 rounded-full transition-all duration-500"
-                            :style="{ width: `${(Object.keys(paperStore.currentUserAnswers).length / answerdata.answers.length) * 100}%` }">
+                            :style="{ width: `${(Object.keys(paperStore.currentUserAnswers).length / answerdata?.answers.length) * 100}%` }">
                         </div>
                     </div>
                 </div>
