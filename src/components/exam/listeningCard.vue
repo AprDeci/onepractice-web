@@ -10,7 +10,7 @@ const hasPrevSection = computed(() => {
 })
 
 const hasNextSection = computed(() => {
-    return activeId.value >= 0 && activeId.value !== exampleData.length - 1
+    return activeId.value >= 0 && activeId.value !== data.questions.length - 1
 })
 
 const activeId = ref(0)
@@ -22,7 +22,7 @@ const getprev = () => {
 }
 
 const getnext = () => {
-    if (activeId.value < exampleData.length - 1) {
+    if (activeId.value < data.questions.length - 1) {
         activeId.value++
     }
 }

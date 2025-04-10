@@ -156,10 +156,10 @@ const counterzero = () => {
         <div class="drawer-side">
             <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
 
-            <div class="bg-white text-gray-800 min-h-full w-64 lg:w-80 flex flex-col shadow-lg">
+            <div class="bg-white dark:bg-base-100 text-gray-800 min-h-full w-64 lg:w-80 flex flex-col shadow-lg">
                 <!-- 侧边栏标题 -->
                 <div class="p-5 border-b border-gray-100">
-                    <h2 class="text-lg font-medium">Answer Sheet</h2>
+                    <h2 class="text-lg font-medium text-base-content">Answer Sheet</h2>
                     <div class="flex justify-between">
                         <p class="text-xs text-gray-500 mt-1">Track your progress</p>
                         <p class="text-xs text-blue-200 hover:text-blue-400 cursor-pointer"
@@ -198,14 +198,17 @@ const counterzero = () => {
                 </div>
 
                 <!-- 底部统计 -->
-                <div class="p-5 border-t border-gray-100 bg-gray-50">
+                <div class="p-5 border-t border-gray-100 bg-gray-50 dark:bg-base-200">
                     <div class="flex justify-between items-center">
                         <div class="text-sm">
-                            <span class="font-medium">{{ Object.keys(paperStore.currentUserAnswers).length }}</span> /
-                            {{ answerdata.answers.length }}
-                            answered
+                            <span class="font-medium text-base-content">{{
+                                Object.keys(paperStore.currentUserAnswers).length }}/
+                                {{ answerdata.answers.length }}
+                                answered
+                            </span>
                         </div>
-                        <button class="text-xs text-gray-500 hover:text-red-500 transition-colors" @click="cleanAnswer">
+                        <button class="text-xs text-gray-500 dark:text-gray-200 hover:text-red-500 transition-colors"
+                            @click="cleanAnswer">
                             Clear all
                         </button>
                     </div>
