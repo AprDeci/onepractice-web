@@ -12,10 +12,10 @@
                     </p>
                 </div>
                 <div className="flex gap-8">
-                    <a href="#" className="text-sm text-base-content hover:text-gray-900">
+                    <a href="/terms" className="text-sm text-base-content hover:text-gray-900">
                         Terms
                     </a>
-                    <a href="#" className="text-sm text-base-content hover:text-gray-900">
+                    <a href="/privacy" className="text-sm text-base-content hover:text-gray-900">
                         Privacy
                     </a>
                     <a href="#" className="text-sm text-base-content hover:text-gray-900">

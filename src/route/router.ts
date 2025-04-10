@@ -74,6 +74,16 @@ const routes = [
   {
     path: "/:pathMatch(.*)",
     redirect: "/404"
+  },
+  {
+    path: "/terms",
+    name: "terms",
+    component: () => import("@/page/terms.vue")
+  },
+  {
+    path: "/privacy",
+    name: "privacy",
+    component: () => import("@/page/privacy.vue")
   }
 ];
 
