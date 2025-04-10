@@ -36,12 +36,12 @@ const Continue = (index: number) => {
         <div class="info card bg-base-100 shadow-sm w-full lg:w-80 flex flex-wrap lg:flex-col  gap-4 p-5">
             <div class="avatar avatar-placeholder flex items-center justify-center ">
                 <div class="bg-blue-100 text-neutral-content w-24 lg:w-60 rounded-full">
-                    <span class="text-5xl text-base-content">{{ userinfo.username[0].toUpperCase() }}</span>
+                    <span class="text-5xl text-base-content">{{ userinfo?.username[0].toUpperCase() }}</span>
                 </div>
             </div>
             <div class="flex flex-col gap-3">
-                <span class="font-bold">{{ userinfo.username.toUpperCase() }}</span>
-                <span class="text-gray-500">{{ userinfo.email }}</span>
+                <span class="font-bold">{{ userinfo?.username.toUpperCase() }}</span>
+                <span class="text-gray-500">{{ userinfo?.email }}</span>
                 <span class="btn rounded-md">Edit Profile</span>
             </div>
             <div class="divider my-2"></div>

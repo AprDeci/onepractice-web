@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import {
-    House,
     Clock as ClockIcon,
     PlayCircle as PlayCircleIcon,
     Shuffle as ShuffleIcon,
@@ -12,7 +11,6 @@ import { useRouter } from 'vue-router';
 import { getPaperIntro } from '../request/methods/paper';
 import { useRequest } from 'alova/client';
 import { usepaperStore } from '../store/paperStore';
-import Rating from '../components/common/rating.vue';
 const { id } = defineProps<{
     id: string
 }>()
@@ -47,20 +45,20 @@ const { data: paperdata } = useRequest(getPaperIntro(id)).onSuccess(e => {
 <template>
     <div class="container mx-auto py-8 px-4 max-w-4xl">
         <div class="mb-8">
-            <h1 class="text-3xl font-bold mb-2">{{ paperdata.examYear }}年{{ paperdata.examMonth
-            }}月{{ paperdata.paperType }}{{ paperdata.paperName }}</h1>
+            <h1 class="text-3xl font-bold mb-2">{{ paperdata?.examYear }}年{{ paperdata?.examMonth
+            }}月{{ paperdata?.paperType }}{{ paperdata?.paperName }}</h1>
             <div class="flex flex-wrap gap-3 mb-4">
                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border">
                     <ClockIcon class="h-3 w-3 mr-1" />
-                    {{ paperdata.paperTime }} minutes
+                    {{ paperdata?.paperTime }} minutes
                 </span>
                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border">
                     <BookOpenIcon class="h-3 w-3 mr-1" />
-                    {{ paperdata.sectionCount }} sections
+                    {{ paperdata?.sectionCount }} sections
                 </span>
                 <span
-                    :class="`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium text-white ${getDifficultyColor(paperdata.difficulty)}`">
-                    {{ paperdata.difficulty }}
+                    :class="`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium text-white ${getDifficultyColor(paperdata?.difficulty)}`">
+                    {{ paperdata?.difficulty }}
                 </span>
             </div>
 
@@ -126,7 +124,7 @@ const { data: paperdata } = useRequest(getPaperIntro(id)).onSuccess(e => {
             <div class="bg-base-100 shadow-lg card">
                 <div class="p-6 border-b">
                     <h2 class="text-lg font-medium">Exam Sections</h2>
-                    <p class="text-sm text-gray-500">This exam contains {{ paperdata.sectionCount }} sections</p>
+                    <p class="text-sm text-gray-500">This exam contains {{ paperdata?.sectionCount }} sections</p>
                 </div>
                 <div class="p-6">
                     <div class="space-y-4">
@@ -135,7 +133,7 @@ const { data: paperdata } = useRequest(getPaperIntro(id)).onSuccess(e => {
                                 <h3 class="font-medium">Writing</h3>
                                 <span
                                     class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border">
-                                    {{ paperdata.sectionQuestionCount[0] }} questions
+                                    {{ paperdata?.sectionQuestionCount[0] }} questions
                                 </span>
                             </div>
                             <p class="text-sm text-gray-500 mb-2">Focus on clear structure with introduction, body, and
@@ -150,7 +148,7 @@ const { data: paperdata } = useRequest(getPaperIntro(id)).onSuccess(e => {
                                 <h3 class="font-medium">Listening</h3>
                                 <span
                                     class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border">
-                                    {{ paperdata.sectionQuestionCount[1] }} questions
+                                    {{ paperdata?.sectionQuestionCount[1] }} questions
                                 </span>
                             </div>
                             <p class="text-sm text-gray-500 mb-2">Practice predicting content from keywords; note
@@ -165,7 +163,7 @@ const { data: paperdata } = useRequest(getPaperIntro(id)).onSuccess(e => {
                                 <h3 class="font-medium">Reading</h3>
                                 <span
                                     class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border">
-                                    {{ paperdata.sectionQuestionCount[2] }} questions
+                                    {{ paperdata?.sectionQuestionCount[2] }} questions
                                 </span>
                             </div>
                             <p class="text-sm text-gray-500 mb-2">Skim for main ideas first; underline key info; manage
@@ -180,7 +178,7 @@ const { data: paperdata } = useRequest(getPaperIntro(id)).onSuccess(e => {
                                 <h3 class="font-medium">Translation</h3>
                                 <span
                                     class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border">
-                                    {{ paperdata.sectionQuestionCount[3] }} questions
+                                    {{ paperdata?.sectionQuestionCount[3] }} questions
                                 </span>
                             </div>
                             <p class="text-sm text-gray-500 mb-2">Translate meaning, not word-for-word; adjust sentence

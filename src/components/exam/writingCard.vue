@@ -2,7 +2,7 @@
 import { ref, watch } from 'vue';
 import { Info, CircleCheck } from 'lucide-vue-next';
 import type { QuestionPart } from '../../interface/Question';
-const { data } = defineProps<{ data: QuestionPart }>()
+const { data } = defineProps<{ data?: QuestionPart }>()
 const textinput = ref("")
 const wordcount = ref(0)
 watch(textinput, (text) => {
@@ -32,12 +32,12 @@ watch(textinput, (text) => {
                 </p>
             </div>
         </div>
-        <CardContent class="space-y-4">
+        <div class="space-y-4">
             <h2 class="text-xl font-bold text-gray-800 mb-2  dark:text-base-content">Writing Prompt</h2>
             <div class="bg-base-200 px-4 py-6 rounded-md mb-2">
-                <p class="hyphens-auto text-base-content">{{ data.questions[0].content }}</p>
+                <p class="hyphens-auto text-base-content">{{ data?.questions[0].content }}</p>
             </div>
-        </CardContent>
+        </div>
         <h2 class="mt-3 text-xl font-bold text-gray-800 mb-2  dark:text-base-content">Your Writing</h2>
         <textarea
             class=" w-full min-h-[300px] p-4 border rounded-lg focus:ring-2 focus:ring-blue-300 focus:border-blue-300 outline-none resize-y"
