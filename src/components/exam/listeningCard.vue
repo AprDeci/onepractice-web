@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import AudioPlayer from '../common/audioPlayer.vue';
 import QuestionContainer from '../common/QuestionContainer.vue';
-import exampleData from '../../assets/example/listeningquestion.json'
 import ListeningSingleCard from './listeningSingleCard.vue';
 import { computed, ref } from 'vue';
 import type { QuestionPart } from '../../interface/Question';
