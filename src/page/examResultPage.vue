@@ -2,12 +2,14 @@
 import { ref } from 'vue'
 import { ChevronRight } from 'lucide-vue-next'
 import { usepaperStore } from '../store/paperStore'
+import { userecordStore } from '../store/recordStore'
 import { useRouter } from 'vue-router'
 import Rating from '../components/common/rating.vue'
 import { submitRating, getVoteByUserIdandPaperId } from '../request/methods/vote'
 import { useRequest } from 'alova/client'
 const router = useRouter()
 const paperStore = usepaperStore()
+const recordStore = userecordStore()
 const score = ref(0)
 const timer = setInterval(() => {
     if (score.value < paperStore.currentScore) {
@@ -86,10 +88,10 @@ const { data: voterating } = useRequest(() => getVoteByUserIdandPaperId(paperSto
                             Object.keys(paperStore.currentUserAnswers).length).toFixed(4) * 100 }}%</span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-base-content">Time Spent</span>
-                        <span class="text-base-content">{{ ((Date.now() - paperStore.currentTimestamp) / 1000 /
-                            60).toFixed(0)
-                            }}min</span>
+                        <span class="text-base-content">Time Spend</span>
+                        <span class="text-base-content">{{ ((recordStore.currentHasspendtime) / 1000 /
+                            60).toFixed(1)
+                        }}min</span>
                     </div>
                 </div>
                 <div class="mt-7">
