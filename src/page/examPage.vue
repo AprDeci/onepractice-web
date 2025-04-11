@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch, beforeUnmount } from 'vue'
+import { ref, onMounted, watch, onBeforeUnmount, computed } from 'vue'
 import { Timer } from 'lucide-vue-next'
 import { useRouter } from 'vue-router'
 import WritingCard from '../components/exam/writingCard.vue'
@@ -13,7 +13,9 @@ import { saveRecord, updateRecord } from '../request/methods/record.ts'
 import { motion, AnimatePresence } from 'motion-v'
 import { Times } from '../common/examMode.ts'
 import { useElementSize } from '@vueuse/core'
+import { userecordStore } from '../store/recordStore.ts'
 const paperStore = usepaperStore()
+const recordStore = userecordStore()
 const { id, mode, recordId } = defineProps<{
     id: string,
     mode: string
@@ -24,13 +26,39 @@ const tab = ref()
 const tabwidth = useElementSize(tab).width
 const showBlur = ref(true)
 const router = useRouter()
-const seconds = Times[paperStore.currentPaperType] * 60 | 125
+// 计时器
+const seconds = computed(() => {
+    const hasspendtime = recordStore.records[parseInt(id)].hasspendtime
+    // 如果有记录(有时间)
+    if (hasspendtime != 0) {
+        return Times[paperStore.currentPaperType] * 60 - hasspendtime / 1000
+    } else {
+        return Times[paperStore.currentPaperType] * 60 | 125
+    }
+})
 const selectedtab = ref('writing')
 const selectedindex = ref(0)
 const { loading, data, send } = useRequest(getAllQuestionsBypaperIdSplitByPart(id))
 const { loading: answerload, data: answerdata } = useRequest(getAnswersByPaperId(id)).onSuccess(e => {
     paperStore.setCurrentPaper(id, answerdata.value.answers)
 })
+// 初始化records
+onMounted(() => {
+    // 如果非continue 初始化 
+    if (!recordId) {
+        recordStore.initRecord(parseInt(id))
+    } else {
+        // 如果continue 在历史界面设置record
+        recordStore.setRecordLasttime(parseInt(id), Date.now())
+    }
+
+})
+
+onBeforeUnmount(() => {
+    // 销毁前更新record数据
+    recordStore.updateRecord(parseInt(id))
+})
+
 const showAlert = ref(false)
 
 const cards = {
@@ -58,13 +86,15 @@ const submit = async () => {
         router.push({ name: 'examResult' });
         return ''
     }
+    // 更新时间记录
+    await recordStore.updateRecord(parseInt(id))
     if (recordId) {
 
-        await updateRecord(recordId, paperStore.currentPaperId, mode, paperStore.currentUserAnswersLength === paperStore.currentCorrectAnswersLength ? 1 : 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, Object.keys(paperStore.currentCorrectAnswers).length, 0);
+        await updateRecord(recordId, paperStore.currentPaperId, mode, paperStore.currentUserAnswersLength === paperStore.currentCorrectAnswersLength ? 1 : 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, Object.keys(paperStore.currentCorrectAnswers).length, 0, recordStore.currentHasspendtime);
 
     } else {
 
-        await saveRecord(paperStore.currentPaperId, mode, paperStore.currentUserAnswersLength === paperStore.currentCorrectAnswersLength ? 1 : 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, Object.keys(paperStore.currentCorrectAnswers).length, 0);
+        await saveRecord(paperStore.currentPaperId, mode, paperStore.currentUserAnswersLength === paperStore.currentCorrectAnswersLength ? 1 : 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, Object.keys(paperStore.currentCorrectAnswers).length, 0, recordStore.currentHasspendtime);
     }
     router.push({ name: 'examResult' });
 

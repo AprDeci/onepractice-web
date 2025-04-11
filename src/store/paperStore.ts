@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 import type { answer } from "../interface/Question";
+import { userecordStore } from "./recordStore";
 
 interface paperdata {
   paperId: string;
@@ -11,6 +12,8 @@ interface paperdata {
 export const usepaperStore = defineStore(
   "paperStore",
   () => {
+    const recordStore = userecordStore();
+
     // state
     const papersData = ref<Record<number, paperdata>>({}); // 所有试卷数据 { paperId: { userAnswers, correctAnswers, timestamp } }
     const currentPaperId = ref<number | null>(null); // 当前试卷ID
@@ -129,6 +132,8 @@ export const usepaperStore = defineStore(
       for (const paperId in papersData.value) {
         if (now - papersData.value[paperId].timestamp > maxAge) {
           delete papersData.value[paperId];
+          // 删除对应record
+          delete recordStore.records[paperId];
         }
       }
     };

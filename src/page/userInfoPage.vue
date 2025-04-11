@@ -8,9 +8,11 @@ import { BookA } from 'lucide-vue-next';
 import { usepaperStore } from '../store/paperStore';
 import { useRouter } from 'vue-router';
 import { timestamp } from '@vueuse/core';
+import { userecordStore } from '../store/recordStore';
 const { data: userinfo } = useRequest(getUserInfo)
 const { data: records } = useRequest(getRecords(7))
 const paperStore = usepaperStore();
+const recordStore = userecordStore();
 const router = useRouter();
 // 通过时间戳计算当时日期
 const getDate = (timestamp: number) => {
@@ -26,6 +28,8 @@ const Continue = (index: number) => {
     // 跳转试卷页面 设置当前试卷id和当前用户答案
     paperStore.setCurrentPaperType(recorddata.paperType)
     paperStore.setUserAnswer(recorddata.paperId, JSON.parse(recorddata.answers))
+    // 设置record时间
+    recordStore.setRecordtime(recorddata.paperId, recorddata.hasspendtime)
     router.push({ name: 'examPageContinue', params: { id: recorddata.paperId, mode: recorddata.type, recordId: recorddata.recordId } })
 }
 </script>

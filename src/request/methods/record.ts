@@ -7,7 +7,8 @@ export const saveRecord = (
   answers: any[],
   score: number,
   totalscore: number,
-  timespend: number
+  timespend: number,
+  hasspendtime: number
 ) =>
   httpclient.Post("/record/save", {
     paperId: paperId,
@@ -16,7 +17,8 @@ export const saveRecord = (
     answers: answers,
     score: score,
     totalscore: totalscore,
-    timespend: timespend
+    timespend: timespend,
+    hasspendtime: hasspendtime
   });
 
 export const getRecords = (days: number) =>
@@ -34,7 +36,8 @@ export const updateRecord = (
   answers: any[],
   score: number,
   totalscore: number,
-  timespend: number
+  timespend: number,
+  hasspendtime: number
 ) =>
   httpclient.Post("/record/save", {
     recordId: recordId,
@@ -44,5 +47,6 @@ export const updateRecord = (
     answers: answers,
     score: score,
     totalscore: totalscore,
-    timespend: timespend
+    timespend: timespend,
+    hasspendtime: hasspendtime
   });
