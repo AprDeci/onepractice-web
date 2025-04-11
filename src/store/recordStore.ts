@@ -5,6 +5,7 @@ import { usepaperStore } from "./paperStore";
 interface record {
   hasspendtime: number;
   laststarttime: number;
+  recordId: string;
 }
 
 export const userecordStore = defineStore(
@@ -15,18 +16,23 @@ export const userecordStore = defineStore(
     const records = ref<Record<number, record>>({});
 
     const currentRecord = computed(() => {
-      if (!paperstore.currentPaperId) return;
+      if (!paperstore.currentPaperId || !records.value[paperstore.currentPaperId as number]) return;
       return records.value[paperstore.currentPaperId as number];
     });
 
     const currentHasspendtime = computed(() => {
-      if (!paperstore.currentPaperId) return;
+      if (!paperstore.currentPaperId || !records.value[paperstore.currentPaperId as number]) return;
       return records.value[paperstore.currentPaperId as number].hasspendtime;
     });
 
     const currentLaststarttime = computed(() => {
-      if (!paperstore.currentPaperId) return;
+      if (!paperstore.currentPaperId || !records.value[paperstore.currentPaperId as number]) return;
       return records.value[paperstore.currentPaperId as number].laststarttime;
+    });
+
+    const currentRecordId = computed(() => {
+      if (!paperstore.currentPaperId || !records.value[paperstore.currentPaperId as number]) return;
+      return records.value[paperstore.currentPaperId as number].recordId;
     });
 
     const setRecordtime = (index: number, time: number) => {
@@ -51,11 +57,24 @@ export const userecordStore = defineStore(
       }
     };
 
+    const setRecordId = (index: number, recordid: string) => {
+      if (!records.value[index]) {
+        records.value[index] = {
+          hasspendtime: 0,
+          laststarttime: 0,
+          recordId: recordid
+        };
+      } else {
+        records.value[index].recordId = recordid;
+      }
+    };
+
     const initRecord = (index: number) => {
       if (!records.value[index]) {
         records.value[index] = {
           hasspendtime: 0,
-          laststarttime: Date.now()
+          laststarttime: Date.now(),
+          recordId: "0"
         };
       } else {
         records.value[index].laststarttime = Date.now();
@@ -72,6 +91,8 @@ export const userecordStore = defineStore(
       currentRecord,
       currentHasspendtime,
       currentLaststarttime,
+      currentRecordId,
+      setRecordId,
       setRecordtime,
       setRecordLasttime,
       initRecord,

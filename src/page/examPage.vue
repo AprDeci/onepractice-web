@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch, onBeforeUnmount, computed } from 'vue'
+import { ref, onMounted, watch, onBeforeUnmount, computed, onBeforeMount } from 'vue'
 import { Timer } from 'lucide-vue-next'
 import { useRouter } from 'vue-router'
 import WritingCard from '../components/exam/writingCard.vue'
@@ -26,16 +26,9 @@ const tab = ref()
 const tabwidth = useElementSize(tab).width
 const showBlur = ref(true)
 const router = useRouter()
-// 计时器
-const seconds = computed(() => {
-    const hasspendtime = recordStore.records[parseInt(id)].hasspendtime
-    // 如果有记录(有时间)
-    if (hasspendtime != 0) {
-        return Times[paperStore.currentPaperType] * 60 - hasspendtime / 1000
-    } else {
-        return Times[paperStore.currentPaperType] * 60 | 125
-    }
-})
+const initialRecord = ref(false)
+//计时器
+const seconds = ref(60)
 const selectedtab = ref('writing')
 const selectedindex = ref(0)
 const { loading, data, send } = useRequest(getAllQuestionsBypaperIdSplitByPart(id))
@@ -43,7 +36,7 @@ const { loading: answerload, data: answerdata } = useRequest(getAnswersByPaperId
     paperStore.setCurrentPaper(id, answerdata.value.answers)
 })
 // 初始化records
-onMounted(() => {
+onBeforeMount(() => {
     // 如果非continue 初始化 
     if (!recordId) {
         recordStore.initRecord(parseInt(id))
@@ -51,7 +44,14 @@ onMounted(() => {
         // 如果continue 在历史界面设置record
         recordStore.setRecordLasttime(parseInt(id), Date.now())
     }
-
+    initialRecord.value = true
+    const hasspendtime = recordStore.records[parseInt(id)]?.hasspendtime
+    // 如果有记录(有时间)
+    if (hasspendtime != 0) {
+        seconds.value = Times[paperStore.currentPaperType] * 60 - hasspendtime / 1000
+    } else {
+        seconds.value = Times[paperStore.currentPaperType] * 60 | 125
+    }
 })
 
 onBeforeUnmount(() => {
@@ -88,13 +88,16 @@ const submit = async () => {
     }
     // 更新时间记录
     await recordStore.updateRecord(parseInt(id))
-    if (recordId) {
-
-        await updateRecord(recordId, paperStore.currentPaperId, mode, paperStore.currentUserAnswersLength === paperStore.currentCorrectAnswersLength ? 1 : 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, Object.keys(paperStore.currentCorrectAnswers).length, 0, recordStore.currentHasspendtime);
-
+    if (recordId || recordStore.currentRecordId != 0) {
+        if (recordId) {
+            await updateRecord(recordId, paperStore.currentPaperId, mode, paperStore.currentUserAnswersLength === paperStore.currentCorrectAnswersLength ? 1 : 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, Object.keys(paperStore.currentCorrectAnswers).length, 0, recordStore.currentHasspendtime);
+        } else {
+            await updateRecord(recordStore.currentRecordId, paperStore.currentPaperId, mode, paperStore.currentUserAnswersLength === paperStore.currentCorrectAnswersLength ? 1 : 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, Object.keys(paperStore.currentCorrectAnswers).length, 0, recordStore.currentHasspendtime);
+        }
     } else {
-
-        await saveRecord(paperStore.currentPaperId, mode, paperStore.currentUserAnswersLength === paperStore.currentCorrectAnswersLength ? 1 : 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, Object.keys(paperStore.currentCorrectAnswers).length, 0, recordStore.currentHasspendtime);
+        const data = await saveRecord(paperStore.currentPaperId, mode, paperStore.currentUserAnswersLength === paperStore.currentCorrectAnswersLength ? 1 : 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, Object.keys(paperStore.currentCorrectAnswers).length, 0, recordStore.currentHasspendtime);
+        // 将对应record的recordId保存到recordStore中
+        recordStore.setRecordId(parseInt(id), data)
     }
     router.push({ name: 'examResult' });
 

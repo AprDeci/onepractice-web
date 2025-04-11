@@ -39,7 +39,7 @@ export const updateRecord = (
   timespend: number,
   hasspendtime: number
 ) =>
-  httpclient.Post("/record/save", {
+  httpclient.Post("/record/update", {
     recordId: recordId,
     paperId: paperId,
     type: type,
