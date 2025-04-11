@@ -9,8 +9,9 @@ import { usepaperStore } from '../store/paperStore';
 import { useRouter } from 'vue-router';
 import { timestamp } from '@vueuse/core';
 import { userecordStore } from '../store/recordStore';
+import PagiNation from '../components/pagiNation.vue';
 const { data: userinfo } = useRequest(getUserInfo)
-const { data: records } = useRequest(getRecords(7))
+const { data: records } = useRequest(getRecords(30))
 const paperStore = usepaperStore();
 const recordStore = userecordStore();
 const router = useRouter();
@@ -20,7 +21,9 @@ const getDate = (timestamp: number) => {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const day = date.getDate();
-    return `${year}-${month}-${day}`;
+    const hour = date.getHours();
+    const min = date.getMinutes().toString().padStart(2, '0');
+    return `${year}-${month}-${day} ${hour}:${min}`;
 }
 const Continue = (index: number) => {
     // 跟随记录继续写
@@ -63,7 +66,7 @@ const Continue = (index: number) => {
                     <span class="text-blue-400 cursor-pointer">View All</span>
                 </div>
                 <div>
-                    <div class="overflow-x-auto">
+                    <div class="overflow-x-auto overflow-scroll max-h-150">
                         <table class="table table-pin-rows table-pin-cols">
                             <thead>
                                 <tr>

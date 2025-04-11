@@ -89,7 +89,7 @@ const submit = async () => {
     // 更新时间记录
     await recordStore.updateRecord(parseInt(id))
     if (recordId || recordStore.currentRecordId != 0) {
-        if (recordId) {
+        if (recordId) { //优先recordId
             await updateRecord(recordId, paperStore.currentPaperId, mode, paperStore.currentUserAnswersLength === paperStore.currentCorrectAnswersLength ? 1 : 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, Object.keys(paperStore.currentCorrectAnswers).length, 0, recordStore.currentHasspendtime);
         } else {
             await updateRecord(recordStore.currentRecordId, paperStore.currentPaperId, mode, paperStore.currentUserAnswersLength === paperStore.currentCorrectAnswersLength ? 1 : 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, Object.keys(paperStore.currentCorrectAnswers).length, 0, recordStore.currentHasspendtime);
