@@ -22,13 +22,13 @@ const contentParsed = computed(() => {
         const word = selectedWords.value[blankNumber];
         if (word) {
             if (paperStore.currentAnswerStatus[blankNumber]) {
-                return `<span class="dark:text-gray-200 inline-block relative border-b-2 border-green-400 px-1 mx-1 bg-green-50 dark:bg-blue-300 dark:text-base-content cursor-pointer" data-blank="${blankNumber}">
+                return `<span class="dark:text-gray-200 inline-block relative border-b-2 border-green-400 px-1 mx-1 bg-green-50 dark:bg-green-400 dark:text-white cursor-pointer" data-blank="${blankNumber}">
           <span class=" blank-number relative  transform -translate-x-1/2 text-xs font-bold text-green-600 bg-green-100 px-1.5 py-0.5 rounded">${blankNumber}</span>
           ${word}
           <span class="absolute inset-0" data-blank="${blankNumber}"></span>
         </span>`
             } else {
-                return `<span class="dark:text-gray-200 inline-block relative border-b-2 border-red-400 px-1 mx-1 bg-red-50 dark:bg-blue-300 dark:text-base-content cursor-pointer" data-blank="${blankNumber}">
+                return `<span class="dark:text-gray-200 inline-block relative border-b-2 border-red-400 px-1 mx-1 bg-red-50 dark:bg-red-400 dark:text-white cursor-pointer" data-blank="${blankNumber}">
           <span class=" blank-number relative  transform -translate-x-1/2 text-xs font-bold text-red-600 bg-red-100 px-1.5 py-0.5 rounded">${blankNumber}</span>
           ${word}
           <span class="absolute inset-0" data-blank="${blankNumber}"></span>

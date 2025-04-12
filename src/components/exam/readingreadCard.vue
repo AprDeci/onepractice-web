@@ -204,4 +204,23 @@ onMounted(() => {
         padding-bottom: 70px;
     }
 }
+
+.colheightcontainer {
+    max-height: 80vh;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e0 #f7fafc;
+}
+
+.colheightcontainer::-webkit-scrollbar {
+    width: 6px;
+}
+
+.colheightcontainer::-webkit-scrollbar-track {
+    background: #f7fafc;
+}
+
+.colheightcontainer::-webkit-scrollbar-thumb {
+    background-color: #cbd5e0;
+    border-radius: 3px;
+}
 </style>

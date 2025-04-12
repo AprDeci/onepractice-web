@@ -155,10 +155,10 @@ onMounted(() => {
 
                         <div class="space-y-3 lg:pl-9">
                             <div v-for="option in question.options" :key="`${index}-${option.label}`"
-                                class="flex items-start p-1 lg:p-3 rounded-md cursor-not-allowed transition-colors"
+                                class="flex items-start p-1 lg:p-3 rounded-md cursor-not-allowed transition-colors text-gray-700 dark:text-base-content"
                                 :class="{
-                                    'bg-green-50 border border-green-200': selectedAnswers[index] === option.label && paperStore.currentAnswerStatus[getQuestionNumber(index)],
-                                    'bg-red-50 border border-red-200': selectedAnswers[index] === option.label && !paperStore.currentAnswerStatus[getQuestionNumber(index)],
+                                    'bg-green-50 border border-green-200 dark:bg-transparent border-2 dark:!text-white': selectedAnswers[index] === option.label && paperStore.currentAnswerStatus[getQuestionNumber(index)],
+                                    'bg-red-50 border border-red-200 dark:bg-transparent border-2 dark:!text-white': selectedAnswers[index] === option.label && !paperStore.currentAnswerStatus[getQuestionNumber(index)],
                                 }">
                                 <div class="flex items-center justify-center h-6 w-6 rounded-full border-2 mr-3 flex-shrink-0"
                                     :class="{
@@ -167,7 +167,7 @@ onMounted(() => {
                                     }">
                                     <span class="text-sm font-bold">{{ option.label }}</span>
                                 </div>
-                                <p class="text-gray-700 dark:text-base-content">{{ option.content }}</p>
+                                <p class="">{{ option.content }}</p>
                             </div>
                         </div>
                     </div>
