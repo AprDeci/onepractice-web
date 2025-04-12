@@ -125,7 +125,7 @@ const counterzero = () => {
                     <Counter v-if="mode === 'free'"></Counter>
                 </div>
                 <div class="navbar-end">
-                    <label for="my-drawer-4" class="drawer-button btn btn-primary">Open drawer</label>
+                    <label for="my-drawer-4" class="drawer-button btn btn-primary">Answers</label>
                 </div>
             </div>
 

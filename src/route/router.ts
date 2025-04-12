@@ -51,6 +51,12 @@ const routes = [
         path: "result",
         name: "examResult",
         component: () => import("@/page/examResultPage.vue")
+      },
+      {
+        path: "review",
+        props: true,
+        name: "examReview",
+        component: () => import("@/page/examReviewPage.vue")
       }
     ]
   },
