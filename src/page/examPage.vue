@@ -158,7 +158,8 @@ const counterzero = () => {
                             Next Section</div>
                     </aside>
                     <nav class="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
-                        <div class="btn btn-primary btn-sm lg:btn-md" @click="showAlert = !showAlert">
+                        <div v-if="mode != 'free'" class="btn btn-primary btn-sm lg:btn-md"
+                            @click="showAlert = !showAlert">
                             submit
                         </div>
                     </nav>

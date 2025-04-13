@@ -10,15 +10,17 @@ import { useRequest } from 'alova/client'
 import { usepaperStore } from '../store/paperStore.ts'
 import { useElementSize } from '@vueuse/core'
 const paperStore = usepaperStore()
+const { id, recordId = '0412' } = defineProps<{ id: string, recordId?: string }>()
 const tab = ref()
 const tabwidth = useElementSize(tab).width
 const router = useRouter()
 //计时器
 const selectedtab = ref('writing')
 const selectedindex = ref(0)
-const { loading, data, send } = useRequest(getAllQuestionsBypaperIdSplitByPart(1))
-const { loading: answerload, data: answerdata } = useRequest(getAnswersByPaperId(1))
-
+const { loading, data, send } = useRequest(getAllQuestionsBypaperIdSplitByPart(id))
+const { loading: answerload, data: answerdata } = useRequest(getAnswersByPaperId(id)).onSuccess(e => {
+    paperStore.setCurrentPaper(id, answerdata.value.answers)
+})
 const cards = {
     'writing': WritingCard,
     'listening': rlisteningCard,
@@ -32,7 +34,10 @@ const changeTab = (card, index: number) => {
     selectedtab.value = card;
     selectedindex.value = index;
 }
-
+onBeforeUnmount(() => {
+    // 清理paperstore数据
+    delete paperStore.papersData[parseInt(id)]
+})
 
 
 </script>
@@ -83,6 +88,11 @@ const changeTab = (card, index: number) => {
                             @click="changeTab(data?.questionParts[selectedindex + 1].questions[0].questionType, selectedindex + 1)">
                             Next Section</div>
                     </aside>
+                    <nav class="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
+                        <div class="btn btn-primary btn-sm lg:btn-md" @click="router.push('/')">
+                            Return Home
+                        </div>
+                    </nav>
                 </footer>
             </footer>
         </div>

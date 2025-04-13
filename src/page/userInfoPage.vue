@@ -7,9 +7,7 @@ import { getRecords } from '../request/methods/record';
 import { BookA } from 'lucide-vue-next';
 import { usepaperStore } from '../store/paperStore';
 import { useRouter } from 'vue-router';
-import { timestamp } from '@vueuse/core';
 import { userecordStore } from '../store/recordStore';
-import PagiNation from '../components/pagiNation.vue';
 const { data: userinfo } = useRequest(getUserInfo)
 const { data: records } = useRequest(getRecords(30))
 const paperStore = usepaperStore();
@@ -34,6 +32,12 @@ const Continue = (index: number) => {
     // 设置record时间
     recordStore.setRecordtime(recorddata.paperId, recorddata.hasspendtime)
     router.push({ name: 'examPageContinue', params: { id: recorddata.paperId, mode: recorddata.type, recordId: recorddata.recordId } })
+}
+const Review = (index: number) => {
+    const recorddata = records.value[index]
+    paperStore.setCurrentPaperType(recorddata.paperType)
+    paperStore.setUserAnswer(recorddata.paperId, JSON.parse(recorddata.answers))
+    router.push({ name: 'examReview', params: { id: recorddata.paperId, recordId: recorddata.recordId } })
 }
 </script>
 
@@ -120,7 +124,8 @@ const Continue = (index: number) => {
                                             </div> <span>Unfinished</span>
                                         </div>
                                     </td>
-                                    <th v-if="record.isfinished === 1" class="text-blue-500 cursor-pointer">Review</th>
+                                    <th @click="Review(index)" v-if="record.isfinished === 1"
+                                        class="text-blue-500 cursor-pointer">Review</th>
                                     <th @click="Continue(index)" v-else class="text-blue-500 cursor-pointer">Continue
                                     </th>
                                 </tr>
