@@ -39,6 +39,7 @@ const { loading: answerload, data: answerdata } = useRequest(getAnswersByPaperId
 onBeforeMount(() => {
     // 如果非continue 初始化 
     if (!recordId) {
+        // init:若record(id)有值 则修改时间 若无值 初始化
         recordStore.initRecord(parseInt(id))
     } else {
         // 如果continue 在历史界面设置record
@@ -55,7 +56,7 @@ onBeforeMount(() => {
 })
 
 onBeforeUnmount(() => {
-    // 销毁前更新record数据
+    // 销毁前更新record数据 更新时间
     recordStore.updateRecord(parseInt(id))
 })
 

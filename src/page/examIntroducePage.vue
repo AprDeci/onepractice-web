@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onBeforeUnmount } from 'vue'
 import {
     Clock as ClockIcon,
     PlayCircle as PlayCircleIcon,
@@ -38,6 +38,10 @@ const { data: paperdata } = useRequest(getPaperIntro(id)).onSuccess(e => {
     paperStore.setCurrentPaperType(e.data.paperType)
 })
 
+onBeforeUnmount(() => {
+    paperStore.setCurrentMode(examMode.value);
+})
+
 
 
 </script>
@@ -46,7 +50,7 @@ const { data: paperdata } = useRequest(getPaperIntro(id)).onSuccess(e => {
     <div class="container mx-auto py-8 px-4 max-w-4xl">
         <div class="mb-8">
             <h1 class="text-3xl font-bold mb-2">{{ paperdata?.examYear }}年{{ paperdata?.examMonth
-            }}月{{ paperdata?.paperType }}{{ paperdata?.paperName }}</h1>
+                }}月{{ paperdata?.paperType }}{{ paperdata?.paperName }}</h1>
             <div class="flex flex-wrap gap-3 mb-4">
                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border">
                     <ClockIcon class="h-3 w-3 mr-1" />

@@ -10,6 +10,10 @@ declare module 'vue' {
   export interface GlobalComponents {
     Alert: typeof import('./src/components/common/alert.vue')['default']
     AudioPlayer: typeof import('./src/components/common/audioPlayer.vue')['default']
+    Book: typeof import('./src/components/ui/book/Book.vue')['default']
+    BookDescription: typeof import('./src/components/ui/book/BookDescription.vue')['default']
+    BookHeader: typeof import('./src/components/ui/book/BookHeader.vue')['default']
+    BookTitle: typeof import('./src/components/ui/book/BookTitle.vue')['default']
     copy: typeof import('./src/components/exam/writingCard copy.vue')['default']
     Counter: typeof import('./src/components/common/counter.vue')['default']
     CounterReverse: typeof import('./src/components/common/counterReverse.vue')['default']
