@@ -101,7 +101,11 @@ const sendregister = async () => {
                 <div class="card-body pt-2">
                     <fieldset class="fieldset">
                         <legend class="fieldset-legend">用户名</legend>
-                        <input v-model="registerdata.username" type="text" class="input" placeholder=" " />
+                        <input v-model="registerdata.username" type="text" class="input validator" minlength="3"
+                            maxlength="20" placeholder=" " />
+                        <p class="validator-hint hidden">
+                            用户名至少三位,最长二十位
+                        </p>
                     </fieldset>
                     <fieldset class="fieldset">
                         <legend class="fieldset-legend">邮箱</legend>
@@ -115,7 +119,7 @@ const sendregister = async () => {
                             </svg>
                             <input v-model="registerdata.email" type="email" placeholder="mail@site.com" required />
                         </label>
-                        <div class="validator-hint hidden">Enter valid email address</div>
+                        <div class="validator-hint hidden">错误邮箱格式</div>
                     </fieldset>
                     <fieldset>
                         <legend class="fieldset-legend">验证码</legend>
@@ -145,11 +149,11 @@ const sendregister = async () => {
                                 </g>
                             </svg>
                             <input v-model="registerdata.password" class="" type="password" required
-                                placeholder="Password" minlength="8" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                                title="Must be more than 8 characters, including number, lowercase letter, uppercase letter" />
+                                placeholder="Password" minlength="6"
+                                pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z][^\s]{5,}$" />
                         </label>
                         <p class="validator-hint hidden">
-                            必须大于八个字符,包括数字,小写字母,大写字母
+                            密码至少六位,字母开头包含数字
                         </p>
                     </fieldset>
                     <button class="btn btn-primary btn-md mt-2" @click="sendregister">注册</button>

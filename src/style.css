@@ -9,6 +9,4 @@
 
 }
 @custom-variant dark (&:where([data-theme=dim], [data-theme=dim] *));
-:root{
-  font-size: 16px;
-}
+

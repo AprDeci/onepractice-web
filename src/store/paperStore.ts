@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 import type { answer } from "../interface/Question";
+import { userecordStore } from "./recordStore";
 
 interface paperdata {
   paperId: string;
@@ -11,10 +12,13 @@ interface paperdata {
 export const usepaperStore = defineStore(
   "paperStore",
   () => {
+    const recordStore = userecordStore();
+
     // state
     const papersData = ref<Record<number, paperdata>>({}); // 所有试卷数据 { paperId: { userAnswers, correctAnswers, timestamp } }
     const currentPaperId = ref<number | null>(null); // 当前试卷ID
     const currentPaperType = ref<string | null>(null);
+    const currentMode = ref<string | null>(null); // 当前模式
 
     // getter
     const currentUserAnswers = computed(() => {
@@ -123,12 +127,18 @@ export const usepaperStore = defineStore(
       return papersData.value[currentPaperId.value]?.userAnswers[index];
     };
 
+    const setCurrentMode = (mode: string) => {
+      currentMode.value = mode;
+    };
+
     //   清理过期的试卷数据
     const cleanupOldData = (maxAge = 2 * 60 * 60 * 1000) => {
       const now = Date.now();
       for (const paperId in papersData.value) {
         if (now - papersData.value[paperId].timestamp > maxAge) {
           delete papersData.value[paperId];
+          // 删除对应record
+          delete recordStore.records[paperId];
         }
       }
     };
@@ -148,6 +158,7 @@ export const usepaperStore = defineStore(
     return {
       papersData,
       currentPaperId,
+      currentMode,
       currentUserAnswers,
       currentCorrectAnswers,
       currentScore,
@@ -161,6 +172,7 @@ export const usepaperStore = defineStore(
       setUserAnswer,
       updateUserAnswer,
       getUserAnswer,
+      setCurrentMode,
       cleanupOldData,
       cleancurrentUserAnswer,
       cleanAll

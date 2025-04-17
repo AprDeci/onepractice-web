@@ -95,21 +95,22 @@ const { data: resetdata, loading: resetLoading, send: sendPassword } = useReques
                         <div class="validator-hint">Enter valid email address</div>
                         <label class="fieldset-label text-sm">captcha</label>
                         <div class="join w-full">
-                            <input v-model="captcha" type="text" class="input">
+                            <input v-model="captcha" type="text" class="input rounded-sm">
                             <button class="btn" @click="sendCaptcha" :loading="sending"
                                 :disabled="sending || countdown > 0">
                                 {{ sending ? '发送中...' : countdown > 0 ? `${countdown}后可重发` : '发送验证码' }}
                             </button>
                         </div>
-                        <div class="validator-hint">233333</div>
-                        <div @click="verifyCaptcha" class="btn btn-primary">确认</div>
+                        <div @click="verifyCaptcha" class="btn btn-primary mt-5">确认</div>
                     </fieldset>
                     <!-- 密码界面 -->
                     <fieldset v-if="verifed" class="fieldset">
                         <label class="fieldset-label text-sm">新密码</label>
-                        <input type="password" v-model="password" class="input w-full validator" required
-                            placeholder="请输入新密码">
-                        <div class="validator-hint">Enter valid password</div>
+                        <input type="password " v-model="password" class="input w-full validator" required
+                            placeholder="请输入新密码" minlength="6" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z][^\s]{5,}$">
+                            <p class="validator-hint hidden">
+                            密码至少六位,字母开头包含数字
+                        </p>
                         <label class="fieldset-label text-sm">确认密码</label>
                         <input type="password" class="input w-full" :class="{ 'border-error': password != passwordt }"
                             v-model="passwordt" required placeholder="请再次输入新密码">

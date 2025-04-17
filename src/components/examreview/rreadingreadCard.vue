@@ -4,8 +4,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-vue-next'
 import type { QuestionsDO } from '../../interface/Question'
 import { useElementSize } from '@vueuse/core';
 import { usepaperStore } from '../../store/paperStore.ts';
-import { wrapWordsWithSpan } from '../../common/utils.ts';
-
+import { wrapWordsWithSpan } from '../../common/utils';
 
 const paperStore = usepaperStore()
 
@@ -70,11 +69,6 @@ const getQuestionNumber = (index: number) => {
     return questions.value[index].questionNumber
 }
 
-// Select an answer
-const selectAnswer = (questionIndex: number, optionLabel: string, answerIndex: number) => {
-    paperStore.updateUserAnswer(answerIndex, optionLabel)
-    selectedAnswers.value[questionIndex] = optionLabel
-}
 
 // Scroll to a specific question
 const scrollToQuestion = (questionIndex: number) => {
@@ -132,8 +126,9 @@ onMounted(() => {
                                 @click="scrollToQuestion(index)"
                                 class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors"
                                 :class="{
-                                    'bg-green-100 text-green-800': selectedAnswers[index] !== undefined,
-                                    'bg-gray-200 text-gray-600 hover:bg-gray-300': selectedAnswers[index] === undefined,
+                                    'bg-green-100 text-green-800': selectedAnswers[index] !== undefined && paperStore.currentAnswerStatus[index],
+                                    'bg-red-100 text-red-800': selectedAnswers[index] !== undefined && !paperStore.currentAnswerStatus[index],
+                                    'bg-gray-200 text-gray-600 ': selectedAnswers[index] === undefined,
                                     'ring-2 ring-blue-400': currentQuestionIndex === index
                                 }">
                                 {{ getQuestionNumber(index) }}
@@ -147,9 +142,10 @@ onMounted(() => {
             <div class="lg:col-span-5 order-2 overflow-y-scroll" :style="{ height: `${height}px` }">
                 <div class="space-y-8">
                     <div v-for="(question, index) in questions" :key="`q-${index}`" :id="`question-${index}`"
-                        class="bg-white dark:bg-gray-800 border rounded-lg shadow-sm p-3 lg:p-6"
-                        :class="{ 'border-blue-300': currentQuestionIndex === index }"
-                        @mouseenter="currentQuestionIndex = index">
+                        class="bg-white dark:bg-gray-800 border rounded-lg shadow-sm p-3 lg:p-6 border-2" :class="{
+                            'border-red-300': !paperStore.currentAnswerStatus[getQuestionNumber(index)],
+                            'border-green-300': paperStore.currentAnswerStatus[getQuestionNumber(index)]
+                        }">
                         <div class="flex items-start mb-4">
                             <span
                                 class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-200 text-gray-700 font-bold text-sm mr-3 flex-shrink-0">
@@ -160,10 +156,10 @@ onMounted(() => {
 
                         <div class="space-y-3 lg:pl-9">
                             <div v-for="option in question.options" :key="`${index}-${option.label}`"
-                                @click="selectAnswer(index, option.label, getQuestionNumber(index))"
-                                class="flex items-start p-1 lg:p-3 rounded-md cursor-pointer transition-colors" :class="{
-                                    'bg-blue-50 border border-blue-200': selectedAnswers[index] === option.label,
-                                    'hover:bg-gray-50 dark:hover:bg-gray-900 border border-transparent': selectedAnswers[index] !== option.label
+                                class="flex items-start p-1 lg:p-3 rounded-md cursor-not-allowed transition-colors text-gray-700 dark:text-base-content"
+                                :class="{
+                                    'bg-green-50 border border-green-200 dark:bg-transparent border-2 dark:!text-white': selectedAnswers[index] === option.label && paperStore.currentAnswerStatus[getQuestionNumber(index)],
+                                    'bg-red-50 border border-red-200 dark:bg-transparent border-2 dark:!text-white': selectedAnswers[index] === option.label && !paperStore.currentAnswerStatus[getQuestionNumber(index)],
                                 }">
                                 <div class="flex items-center justify-center h-6 w-6 rounded-full border-2 mr-3 flex-shrink-0"
                                     :class="{
@@ -172,8 +168,7 @@ onMounted(() => {
                                     }">
                                     <span class="text-sm font-bold">{{ option.label }}</span>
                                 </div>
-                                <p class="text-gray-700 dark:text-base-content"
-                                    v-html="wrapWordsWithSpan(option.content)"></p>
+                                <p class="" v-html="wrapWordsWithSpan(option.content)"></p>
                             </div>
                         </div>
                     </div>
@@ -206,24 +201,5 @@ onMounted(() => {
     .space-y-8 {
         padding-bottom: 70px;
     }
-}
-
-.colheightcontainer {
-    max-height: 80vh;
-    scrollbar-width: thin;
-    scrollbar-color: #cbd5e0 #f7fafc;
-}
-
-.colheightcontainer::-webkit-scrollbar {
-    width: 6px;
-}
-
-.colheightcontainer::-webkit-scrollbar-track {
-    background: #f7fafc;
-}
-
-.colheightcontainer::-webkit-scrollbar-thumb {
-    background-color: #cbd5e0;
-    border-radius: 3px;
 }
 </style>

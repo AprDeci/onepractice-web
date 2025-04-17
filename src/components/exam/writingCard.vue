@@ -2,6 +2,7 @@
 import { ref, watch } from 'vue';
 import { Info, CircleCheck } from 'lucide-vue-next';
 import type { QuestionPart } from '../../interface/Question';
+import { wrapWordsWithSpan } from '../../common/utils';
 const { data } = defineProps<{ data?: QuestionPart }>()
 const textinput = ref("")
 const wordcount = ref(0)
@@ -35,7 +36,7 @@ watch(textinput, (text) => {
         <div class="space-y-4">
             <h2 class="text-xl font-bold text-gray-800 mb-2  dark:text-base-content">Writing Prompt</h2>
             <div class="bg-base-200 px-4 py-6 rounded-md mb-2">
-                <p class="hyphens-auto text-base-content">{{ data?.questions[0].content }}</p>
+                <p class="hyphens-auto text-base-content">{{ data.questions[0].content }}</p>
             </div>
         </div>
         <h2 class="mt-3 text-xl font-bold text-gray-800 mb-2  dark:text-base-content">Your Writing</h2>

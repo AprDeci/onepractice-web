@@ -51,6 +51,12 @@ const routes = [
         path: "result",
         name: "examResult",
         component: () => import("@/page/examResultPage.vue")
+      },
+      {
+        path: "review/:id/:recordId",
+        props: true,
+        name: "examReview",
+        component: () => import("@/page/examReviewPage.vue")
       }
     ]
   },
@@ -69,7 +75,7 @@ const routes = [
   },
   {
     path: "/test",
-    component: () => import("@/page/examResultPage.vue")
+    component: () => import("@/page/test.vue")
   },
   {
     path: "/:pathMatch(.*)",

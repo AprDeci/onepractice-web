@@ -61,7 +61,7 @@ const setdark = () => {
                     <li>
                         <div class="theme">
                             <label class=" swap swap-rotate">
-                                <input type="checkbox" class="theme-controller" value="night" @change="setdark" />
+                                <input type="checkbox" class="theme-controller" @change="setdark" />
                                 <svg class="swap-off h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 24 24">
                                     <path

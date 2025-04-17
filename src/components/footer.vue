@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Github } from 'lucide-vue-next';
+import { useRouter } from 'vue-router'
+const router = useRouter()
 </script>
 
 <template>
@@ -12,15 +13,14 @@ import { Github } from 'lucide-vue-next';
                     </p>
                 </div>
                 <div className="flex gap-8">
-                    <div class="flex gap-2">
-                        <Github :size="18" /><a href="https://github.com/AprDeci/onepractice">项目地址</a>
-                    </div>
-                    <a href="/terms" className="text-sm text-base-content hover:text-gray-900">
+                    <a class="cursor-pointer text-sm text-base-content hover:text-gray-900"
+                        @click="router.push({ name: 'terms' })">
                         Terms
                     </a>
-                    <a href="/privacy" className="text-sm text-base-content hover:text-gray-900">
+                    <div class="cursor-pointer text-sm text-base-content hover:text-gray-900"
+                        @click="router.push({ name: 'privacy' })">
                         Privacy
-                    </a>
+                    </div>
                     <a href="#" className="text-sm text-base-content hover:text-gray-900">
                         Help
                     </a>

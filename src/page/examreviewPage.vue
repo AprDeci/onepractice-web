@@ -1,76 +1,35 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, onBeforeUnmount, computed, onBeforeMount } from 'vue'
-import { Timer } from 'lucide-vue-next'
 import { useRouter } from 'vue-router'
 import WritingCard from '../components/exam/writingCard.vue'
-import ListeningCard from '../components/exam/listeningCard.vue'
-import readingCard from '../components/exam/readingCard.vue'
 import TranslationCard from '../components/exam/TranslationCard.vue'
-import { getAllQuestionsBypaperIdSplitByPart, getAnswersByPaperId } from '../request/methods/question'
+import rlisteningCard from '../components/examreview/rlisteningCard.vue'
+import rreadingCard from '../components/examreview/rreadingCard.vue'
+import { getAllQuestionsBypaperIdSplitByPart, getAnswersByPaperId } from '../request/methods/question.ts'
 import { useRequest } from 'alova/client'
 import { usepaperStore } from '../store/paperStore.ts'
-import { saveRecord, updateRecord } from '../request/methods/record.ts'
-import { motion, AnimatePresence } from 'motion-v'
-import { Times } from '../common/examMode.ts'
-import { useElementSize, useElementByPoint, useMouse, useEventListener, onClickOutside } from '@vueuse/core'
-import { userecordStore } from '../store/recordStore.ts'
+import { useElementSize, onClickOutside, useEventListener, useElementByPoint, useMouse } from '@vueuse/core'
 import { useUtilStore } from '../store/utilStore.ts'
 import { useFloating, autoUpdate, offset, flip, shift } from '@floating-ui/vue'
 import dicpanel from '../components/exam/dicpanel.vue'
-const utilStore = useUtilStore()
 const paperStore = usepaperStore()
-const recordStore = userecordStore()
-const { id, mode, recordId } = defineProps<{
-    id: string,
-    mode: string
-    recordId?: string
-}>()
-
+const utilStore = useUtilStore()
+const { id, recordId = '0412' } = defineProps<{ id: string, recordId?: string }>()
 const tab = ref()
 const tabwidth = useElementSize(tab).width
-const showBlur = ref(true)
 const router = useRouter()
-const initialRecord = ref(false)
 //计时器
-const seconds = ref(60)
 const selectedtab = ref('writing')
 const selectedindex = ref(0)
 const { loading, data, send } = useRequest(getAllQuestionsBypaperIdSplitByPart(id))
 const { loading: answerload, data: answerdata } = useRequest(getAnswersByPaperId(id)).onSuccess(e => {
     paperStore.setCurrentPaper(id, answerdata.value.answers)
 })
-// 初始化records
-onBeforeMount(() => {
-    // 如果非continue 初始化 
-    if (!recordId) {
-        // init:若record(id)有值 则修改时间 若无值 初始化
-        recordStore.initRecord(parseInt(id))
-    } else {
-        // 如果continue 在历史界面设置record
-        recordStore.setRecordLasttime(parseInt(id), Date.now())
-    }
-    initialRecord.value = true
-    const hasspendtime = recordStore.records[parseInt(id)]?.hasspendtime
-    // 如果有记录(有时间)
-    if (hasspendtime != 0) {
-        seconds.value = Times[paperStore.currentPaperType] * 60 - hasspendtime / 1000
-    } else {
-        seconds.value = Times[paperStore.currentPaperType] * 60 | 125
-    }
-})
-
-onBeforeUnmount(() => {
-    // 销毁前更新record数据 更新时间
-    recordStore.updateRecord(parseInt(id))
-})
-
-const showAlert = ref(false)
-
 const cards = {
     'writing': WritingCard,
-    'listening': ListeningCard,
-    'reading': readingCard,
-    'cloze': readingCard,
+    'listening': rlisteningCard,
+    'reading': rreadingCard,
+    'cloze': rreadingCard,
     'translation': TranslationCard
 
 }
@@ -79,39 +38,10 @@ const changeTab = (card, index: number) => {
     selectedtab.value = card;
     selectedindex.value = index;
 }
-
-const cleanAnswer = () => {
-    paperStore.cleancurrentUserAnswer();
-    location.reload();
-}
-
-const submit = async () => {
-    // 没做题不让提交
-    if (paperStore.currentUserAnswersLength === 0) {
-        router.push({ name: 'examResult' });
-        return ''
-    }
-    // 更新时间记录
-    await recordStore.updateRecord(parseInt(id))
-    if (recordId || recordStore.currentRecordId != 0) {
-        if (recordId) { //优先recordId
-            await updateRecord(recordId, paperStore.currentPaperId, mode, paperStore.currentUserAnswersLength === paperStore.currentCorrectAnswersLength ? 1 : 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, Object.keys(paperStore.currentCorrectAnswers).length, 0, recordStore.currentHasspendtime);
-        } else {
-            await updateRecord(recordStore.currentRecordId, paperStore.currentPaperId, mode, paperStore.currentUserAnswersLength === paperStore.currentCorrectAnswersLength ? 1 : 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, Object.keys(paperStore.currentCorrectAnswers).length, 0, recordStore.currentHasspendtime);
-        }
-    } else {
-        const data = await saveRecord(paperStore.currentPaperId, mode, paperStore.currentUserAnswersLength === paperStore.currentCorrectAnswersLength ? 1 : 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, Object.keys(paperStore.currentCorrectAnswers).length, 0, recordStore.currentHasspendtime);
-        // 将对应record的recordId保存到recordStore中
-        recordStore.setRecordId(parseInt(id), data)
-    }
-    router.push({ name: 'examResult' });
-
-}
-
-const counterzero = () => {
-    submit()
-}
-
+onBeforeUnmount(() => {
+    // 清理paperstore数据
+    delete paperStore.papersData[parseInt(id)]
+})
 
 // 鼠标查词功能
 const { x, y } = useMouse({ type: 'client' });
@@ -150,6 +80,7 @@ onClickOutside(dicpanelref, () => {
     word.value = ''
 }
 )
+
 </script>
 
 <template>
@@ -163,10 +94,7 @@ onClickOutside(dicpanelref, () => {
                     <span class="text-xl mx-2 cursor-pointer" @click="router.push('/')">One Practice</span>
                 </div>
                 <div class="navbar-center">
-                    <Timer />
-                    <CounterReverse v-if="mode === 'simulation'" @todo="counterzero" :seconds="seconds">
-                    </CounterReverse>
-                    <Counter v-if="mode === 'free'"></Counter>
+                    <span class="font-bold">REVIEW</span>
                 </div>
                 <div class="navbar-end flex gap-3">
                     <div>
@@ -195,7 +123,7 @@ onClickOutside(dicpanelref, () => {
                     </KeepAlive>
                 </div>
             </div>
-            <footer class="sticky bottom-0 w-full z-10">
+            <footer class="sticky bottom-0 w-full">
                 <footer
                     class="footer flex justify-between footer-horizontal bg-base-200 text-neutral-content items-center p-4 border dark:border-base-100">
                     <aside class="grid-flow-col items-center">
@@ -207,31 +135,10 @@ onClickOutside(dicpanelref, () => {
                             Next Section</div>
                     </aside>
                     <nav class="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
-                        <div v-if="mode != 'free'" class="btn btn-primary btn-sm lg:btn-md"
-                            @click="showAlert = !showAlert">
-                            submit
+                        <div class="btn btn-primary btn-sm lg:btn-md" @click="router.push('/')">
+                            Return Home
                         </div>
                     </nav>
-                    <AnimatePresence>
-                        <motion.div :initial="{ y: 20, opacity: 0 }" :animate="{ y: 0, opacity: 1 }"
-                            :exit="{ opacity: 1, y: [0, 20, -1000], scaleY: [1, 0.4, 0], scaleX: [1, 0.7, 0], transition: { duration: 0.8, times: [0, 0.6, 0.8] } }"
-                            :transition="{
-                                duration: 0.4,
-                            }" v-if="showAlert" role="alert"
-                            class="absolute right-2  bottom-20 alert alert-vertical sm:alert-horizontal">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                class="stroke-info h-6 w-6 shrink-0">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            <span>确认提交吗? <span
-                                    v-if="paperStore.currentUserAnswersLength != paperStore.currentCorrectAnswersLength">您还没有做完所有题目</span></span>
-                            <div class="flex gap-2">
-                                <button @click="showAlert = false" class="btn btn-sm">不交不交</button>
-                                <button @click="submit" class="btn btn-sm btn-primary">交!</button>
-                            </div>
-                        </motion.div>
-                    </AnimatePresence>
                 </footer>
             </footer>
         </div>
@@ -245,8 +152,6 @@ onClickOutside(dicpanelref, () => {
                     <h2 class="text-lg font-medium text-base-content">Answer Sheet</h2>
                     <div class="flex justify-between">
                         <p class="text-xs text-gray-500 mt-1">Track your progress</p>
-                        <p class="text-xs text-blue-200 hover:text-blue-400 cursor-pointer"
-                            @click="showBlur = !showBlur">View All</p>
                     </div>
                 </div>
 
@@ -262,14 +167,10 @@ onClickOutside(dicpanelref, () => {
                                 <div class="relative w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200 shadow-sm group-hover:shadow-md"
                                     :class="[
                                         answer.answer ? 'bg-blue-50 text-blue-600 border border-blue-200' : 'bg-gray-50 border border-gray-200',
-                                        answer.answer === paperStore.currentUserAnswers[answer.index] && mode === 'free' ? 'bg-green-50 text-green-600 border border-green-200' : '',
-                                        answer.answer != paperStore.currentUserAnswers[answer.index] && mode === 'free' && paperStore.currentUserAnswers[answer.index] ? 'bg-red-50 text-red-600 border border-red-200' : ''
+                                        answer.answer === paperStore.currentUserAnswers[answer.index] ? 'bg-green-50 text-green-600 border border-green-200' : '',
+                                        answer.answer != paperStore.currentUserAnswers[answer.index] && paperStore.currentUserAnswers[answer.index] ? 'bg-red-50 text-red-600 border border-red-200' : ''
                                     ]">
                                     <span class="text-sm font-medium">{{ answer.answer || '?' }}</span>
-                                    <!-- 遮罩层 -->
-                                    <div v-if="mode === 'simulation' && showBlur"
-                                        class="rounded-lg answerblur w-full h-full absolute backdrop-blur-sm hover:backdrop-blur-[0px]">
-                                    </div>
                                 </div>
 
                                 <!-- 题号 -->
@@ -290,10 +191,6 @@ onClickOutside(dicpanelref, () => {
                                 answered
                             </span>
                         </div>
-                        <button class="text-xs text-gray-500 dark:text-gray-200 hover:text-red-500 transition-colors"
-                            @click="cleanAnswer">
-                            Clear all
-                        </button>
                     </div>
 
                     <!-- 进度条 -->
@@ -311,6 +208,7 @@ onClickOutside(dicpanelref, () => {
     <dicpanel v-show="word" :word="word" id="tooltip" class="" role="tooltip" ref="dicpanelref" :style="floatingStyles">
     </dicpanel>
 </template>
+
 <style scoped>
 :deep(span.wordactive) {
     border-bottom: 2px solid orange;

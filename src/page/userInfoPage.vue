@@ -7,10 +7,11 @@ import { getRecords } from '../request/methods/record';
 import { BookA } from 'lucide-vue-next';
 import { usepaperStore } from '../store/paperStore';
 import { useRouter } from 'vue-router';
-import { timestamp } from '@vueuse/core';
+import { userecordStore } from '../store/recordStore';
 const { data: userinfo } = useRequest(getUserInfo)
-const { data: records } = useRequest(getRecords(7))
+const { data: records } = useRequest(getRecords(30))
 const paperStore = usepaperStore();
+const recordStore = userecordStore();
 const router = useRouter();
 // 通过时间戳计算当时日期
 const getDate = (timestamp: number) => {
@@ -18,7 +19,9 @@ const getDate = (timestamp: number) => {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const day = date.getDate();
-    return `${year}-${month}-${day}`;
+    const hour = date.getHours();
+    const min = date.getMinutes().toString().padStart(2, '0');
+    return `${year}-${month}-${day} ${hour}:${min}`;
 }
 const Continue = (index: number) => {
     // 跟随记录继续写
@@ -26,7 +29,15 @@ const Continue = (index: number) => {
     // 跳转试卷页面 设置当前试卷id和当前用户答案
     paperStore.setCurrentPaperType(recorddata.paperType)
     paperStore.setUserAnswer(recorddata.paperId, JSON.parse(recorddata.answers))
+    // 设置record时间
+    recordStore.setRecordtime(recorddata.paperId, recorddata.hasspendtime)
     router.push({ name: 'examPageContinue', params: { id: recorddata.paperId, mode: recorddata.type, recordId: recorddata.recordId } })
+}
+const Review = (index: number) => {
+    const recorddata = records.value[index]
+    paperStore.setCurrentPaperType(recorddata.paperType)
+    paperStore.setUserAnswer(recorddata.paperId, JSON.parse(recorddata.answers))
+    router.push({ name: 'examReview', params: { id: recorddata.paperId, recordId: recorddata.recordId } })
 }
 </script>
 
@@ -59,7 +70,7 @@ const Continue = (index: number) => {
                     <span class="text-blue-400 cursor-pointer">View All</span>
                 </div>
                 <div>
-                    <div class="overflow-x-auto">
+                    <div class="overflow-x-auto overflow-scroll max-h-150">
                         <table class="table table-pin-rows table-pin-cols">
                             <thead>
                                 <tr>
@@ -113,7 +124,8 @@ const Continue = (index: number) => {
                                             </div> <span>Unfinished</span>
                                         </div>
                                     </td>
-                                    <th v-if="record.isfinished === 1" class="text-blue-500 cursor-pointer">Review</th>
+                                    <th @click="Review(index)" v-if="record.isfinished === 1"
+                                        class="text-blue-500 cursor-pointer">Review</th>
                                     <th @click="Continue(index)" v-else class="text-blue-500 cursor-pointer">Continue
                                     </th>
                                 </tr>

@@ -104,10 +104,14 @@ const sendlogin = async () => {
                 <div class="tabs tabs-border">
                     <input type="radio" name="my_tabs_2" class="tab" aria-label="账号登录" checked="true" />
                     <div class="tab-content">
-                        <div class="card-body pt-2">
+                        <div class="card-body pt-2 flex flex-col gap-0">
                             <fieldset class="fieldset">
                                 <legend class="fieldset-legend">用户名</legend>
-                                <input v-model="loginData.usernameOrEmail" type="text" class="input" placeholder=" " />
+                                <input v-model="loginData.usernameOrEmail" type="text" class="input validator"
+                                    minlength="3" maxlength="20" placeholder=" " />
+                                <p class="validator-hint">
+                                    用户名至少三位,最长二十位
+                                </p>
                             </fieldset>
                             <fieldset>
                                 <legend class="fieldset-legend">密码</legend>
@@ -123,12 +127,11 @@ const sendlogin = async () => {
                                         </g>
                                     </svg>
                                     <input v-model="loginData.password" class="" type="password" required
-                                        placeholder="Password" minlength="8"
-                                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                                        title="Must be more than 8 characters, including number, lowercase letter, uppercase letter" />
+                                        placeholder="Password" minlength="6"
+                                        pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z][^\s]{5,}$" />
                                 </label>
-                                <p class="validator-hint hidden">
-                                    必须大于八个字符,包括数字,小写字母,大写字母
+                                <p class="validator-hint ">
+                                    密码至少六位,字母开头包含数字
                                 </p>
 
                             </fieldset>

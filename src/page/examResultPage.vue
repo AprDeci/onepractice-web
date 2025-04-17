@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onBeforeUnmount } from 'vue'
 import { ChevronRight } from 'lucide-vue-next'
 import { usepaperStore } from '../store/paperStore'
+import { userecordStore } from '../store/recordStore'
 import { useRouter } from 'vue-router'
 import Rating from '../components/common/rating.vue'
 import { submitRating, getVoteByUserIdandPaperId } from '../request/methods/vote'
 import { useRequest } from 'alova/client'
 const router = useRouter()
 const paperStore = usepaperStore()
+const recordStore = userecordStore()
 const score = ref(0)
 const timer = setInterval(() => {
     if (score.value < paperStore.currentScore) {
@@ -19,6 +21,7 @@ const timer = setInterval(() => {
 const leftcard = ref()
 const rightcard = ref()
 const ratingvalue = ref<number>(0)
+const destroy = ref(true)
 const updaterating = async (n: number) => {
     ratingvalue.value = n;
     await submitRating(paperStore.currentPaperId as number, n.toString())
@@ -26,6 +29,22 @@ const updaterating = async (n: number) => {
 const { data: voterating } = useRequest(() => getVoteByUserIdandPaperId(paperStore.currentPaperId as number, 0)).onSuccess((res) => {
     if (res.data) ratingvalue.value = res.data.rating
 })
+
+onBeforeUnmount(() => {
+    // 如果做完 清理paperstore
+    if (paperStore.currentCorrectAnswersLength == paperStore.currentUserAnswersLength) {
+        // 如果从非Review离开
+        if (destroy.value) {
+            delete paperStore.papersData[paperStore.currentPaperId as number]
+        }
+    }
+    //反之不做变化
+
+})
+const review = () => {
+    destroy.value = false
+    router.push({ name: 'examReview', params: { id: paperStore.currentPaperId, recordId: '0412' } })
+}
 </script>
 
 <template>
@@ -86,40 +105,49 @@ const { data: voterating } = useRequest(() => getVoteByUserIdandPaperId(paperSto
                             Object.keys(paperStore.currentUserAnswers).length).toFixed(4) * 100 }}%</span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-base-content">Time Spent</span>
-                        <span class="text-base-content">{{ ((Date.now() - paperStore.currentTimestamp) / 1000 /
-                            60).toFixed(0)
-                            }}min</span>
+                        <span class="text-base-content">Time Spend</span>
+                        <span class="text-base-content">{{ ((recordStore.currentHasspendtime) / 1000 /
+                            60).toFixed(1)
+                        }}min</span>
                     </div>
                 </div>
-                <div class="mt-7">
-                    <div class="btn btn-primary w-full" @click="router.push('/')"> Return Home
+                <div class="mt-7 flex flex-col gap-3">
+                    <div v-if="paperStore.currentCorrectAnswersLength == paperStore.currentUserAnswersLength"
+                        class="btn btn-primary w-full" @click="review()"> Review
+                        <ChevronRight :size="18" />
+                    </div>
+                    <div class="btn btn-secondary w-full" @click="router.push('/')"> Return Home
                         <ChevronRight :size="18" />
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card bg-base-100 shadow-lg  py-8 px-6 w-80 lg:w-120 lg:h-120 rounded-2xl" ref="rightcard">
-            <div class="header mb-2">
-                <span class="text-2xl font-bold">Detailed Answers</span>
+        <div class="flex flex-col gap-4">
+            <div v-if="paperStore.currentCorrectAnswersLength != paperStore.currentUserAnswersLength" role="alert"
+                class="alert alert-info alert-soft">
+                <span>您的答案将在本地保存两小时,点击试卷继续做题</span>
             </div>
-            <div
-                class="body grid grid-cols-4 lg:grid-cols-5 flex gap-y-3 justify-center items-center overflow-y-scroll">
-                <div v-for="(answerstatu, index) in paperStore.currentAnswerStatus" :key="index"
-                    class="w-12 flex-col justify-center place-self-center">
-                    <div class="shadow-sm w-12 h-12 rounded-lg flex  place-self-center self-center justify-center items-center  text-[16px]"
-                        :class="{
-                            'bg-green-50 text-green-400': answerstatu,
-                            'bg-red-100 text-red-400': !answerstatu
-                        }">
+            <div class="card bg-base-100 shadow-lg  py-8 px-6 w-80 lg:w-120 lg:h-120 rounded-2xl" ref="rightcard">
+                <div class="header mb-2">
+                    <span class="text-2xl font-bold">Detailed Answers</span>
+                </div>
+                <div
+                    class="body grid grid-cols-4 lg:grid-cols-5 flex gap-y-3 justify-center items-center overflow-y-scroll">
+                    <div v-for="(answerstatu, index) in paperStore.currentAnswerStatus" :key="index"
+                        class="w-12 flex-col justify-center place-self-center">
+                        <div class="shadow-sm w-12 h-12 rounded-lg flex  place-self-center self-center justify-center items-center  text-[16px]"
+                            :class="{
+                                'bg-green-50 text-green-400': answerstatu,
+                                'bg-red-100 text-red-400': !answerstatu
+                            }">
 
-                        <div>{{ paperStore.getUserAnswer(index) }}</div>
+                            <div>{{ paperStore.getUserAnswer(index) }}</div>
+                        </div>
+                        <div class="mt-2 flex w-12 justify-center text-gray-600 text-[12px]">{{ index }}</div>
                     </div>
-                    <div class="mt-2 flex w-12 justify-center text-gray-600 text-[12px]">{{ index }}</div>
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 
