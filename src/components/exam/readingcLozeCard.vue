@@ -4,6 +4,7 @@ import { onClickOutside, useWindowSize } from '@vueuse/core'
 import { XIcon } from 'lucide-vue-next'
 import type { QuestionsDO } from '../../interface/Question'
 import { usepaperStore } from '../../store/paperStore.ts'
+import { wrapWordsWithSpan } from '../../common/utils.ts'
 const paperStore = usepaperStore()
 const { question } = defineProps<{
     question: QuestionsDO
@@ -29,7 +30,7 @@ onClickOutside(answerCard, () => {
 
 // 生成html
 const contentParsed = computed(() => {
-    let content = question.content;
+    let content = wrapWordsWithSpan(question.content)
     content = content.replace(/_(\d+)_/g, (match, number) => {
         const blankNumber = parseInt(number);
         const word = selectedWords.value[blankNumber];

@@ -6,6 +6,8 @@ import { useWatcher } from 'alova/client';
 const { word } = defineProps<{ word: string }>();
 const { loading, data: wordmean, } = useWatcher(() => getwordmean(word), [() => word], {
     initialData: {},
+}).onError((e) => {
+    return { wordmean: { word: word, mean: '查无此词' } }
 })
 
 </script>

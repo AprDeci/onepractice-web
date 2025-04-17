@@ -8,8 +8,12 @@ import rreadingCard from '../components/examreview/rreadingCard.vue'
 import { getAllQuestionsBypaperIdSplitByPart, getAnswersByPaperId } from '../request/methods/question.ts'
 import { useRequest } from 'alova/client'
 import { usepaperStore } from '../store/paperStore.ts'
-import { useElementSize } from '@vueuse/core'
+import { useElementSize, onClickOutside, useEventListener, useElementByPoint, useMouse } from '@vueuse/core'
+import { useUtilStore } from '../store/utilStore.ts'
+import { useFloating, autoUpdate, offset, flip, shift } from '@floating-ui/vue'
+import dicpanel from '../components/exam/dicpanel.vue'
 const paperStore = usepaperStore()
+const utilStore = useUtilStore()
 const { id, recordId = '0412' } = defineProps<{ id: string, recordId?: string }>()
 const tab = ref()
 const tabwidth = useElementSize(tab).width
@@ -39,6 +43,43 @@ onBeforeUnmount(() => {
     delete paperStore.papersData[parseInt(id)]
 })
 
+// 鼠标查词功能
+const { x, y } = useMouse({ type: 'client' });
+const { element } = useElementByPoint({ x, y })
+const worddom = ref()
+const dicpanelref = ref() //查词弹窗
+const word = ref('')
+useEventListener(element, 'click', (e) => {
+    getword(element.value)
+}, { passive: true, capture: true })
+
+
+const getword = (element) => {
+    try {
+        if (utilStore.dictionaryMode) {
+            if (element.tagname !== 'SPAN') {
+                worddom.value = element.closest('span.wordactive');
+                word.value = worddom.value.textContent;
+            }
+            if (element.matches('span.wordactive')) {
+                worddom.value = element;
+                word.value = worddom.value.textContent;
+            }
+        }
+    } catch (error) {
+        // donothing
+    }
+}
+
+const { floatingStyles } = useFloating(worddom, dicpanelref, {
+    whileElementsMounted: autoUpdate,
+    middleware: [flip(), shift({ padding: 10 }), offset(6)]
+})
+
+onClickOutside(dicpanelref, () => {
+    word.value = ''
+}
+)
 
 </script>
 
@@ -55,7 +96,9 @@ onBeforeUnmount(() => {
                 <div class="navbar-center">
                     <span class="font-bold">REVIEW</span>
                 </div>
-                <div class="navbar-end">
+                <div class="navbar-end flex gap-3">
+                    <input type="checkbox" checked="checked" class="toggle toggle-accent"
+                        v-model="utilStore.dictionaryMode" />
                     <label for="my-drawer-4" class="drawer-button btn btn-primary">Answers</label>
                 </div>
             </div>
@@ -158,4 +201,14 @@ onBeforeUnmount(() => {
         </div>
 
     </div>
+
+    <dicpanel v-show="word" :word="word" id="tooltip" class="" role="tooltip" ref="dicpanelref" :style="floatingStyles">
+    </dicpanel>
 </template>
+
+<style scoped>
+:deep(span.wordactive) {
+    border-bottom: 2px solid orange;
+    cursor: pointer;
+}
+</style>

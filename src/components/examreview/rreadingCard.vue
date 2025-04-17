@@ -3,7 +3,6 @@ import QuestionContainer from '../common/QuestionContainer.vue';
 import rreadingclozeCard from './rreadingclozeCard.vue';
 import rreadingmatchCard from './rreadingmatchCard.vue';
 import rreadingreadCard from './rreadingreadCard.vue';
-
 import { computed, ref } from 'vue';
 import type { QuestionPart } from '../../interface/Question';
 import { recordStats } from 'motion-v';

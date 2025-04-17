@@ -4,6 +4,7 @@ import QuestionContainer from '../common/QuestionContainer.vue';
 import { computed, ref } from 'vue';
 import type { QuestionPart } from '../../interface/Question';
 import RlisteningSingleCard from './rlisteningSingleCard.vue';
+
 const { data } = defineProps<{ data: QuestionPart }>()
 const hasPrevSection = computed(() => {
     return activeId.value !== 0
