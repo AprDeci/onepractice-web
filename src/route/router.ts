@@ -56,7 +56,7 @@ const routes = [
         path: "review/:id/:recordId",
         props: true,
         name: "examReview",
-        component: () => import("@/page/examReviewPage.vue")
+        component: () => import("@/page/examreviewPage.vue")
       }
     ]
   },
