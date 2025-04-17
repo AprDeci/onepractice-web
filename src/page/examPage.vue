@@ -169,8 +169,11 @@ onClickOutside(dicpanelref, () => {
                     <Counter v-if="mode === 'free'"></Counter>
                 </div>
                 <div class="navbar-end flex gap-3">
-                    <input type="checkbox" checked="checked" class="toggle toggle-accent"
-                        v-model="utilStore.dictionaryMode" />
+                    <div>
+                        <span class="text-sm mr-2">查词</span>
+                        <input type="checkbox" checked="checked" class="toggle toggle-accent"
+                            v-model="utilStore.dictionaryMode" />
+                    </div>
                     <label for="my-drawer-4" class="drawer-button btn btn-primary">Answers</label>
                 </div>
             </div>
