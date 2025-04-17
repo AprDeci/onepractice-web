@@ -3,7 +3,7 @@ import { ref, computed, watch, onMounted } from 'vue'
 import { ChevronDownIcon } from 'lucide-vue-next'
 import type { QuestionsDO } from '../../interface/Question'
 import { usepaperStore } from '../../store/paperStore.ts';
-
+import { wrapWordsWithSpan } from '../../common/utils.ts';
 const paperSotre = usepaperStore()
 const { question } = defineProps<{
     question: QuestionsDO
@@ -127,8 +127,8 @@ onMounted(() => {
                                     }">
                                     {{ key }}
                                 </span>
-                                <p class="text-gray-700 dark:text-base-content leading-relaxed"
-                                    v-html="highlightSearchText(paragraph)"></p>
+                                <p class="text-gray-700 dark:text-base-content leading-relaxed border-red-900"
+                                    v-html="wrapWordsWithSpan(paragraph)"></p>
                             </div>
 
                             <div v-if="isParagraphSelected(key)" class="mt-3 pl-9">
@@ -157,7 +157,8 @@ onMounted(() => {
                                     class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-200 text-gray-700 font-bold text-sm mr-2 flex-shrink-0">
                                     {{ item.id }}
                                 </span>
-                                <p class="text-gray-700 dark:text-base-content">{{ item.content }}</p>
+                                <p class="text-gray-700 dark:text-base-content"
+                                    v-html="wrapWordsWithSpan(item.content)"></p>
                             </div>
 
                             <div class="pl-9">

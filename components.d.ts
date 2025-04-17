@@ -17,6 +17,7 @@ declare module 'vue' {
     copy: typeof import('./src/components/exam/writingCard copy.vue')['default']
     Counter: typeof import('./src/components/common/counter.vue')['default']
     CounterReverse: typeof import('./src/components/common/counterReverse.vue')['default']
+    Dicpanel: typeof import('./src/components/exam/dicpanel.vue')['default']
     ExamResult: typeof import('./src/page/examResultPage.vue')['default']
     ExamResult2: typeof import('./src/components/exam/examResult2.vue')['default']
     FloatingPaper: typeof import('./src/components/floating-paper.vue')['default']

@@ -4,6 +4,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-vue-next'
 import type { QuestionsDO } from '../../interface/Question'
 import { useElementSize } from '@vueuse/core';
 import { usepaperStore } from '../../store/paperStore.ts';
+import { wrapWordsWithSpan } from '../../common/utils.ts';
 
 
 const paperStore = usepaperStore()
@@ -118,7 +119,8 @@ onMounted(() => {
                     <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg mb-4">
                         <div class="prose prose-sm max-w-none">
                             <div v-for="(paragraph, index) in formattedPassage" :key="`p-${index}`" class="mb-4">
-                                <p class="leading-relaxed text-gray-800 dark:text-base-content">{{ paragraph }}</p>
+                                <p class="leading-relaxed text-gray-800 dark:text-base-content"
+                                    v-html="wrapWordsWithSpan(paragraph)"></p>
                             </div>
                         </div>
                     </div>
@@ -170,7 +172,8 @@ onMounted(() => {
                                     }">
                                     <span class="text-sm font-bold">{{ option.label }}</span>
                                 </div>
-                                <p class="text-gray-700 dark:text-base-content">{{ option.content }}</p>
+                                <p class="text-gray-700 dark:text-base-content"
+                                    v-html="wrapWordsWithSpan(option.content)"></p>
                             </div>
                         </div>
                     </div>
