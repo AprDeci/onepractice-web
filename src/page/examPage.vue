@@ -195,7 +195,7 @@ onClickOutside(dicpanelref, () => {
                     </KeepAlive>
                 </div>
             </div>
-            <footer class="sticky bottom-0 w-full z-10">
+            <footer class="sticky bottom-0 w-full z-1">
                 <footer
                     class="footer flex justify-between footer-horizontal bg-base-200 text-neutral-content items-center p-4 border dark:border-base-100">
                     <aside class="grid-flow-col items-center">
@@ -236,7 +236,7 @@ onClickOutside(dicpanelref, () => {
             </footer>
         </div>
         <!-- 答案侧边栏 -->
-        <div class="drawer-side">
+        <div class="drawer-side z-2">
             <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
 
             <div class="bg-white dark:bg-base-100 text-gray-800 min-h-full w-64 lg:w-80 flex flex-col shadow-lg">
