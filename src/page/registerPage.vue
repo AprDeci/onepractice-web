@@ -78,8 +78,9 @@ const sendregister = async () => {
         <div class="partone flex justify-center items-center h-dvh">
             <!-- 消息弹窗 -->
             <AnimatePresence>
-                <motion.div v-if="messageisout" class="fixed top-20 right-20" :initial="{ opacity: 0, scale: 0 }"
-                    :exit="{ opacity: 0, scale: 0 }" :animate="{ opacity: 1, scale: 1 }" :transition="{
+                <motion.div v-if="messageisout" class="absolute top-5 lg:top-20 lg:right-20"
+                    :initial="{ opacity: 0, scale: 0 }" :exit="{ opacity: 0, scale: 0 }"
+                    :animate="{ opacity: 1, scale: 1 }" :transition="{
                         duration: 0.4,
                         scale: { type: 'spring', visualDuration: 0.4, bounce: 0.5 }
                     }">

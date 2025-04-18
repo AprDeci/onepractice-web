@@ -12,6 +12,7 @@ import { usepaperStore } from '../store/paperStore';
 import { userecordStore } from '../store/recordStore';
 import { useRouter } from 'vue-router';
 
+
 const router = useRouter();
 const type = ref('');
 const year = ref(0);
@@ -39,6 +40,8 @@ const changePage = (newval: number) => {
 const { loading: continueload, data: continuedata } = useRequest(getPaperIntro(paperStore.currentPaperId as number)).onError(() => {
 
 })
+
+
 </script>
 
 <template>

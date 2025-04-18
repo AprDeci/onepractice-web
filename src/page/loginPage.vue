@@ -77,10 +77,10 @@ const sendlogin = async () => {
 <template>
     <main class="">
         <div class="absolute left-2 cursor-pointer z-1" @click="router.push('/')">Home</div>
-        <div class="partone flex justify-center items-center h-dvh">
+        <div class="partone flex justify-center items-center h-dvh flex-col">
             <!-- 消息弹窗 -->
             <AnimatePresence>
-                <motion.div v-if="messageisout" class="fixed top-20 right-20" :initial="{ opacity: 0, scale: 0 }"
+                <motion.div v-if="messageisout" class="absolute top-20 lg:right-20" :initial="{ opacity: 0, scale: 0 }"
                     :exit="{ opacity: 0, scale: 0 }" :animate="{ opacity: 1, scale: 1 }" :transition="{
                         duration: 0.4,
                         scale: { type: 'spring', visualDuration: 0.4, bounce: 0.5 }

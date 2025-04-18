@@ -66,7 +66,7 @@ const { data: resetdata, loading: resetLoading, send: sendPassword } = useReques
         <div class="partone flex justify-center items-center h-dvh">
             <!-- 消息弹窗 -->
             <AnimatePresence>
-                <motion.div v-if="messageisout" class="fixed top-20 right-20" :initial="{ opacity: 0, scale: 0 }"
+                <motion.div v-if="messageisout" class="absolute top-20 lg:right-20" :initial="{ opacity: 0, scale: 0 }"
                     :exit="{ opacity: 0, scale: 0 }" :animate="{ opacity: 1, scale: 1 }" :transition="{
                         duration: 0.4,
                         scale: { type: 'spring', visualDuration: 0.4, bounce: 0.5 }
@@ -108,7 +108,7 @@ const { data: resetdata, loading: resetLoading, send: sendPassword } = useReques
                         <label class="fieldset-label text-sm">新密码</label>
                         <input type="password " v-model="password" class="input w-full validator" required
                             placeholder="请输入新密码" minlength="6" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z][^\s]{5,}$">
-                            <p class="validator-hint hidden">
+                        <p class="validator-hint hidden">
                             密码至少六位,字母开头包含数字
                         </p>
                         <label class="fieldset-label text-sm">确认密码</label>
