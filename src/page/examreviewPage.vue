@@ -209,9 +209,4 @@ onClickOutside(dicpanelref, () => {
     </dicpanel>
 </template>
 
-<style scoped>
-:deep(span.wordactive) {
-    border-bottom: 2px solid orange;
-    cursor: pointer;
-}
-</style>
+<style scoped></style>

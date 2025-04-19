@@ -311,9 +311,4 @@ onClickOutside(dicpanelref, () => {
     <dicpanel v-show="word" :word="word" id="tooltip" class="" role="tooltip" ref="dicpanelref" :style="floatingStyles">
     </dicpanel>
 </template>
-<style scoped>
-:deep(span.wordactive) {
-    border-bottom: 2px solid orange;
-    cursor: pointer;
-}
-</style>
+<style scoped></style>
