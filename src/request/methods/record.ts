@@ -10,16 +10,22 @@ export const saveRecord = (
   timespend: number,
   hasspendtime: number
 ) =>
-  httpclient.Post("/record/save", {
-    paperId: paperId,
-    type: type,
-    isfinished: isfinished,
-    answers: answers,
-    score: score,
-    totalscore: totalscore,
-    timespend: timespend,
-    hasspendtime: hasspendtime
-  });
+  httpclient.Post(
+    "/record/save",
+    {
+      paperId: paperId,
+      type: type,
+      isfinished: isfinished,
+      answers: answers,
+      score: score,
+      totalscore: totalscore,
+      timespend: timespend,
+      hasspendtime: hasspendtime
+    },
+    {
+      shareRequest: true
+    }
+  );
 
 export const getRecords = (days: number) =>
   httpclient.Get("/record/list", {

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-
+import { useAlert } from './common/alert';
+const { alertRef } = useAlert()
+import Alert from './components/common/alert.vue'
 
 onMounted(() => {
   if (localStorage.getItem('isdark') === 'true') {
@@ -13,6 +15,7 @@ onMounted(() => {
   <div class="app">
     <RouterView></RouterView>
   </div>
+  <Alert ref="alertRef" />
 
 </template>
 
