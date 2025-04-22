@@ -5,7 +5,8 @@ const { alertRef } = useAlert()
 import Alert from './components/common/alert.vue'
 
 onMounted(() => {
-  if (localStorage.getItem('isdark') === 'true') {
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+  if (localStorage.getItem('isdark') === 'true' || prefersDark.matches) {
     document.querySelector('html').setAttribute('data-theme', "dim");
   }
 })
