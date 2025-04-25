@@ -178,9 +178,8 @@ const markpanel = ref(null)
 const selectreference = ref(null)
 const showselectpanel = ref(false)
 const { floatingStyles: selectfloatingStyles } = useFloating(selectreference, markpanel, {
-    whileElementsMounted: autoUpdate,
-    placement: 'bottom-end',
-    middleware: [offset(0), flip(), shift()],
+    placement: 'bottom',
+    middleware: [offset(10), flip(), shift()],
 }
 )
 
@@ -211,11 +210,19 @@ const mark = () => {
     range.insertNode(span);
     selection.removeAllRanges();
     showmarkpanel.value = false
+
+    utilStore.markedRanges.push({
+        startIndex: Math.min(startIndex, endIndex),
+        endIndex: Math.max(startIndex, endIndex),
+        color: markcolor.value,
+        id: markId
+    })
 }
 useEventListener(document, 'selectionchange', (evt) => {
     const selection = selected.selection.value
     if (selection?.rangeCount > 0 && !selection.isCollapsed) {
         const range = selection.getRangeAt(0);
+        console.log(range.startContainer.parentElement)
         const rect = selected.rects.value[0]
         selectreference.value = {
             getBoundingClientRect: () => ({
@@ -257,30 +264,33 @@ useEventListener(document, 'selectionchange', (evt) => {
                     </CounterReverse>
                     <Counter v-if="mode === 'free'"></Counter>
                 </div>
-                <div class="navbar-end flex gap-3">
+                <div class="navbar-end flex gap-1">
                     <ul class="menu menu-horizontal px-1">
                         <li>
                             <details>
-                                <summary>Option</summary>
-                                <ul class="bg-base-100 rounded-t-none p-2 min-w-fit flex flex-col gap-2 w-40">
-                                    <div>
-                                        <span class="text-sm mr-2">查词</span>
+                                <summary class="btn btn-accent">Option</summary>
+                                <ul class="bg-base-100 rounded-t-none p-2 flex flex-col gap-2 z-2 min-w-full">
+                                    <div class="flex flex-col gap-1 justify-center items-center">
+                                        <span class="text-xs mr-2">查词</span>
                                         <input type="checkbox" checked="checked" class="toggle toggle-accent"
                                             v-model="utilStore.dictionaryMode" />
                                     </div>
-                                    <div>
+                                    <div class="divider m-0 p-0"></div>
+                                    <div class="flex flex-col gap-1 justify-center items-center">
+                                        <span class="text-xs mr-2">批注颜色</span>
                                         <el-select v-model="markcolor" class="w-50" placeholder="Pick color">
                                             <el-option v-for="item in colors" :key="item.value" :label="item.label"
                                                 :value="item.value">
                                                 <div class="flex items-center">
-                                                    <el-tag :color="item.color" style="margin-right: 8px"
-                                                        size="small" />
+                                                    <el-tag class="aspect-square" :color="item.color"
+                                                        style="margin-right: 8px" size="small" />
                                                     <span :style="{ color: item.color }">{{ item.label }}</span>
                                                 </div>
                                             </el-option>
-                                            <template #tag>
 
-                                                <el-tag v-for="item in colors" :key="item.color" :color="item.color" />
+                                            <template #label="{ value, }">
+                                                <el-tag class="aspect-square" :key="value"
+                                                    :color="'rgb(' + value + ')'"></el-tag>
                                             </template>
                                         </el-select>
                                     </div>

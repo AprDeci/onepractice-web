@@ -7,6 +7,7 @@ export const splitAnswer = (answers: string[]) => {
   );
 };
 
+// 查词
 // 使用正则匹配单词（按空格分割，保留连字符和撇号等常见情况）
 export const wrapWordsWithSpan = (inputString: string) => {
   if (inputString) {
