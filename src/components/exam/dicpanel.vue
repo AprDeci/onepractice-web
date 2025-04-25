@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, ref } from 'vue';
+import { ref } from 'vue';
 import { getwordmean } from '../../request/methods/dictionary';
 import { useWatcher } from 'alova/client';
 import nlp from 'compromise';

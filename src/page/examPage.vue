@@ -12,11 +12,12 @@ import { usepaperStore } from '../store/paperStore.ts'
 import { saveRecord, updateRecord } from '../request/methods/record.ts'
 import { motion, AnimatePresence } from 'motion-v'
 import { Times } from '../common/examMode.ts'
-import { useElementSize, useElementByPoint, useMouse, useEventListener, onClickOutside } from '@vueuse/core'
+import { useElementSize, useElementByPoint, useMouse, useEventListener, onClickOutside, useTextSelection } from '@vueuse/core'
 import { userecordStore } from '../store/recordStore.ts'
 import { useUtilStore } from '../store/utilStore.ts'
 import { useFloating, autoUpdate, offset, flip, shift } from '@floating-ui/vue'
 import dicpanel from '../components/exam/dicpanel.vue'
+import SelectPanel from '../components/exam/selectPanel.vue'
 const utilStore = useUtilStore()
 const paperStore = usepaperStore()
 const recordStore = userecordStore()
@@ -150,6 +151,94 @@ onClickOutside(dicpanelref, () => {
     word.value = ''
 }
 )
+
+
+// 标记功能
+const selected = useTextSelection()
+const markcolor = ref('255, 158, 215')
+const colors = [
+    {
+        value: '255, 158, 215',
+        color: "#ff9ed7",
+        label: 'pink'
+    },
+    {
+        value: '127, 209, 215',
+        color: "#7fd1d7",
+        label: 'Breeze'
+    },
+    {
+        value: '255, 248, 235',
+        color: "#fff8eb",
+        label: 'cream'
+    }
+]
+// /选择面板
+const markpanel = ref(null)
+const selectreference = ref(null)
+const showselectpanel = ref(false)
+const { floatingStyles: selectfloatingStyles } = useFloating(selectreference, markpanel, {
+    whileElementsMounted: autoUpdate,
+    placement: 'bottom-end',
+    middleware: [offset(0), flip(), shift()],
+}
+)
+
+const mark = () => {
+    const selection = selected.selection.value
+    if (!selection.rangeCount) return;
+
+    const range = selection!.getRangeAt(0);
+    const { startContainer, endContainer } = range;
+
+    // 检查起始节点是否是 span 内的部分文本
+    if (startContainer.nodeType === Node.TEXT_NODE && startContainer.parentNode!.tagName === 'SPAN') {
+        range.setStart(startContainer, 0); // 扩展到 span 的文本开头
+    }
+
+    // 检查结束节点是否是 span 内的部分文本
+    if (endContainer.nodeType === Node.TEXT_NODE && endContainer.parentNode!.tagName === 'SPAN') {
+        range.setEnd(endContainer, endContainer.length); // 扩展到 span 的文本末尾
+    }
+
+    const documentFragment = range.extractContents();
+    const span = document.createElement('mak');
+    span.className = 'highlight';
+
+    span.style.background = ` linear-gradient(to right, rgba(${markcolor.value}, 0.1), rgba(${markcolor.value}, 0.9) 3%, rgba(${markcolor.value}, 0.9) 35%, rgba(${markcolor.value}, 0.9) 70%, rgba(${markcolor.value}, 0.8) 95%, rgba(${markcolor.value}, 0.3))`;
+
+    span.appendChild(documentFragment);
+    range.insertNode(span);
+    selection.removeAllRanges();
+    showmarkpanel.value = false
+}
+useEventListener(document, 'selectionchange', (evt) => {
+    const selection = selected.selection.value
+    if (selection?.rangeCount > 0 && !selection.isCollapsed) {
+        const range = selection.getRangeAt(0);
+        const rect = selected.rects.value[0]
+        selectreference.value = {
+            getBoundingClientRect: () => ({
+                width: rect.width,
+                height: rect.height,
+                x: rect.x,
+                y: rect.y,
+                top: rect.top,
+                left: rect.left,
+                right: rect.right,
+                bottom: rect.bottom
+            }),
+            contextElement: range.startContainer.parentElement
+        };
+        showselectpanel.value = true
+    } else {
+        showselectpanel.value = false
+    }
+})
+
+
+
+
 </script>
 
 <template>
@@ -169,10 +258,40 @@ onClickOutside(dicpanelref, () => {
                     <Counter v-if="mode === 'free'"></Counter>
                 </div>
                 <div class="navbar-end flex gap-3">
+                    <ul class="menu menu-horizontal px-1">
+                        <li>
+                            <details>
+                                <summary>Option</summary>
+                                <ul class="bg-base-100 rounded-t-none p-2 min-w-fit flex flex-col gap-2 w-40">
+                                    <div>
+                                        <span class="text-sm mr-2">查词</span>
+                                        <input type="checkbox" checked="checked" class="toggle toggle-accent"
+                                            v-model="utilStore.dictionaryMode" />
+                                    </div>
+                                    <div>
+                                        <el-select v-model="markcolor" class="w-50" placeholder="Pick color">
+                                            <el-option v-for="item in colors" :key="item.value" :label="item.label"
+                                                :value="item.value">
+                                                <div class="flex items-center">
+                                                    <el-tag :color="item.color" style="margin-right: 8px"
+                                                        size="small" />
+                                                    <span :style="{ color: item.color }">{{ item.label }}</span>
+                                                </div>
+                                            </el-option>
+                                            <template #tag>
+
+                                                <el-tag v-for="item in colors" :key="item.color" :color="item.color" />
+                                            </template>
+                                        </el-select>
+                                    </div>
+                                </ul>
+
+                            </details>
+                        </li>
+                    </ul>
                     <div>
-                        <span class="text-sm mr-2">查词</span>
-                        <input type="checkbox" checked="checked" class="toggle toggle-accent"
-                            v-model="utilStore.dictionaryMode" />
+
+
                     </div>
                     <label for="my-drawer-4" class="drawer-button btn btn-primary">Answers</label>
                 </div>
@@ -246,7 +365,8 @@ onClickOutside(dicpanelref, () => {
                     <div class="flex justify-between">
                         <p class="text-xs text-gray-500 mt-1">Track your progress</p>
                         <p class="text-xs text-blue-200 hover:text-blue-400 cursor-pointer"
-                            @click="showBlur = !showBlur">View All</p>
+                            @click="showBlur = !showBlur">View
+                            All</p>
                     </div>
                 </div>
 
@@ -310,5 +430,8 @@ onClickOutside(dicpanelref, () => {
 
     <dicpanel v-show="word" :word="word" id="tooltip" class="" role="tooltip" ref="dicpanelref" :style="floatingStyles">
     </dicpanel>
+
+    <SelectPanel @mark="mark" ref="markpanel" v-show="showselectpanel" :style="selectfloatingStyles">
+    </SelectPanel>
 </template>
 <style scoped></style>

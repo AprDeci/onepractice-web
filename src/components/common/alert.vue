@@ -42,7 +42,8 @@ defineExpose({
             <AnimatePresence>
                 <motion.div :initial="{ opacity: '0', y: -20 }" :animate="{ opacity: 1, y: 0 }"
                     :exit="{ opacity: 0, y: -20 }" v-for="message in messages" :key="message.id" role="alert"
-                    :class="['alert', `alert-${message.type}`, 'alert-soft']" @click="removeMessage(message.id)">
+                    :class="{ 'alert-success': message.type === 'success', 'alert-error': message.type === 'error', 'alert-warning': message.type === 'warning', 'alert-info': message.type === 'info' }"
+                    class="alert alert-soft" @click="removeMessage(message.id)">
                     <span>{{ message.text }}</span>
                 </motion.div>
             </AnimatePresence>
