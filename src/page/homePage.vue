@@ -49,7 +49,7 @@ const { loading: continueload, data: continuedata } = useRequest(getPaperIntro(p
         <floatingPaper class="-z-1"></floatingPaper>
         <div class="">
             <homeNav :types="types"></homeNav>
-            <div class="middle px-4 py-6">
+            <div class="middle px-4 lg:px-10 py-6">
                 <!-- Continue to do -->
                 <div class="flex flex-col px-4 gap-2"
                     v-if="paperStore.currentPaperId && paperStore.papersData[paperStore.currentPaperId]">
@@ -58,7 +58,7 @@ const { loading: continueload, data: continuedata } = useRequest(getPaperIntro(p
                         @click="router.push({ 'name': 'examPage', params: { 'id': paperStore.currentPaperId, 'mode': paperStore.currentMode } })">
                         <!-- 只考虑本地缓存-->
                         <span class="font-bold">{{ continuedata?.examYear }}年{{ continuedata?.examMonth
-                        }}月{{ continuedata?.paperType }}{{ continuedata?.paperName }}</span>
+                            }}月{{ continuedata?.paperType }}{{ continuedata?.paperName }}</span>
                         <div>
                             <span>已用时间:</span>
                             <span>{{ (recordStore.currentHasspendtime / 1000 / 60).toFixed(0) }}min</span>
@@ -66,8 +66,8 @@ const { loading: continueload, data: continuedata } = useRequest(getPaperIntro(p
                     </div>
                 </div>
                 <div>
-                    <section className="container mx-auto px-4 py-10">
-                        <div className="flex justify-between items-center mb-8 gap-2">
+                    <section className="py-10 ">
+                        <div className="flex justify-between items-center mb-8 ">
                             <div class="flex-col items-center relative bottom-5 lg:bottom-0">
                                 <h1 className="text-2xl md:text-3xl font-bold mr-5">Available Papers</h1>
                                 <div class="absolute flex gap-2 items-center top-[130%]" v-if="type != '' || year != 0">
@@ -88,7 +88,7 @@ const { loading: continueload, data: continuedata } = useRequest(getPaperIntro(p
                                 <select className="px-3 py-2 border border-gray-200 rounded-md text-sm" v-model="type">
                                     <option value="">All Types</option>
                                     <option v-for="(atype, index) in types" :key="index">{{ atype
-                                        }}</option>
+                                    }}</option>
                                 </select>
                                 <select v-model="year" className="px-3 py-2 border border-gray-200 rounded-md text-sm">
                                     <option value="0">All Years</option>
