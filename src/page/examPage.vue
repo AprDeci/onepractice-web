@@ -154,6 +154,7 @@ onClickOutside(dicpanelref, () => {
 
 
 // 标记功能
+import { mark } from '../common/utils.ts'
 const selected = useTextSelection()
 
 // /选择面板
@@ -191,8 +192,8 @@ useEventListener(document, 'selectionchange', (evt) => {
     }
 })
 
-import { mark } from '../common/utils.ts'
-mark(selected)
+
+
 
 
 </script>
