@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 src/test/*
 src/assets/example/*
+src/assets/testjson.json
+src/page/test.vue

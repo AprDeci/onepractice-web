@@ -2,10 +2,9 @@
 import { useRequest } from 'alova/client';
 import { ref } from 'vue';
 import { getEmailCaptcha } from '../request/methods/captcha';
-import { register, login } from '../request/methods/user';
-import { getallpaper } from '../request/methods/paper';
-import { motion, AnimatePresence } from "motion-v"
+import { register } from '../request/methods/user';
 import { useRouter } from 'vue-router';
+import { useAlert } from '../common/alert';
 
 const router = useRouter();
 
@@ -45,26 +44,16 @@ const cooldownchange = () => {
     }, 1000)
 }
 
-const message = ref('')
-const messageisout = ref(false)
-const goodmessage = ref(false)
+const { showAlert } = useAlert()
 const sendregister = async () => {
     try {
-        let data = await register(registerdata.value)
-        goodmessage.value = true
-        message.value = "注册成功啦!五秒后自动切换登录页面"
-        messageisout.value = true
+        await register(registerdata.value)
+        showAlert("注册成功啦!三秒后自动切换登录页面");
         setTimeout(() => {
-            messageisout.value = false
             router.push('/login')
-        }, 5000)
+        }, 3000)
     } catch (error) {
-        goodmessage.value = false
-        message.value = error
-        messageisout.value = true
-        setTimeout(() => {
-            messageisout.value = false
-        }, 5000)
+        showAlert(error, "error")
     }
 
 
@@ -76,25 +65,6 @@ const sendregister = async () => {
     <main class="">
         <div class="absolute left-2 cursor-pointer z-1" @click="router.push('/')">Home</div>
         <div class="partone flex justify-center items-center h-dvh">
-            <!-- 消息弹窗 -->
-            <AnimatePresence>
-                <motion.div v-if="messageisout" class="fixed top-20 right-20" :initial="{ opacity: 0, scale: 0 }"
-                    :exit="{ opacity: 0, scale: 0 }" :animate="{ opacity: 1, scale: 1 }" :transition="{
-                        duration: 0.4,
-                        scale: { type: 'spring', visualDuration: 0.4, bounce: 0.5 }
-                    }">
-                    <div role="alert" class=" alert" :class="[goodmessage ? 'alert-success' : 'alert-error']">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span>
-                            {{ message }}
-                        </span>
-                    </div>
-                </motion.div>
-            </AnimatePresence>
             <!-- 注册 -->
             <div class="register-card card  w-80 bg-base-100 shadow-xl">
                 <div class="card-title mt-6 ml-5">注册</div>

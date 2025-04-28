@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, ref } from 'vue';
+import { ref } from 'vue';
 import { getwordmean } from '../../request/methods/dictionary';
 import { useWatcher } from 'alova/client';
 import nlp from 'compromise';
@@ -23,7 +23,7 @@ const { loading, data: wordmean, } = useWatcher(() => {
 
 <template>
     <div class="bg-base-100 flex flex-col rounded-xl shadow-sm text-base-content max-w-[80%] lg:max-w-100">
-        <div class="bg-yellow-100 dark:bg-orange-400  p-2">{{ pword }}</div>
+        <div class="bg-emerald-100 dark:bg-emerald-400 rounded-t-xl  p-2">{{ pword }}</div>
         <div v-if="!loading" class="px-3 py-1 flex gap-2 flex-col">
             <h3 class="font-bold">mean:</h3>
             <div v-for="translation in wordmean?.translations" :key="translation.pos">

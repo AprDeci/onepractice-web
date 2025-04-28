@@ -1,102 +1,35 @@
 <script setup lang="ts">
-import { useRequest } from 'alova/client';
 import { ref } from 'vue';
-import { getEmailCaptcha } from '../request/methods/captcha';
-import { register, login } from '../request/methods/user';
-import { getallpaper } from '../request/methods/paper';
-import { motion, AnimatePresence } from "motion-v"
+import { login } from '../request/methods/user';
 import { useRouter } from 'vue-router';
+import { useAlert } from '../common/alert';
 
 const router = useRouter();
-const islogin = ref(false)
-const hasSendEmail = ref(false)
-const registerdata = ref({
-    username: '',
-    password: '',
-    email: '',
-    captchacode: '',
-
-})
-
-const { data, loading, error, send } = useRequest(email => getEmailCaptcha(email), {
-    immediate: false,
-},
-)
-
-
-
-const sendEmail = (): void => {
-    hasSendEmail.value = !hasSendEmail.value
-    send(registerdata.value.email);
-    cooldownchange()
-}
-
-const counter = ref(59)
-const cooldownchange = () => {
-    const interval = setInterval(() => {
-        if (counter.value > 0) {
-            counter.value--
-        }
-        if (counter.value === 0) {
-            clearInterval(interval)
-            hasSendEmail.value = !hasSendEmail.value
-            counter.value = 60
-        }
-    }, 1000)
-}
-
-const message = ref('')
-const messageisout = ref(false)
-const goodmessage = ref(false)
 
 const loginData = ref({
     usernameOrEmail: '',
     password: ''
 })
+
+const { showAlert } = useAlert()
+
 const sendlogin = async () => {
     try {
-        await getallpaper();
-        let data = await login(loginData.value.usernameOrEmail, loginData.value.password)
-        goodmessage.value = true
-        message.value = "登录成功啦!五秒后自动跳转首页"
-        messageisout.value = true
+        await login(loginData.value.usernameOrEmail, loginData.value.password)
+        showAlert("登录成功啦!三秒后自动跳转首页")
         setTimeout(() => {
             router.push("/")
-        }, 5000)
+        }, 3000)
     } catch (error) {
-        goodmessage.value = false
-        message.value = error
-        messageisout.value = true
+        showAlert("error")
     }
-    setTimeout(() => {
-        messageisout.value = false
-    }, 5000)
 }
 </script>
 
 <template>
     <main class="">
         <div class="absolute left-2 cursor-pointer z-1" @click="router.push('/')">Home</div>
-        <div class="partone flex justify-center items-center h-dvh">
-            <!-- 消息弹窗 -->
-            <AnimatePresence>
-                <motion.div v-if="messageisout" class="fixed top-20 right-20" :initial="{ opacity: 0, scale: 0 }"
-                    :exit="{ opacity: 0, scale: 0 }" :animate="{ opacity: 1, scale: 1 }" :transition="{
-                        duration: 0.4,
-                        scale: { type: 'spring', visualDuration: 0.4, bounce: 0.5 }
-                    }">
-                    <div role="alert" class=" alert" :class="[goodmessage ? 'alert-success' : 'alert-error']">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span>
-                            {{ message }}
-                        </span>
-                    </div>
-                </motion.div>
-            </AnimatePresence>
+        <div class="partone flex justify-center items-center h-dvh flex-col">
             <!-- 登陆 -->
             <div class="login-card card h-auto w-80  bg-base-100 shadow-xl">
                 <div class="card-title mt-6 ml-5">登陆</div>

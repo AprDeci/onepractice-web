@@ -6,12 +6,21 @@ import { resolve } from "path";
 import MotionResolver from "motion-v/resolver";
 import viteCompression from "vite-plugin-compression";
 import { visualizer } from "rollup-plugin-visualizer";
+import AutoImport from "unplugin-auto-import/vite";
+import Components from "unplugin-vue-components/vite";
+import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 export default defineConfig({
   base: "./",
   plugins: [
     vue(),
     tailwindcss(),
     visualizer(),
+    AutoImport({
+      resolvers: [ElementPlusResolver()]
+    }),
+    Components({
+      resolvers: [ElementPlusResolver()]
+    }),
     Components({
       dts: true,
       resolvers: [MotionResolver()]

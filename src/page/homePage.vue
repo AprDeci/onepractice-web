@@ -12,6 +12,7 @@ import { usepaperStore } from '../store/paperStore';
 import { userecordStore } from '../store/recordStore';
 import { useRouter } from 'vue-router';
 
+
 const router = useRouter();
 const type = ref('');
 const year = ref(0);
@@ -39,6 +40,8 @@ const changePage = (newval: number) => {
 const { loading: continueload, data: continuedata } = useRequest(getPaperIntro(paperStore.currentPaperId as number)).onError(() => {
 
 })
+
+
 </script>
 
 <template>
@@ -46,7 +49,7 @@ const { loading: continueload, data: continuedata } = useRequest(getPaperIntro(p
         <floatingPaper class="-z-1"></floatingPaper>
         <div class="">
             <homeNav :types="types"></homeNav>
-            <div class="middle px-4 py-6">
+            <div class="middle px-4 lg:px-10 py-6">
                 <!-- Continue to do -->
                 <div class="flex flex-col px-4 gap-2"
                     v-if="paperStore.currentPaperId && paperStore.papersData[paperStore.currentPaperId]">
@@ -63,8 +66,8 @@ const { loading: continueload, data: continuedata } = useRequest(getPaperIntro(p
                     </div>
                 </div>
                 <div>
-                    <section className="container mx-auto px-4 py-10">
-                        <div className="flex justify-between items-center mb-8 gap-2">
+                    <section className="py-10 ">
+                        <div className="flex justify-between items-center mb-8 ">
                             <div class="flex-col items-center relative bottom-5 lg:bottom-0">
                                 <h1 className="text-2xl md:text-3xl font-bold mr-5">Available Papers</h1>
                                 <h4 class="text-blue-400 font-bold">预览版2025.4.17</h4>

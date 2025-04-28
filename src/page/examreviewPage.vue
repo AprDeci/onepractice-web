@@ -8,7 +8,7 @@ import rreadingCard from '../components/examreview/rreadingCard.vue'
 import { getAllQuestionsBypaperIdSplitByPart, getAnswersByPaperId } from '../request/methods/question.ts'
 import { useRequest } from 'alova/client'
 import { usepaperStore } from '../store/paperStore.ts'
-import { useElementSize, onClickOutside, useEventListener, useElementByPoint, useMouse } from '@vueuse/core'
+import { useElementSize, onClickOutside, useEventListener, useElementByPoint, useMouse, useTextSelection } from '@vueuse/core'
 import { useUtilStore } from '../store/utilStore.ts'
 import { useFloating, autoUpdate, offset, flip, shift } from '@floating-ui/vue'
 import dicpanel from '../components/exam/dicpanel.vue'
@@ -81,6 +81,46 @@ onClickOutside(dicpanelref, () => {
 }
 )
 
+// 标记
+import { mark } from '../common/utils.ts'
+const selected = useTextSelection();
+// /选择面板
+const markpanel = ref(null)
+const selectreference = ref(null)
+const showselectpanel = ref(false)
+const { floatingStyles: selectfloatingStyles } = useFloating(selectreference, markpanel, {
+    placement: 'bottom',
+    middleware: [offset(10), flip(), shift()],
+}
+)
+
+useEventListener(document, 'selectionchange', (evt) => {
+    const selection = selected.selection.value
+    if (selection?.rangeCount > 0 && !selection.isCollapsed) {
+        const range = selection.getRangeAt(0);
+        console.log(range.startContainer.parentElement)
+        const rect = selected.rects.value[0]
+        selectreference.value = {
+            getBoundingClientRect: () => ({
+                width: rect.width,
+                height: rect.height,
+                x: rect.x,
+                y: rect.y,
+                top: rect.top,
+                left: rect.left,
+                right: rect.right,
+                bottom: rect.bottom
+            }),
+            contextElement: range.startContainer.parentElement
+        };
+        showselectpanel.value = true
+    } else {
+        showselectpanel.value = false
+    }
+})
+
+
+
 </script>
 
 <template>
@@ -97,11 +137,40 @@ onClickOutside(dicpanelref, () => {
                     <span class="font-bold">REVIEW</span>
                 </div>
                 <div class="navbar-end flex gap-3">
-                    <div>
-                        <span class="text-sm mr-2">查词</span>
-                        <input type="checkbox" checked="checked" class="toggle toggle-accent"
-                            v-model="utilStore.dictionaryMode" />
-                    </div>
+                    <ul class="menu menu-horizontal px-1">
+                        <li>
+                            <details>
+                                <summary class="btn btn-accent">Option</summary>
+                                <ul class="bg-base-100 rounded-t-none p-2 flex flex-col gap-2 z-2 min-w-full">
+                                    <div class="flex flex-col gap-1 justify-center items-center">
+                                        <span class="text-xs mr-2">查词</span>
+                                        <input type="checkbox" checked="checked" class="toggle toggle-accent"
+                                            v-model="utilStore.dictionaryMode" />
+                                    </div>
+                                    <div class="divider m-0 p-0"></div>
+                                    <div class="flex flex-col gap-1 justify-center items-center">
+                                        <span class="text-xs mr-2">批注颜色</span>
+                                        <el-select v-model="utilStore.markcolor" class="w-50" placeholder="Pick color">
+                                            <el-option v-for="item in utilStore.colors" :key="item.value"
+                                                :label="item.label" :value="item.value">
+                                                <div class="flex items-center">
+                                                    <el-tag class="aspect-square" :color="item.color"
+                                                        style="margin-right: 8px" size="small" />
+                                                    <span :style="{ color: item.color }">{{ item.label }}</span>
+                                                </div>
+                                            </el-option>
+
+                                            <template #label="{ value, }">
+                                                <el-tag class="aspect-square" :key="value"
+                                                    :color="'rgb(' + value + ')'"></el-tag>
+                                            </template>
+                                        </el-select>
+                                    </div>
+                                </ul>
+
+                            </details>
+                        </li>
+                    </ul>
                     <label for="my-drawer-4" class="drawer-button btn btn-primary">Answers</label>
                 </div>
             </div>
@@ -123,7 +192,7 @@ onClickOutside(dicpanelref, () => {
                     </KeepAlive>
                 </div>
             </div>
-            <footer class="sticky bottom-0 w-full">
+            <footer class="sticky bottom-0 w-full z-1">
                 <footer
                     class="footer flex justify-between footer-horizontal bg-base-200 text-neutral-content items-center p-4 border dark:border-base-100">
                     <aside class="grid-flow-col items-center">
@@ -143,7 +212,7 @@ onClickOutside(dicpanelref, () => {
             </footer>
         </div>
         <!-- 答案侧边栏 -->
-        <div class="drawer-side">
+        <div class="drawer-side z-2">
             <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
 
             <div class="bg-white dark:bg-base-100 text-gray-800 min-h-full w-64 lg:w-80 flex flex-col shadow-lg">
@@ -207,11 +276,9 @@ onClickOutside(dicpanelref, () => {
 
     <dicpanel v-show="word" :word="word" id="tooltip" class="" role="tooltip" ref="dicpanelref" :style="floatingStyles">
     </dicpanel>
+
+    <SelectPanel @mark="mark(selected)" ref="markpanel" v-show="showselectpanel" :style="selectfloatingStyles">
+    </SelectPanel>
 </template>
 
-<style scoped>
-:deep(span.wordactive) {
-    border-bottom: 2px solid orange;
-    cursor: pointer;
-}
-</style>
+<style scoped></style>

@@ -8,5 +8,29 @@
   --color-base-title: oklch(98% 0.02 240);
 
 }
-@custom-variant dark (&:where([data-theme=dim], [data-theme=dim] *));
+@custom-variant dark (&:where([data-theme=dim], [data-theme=dim]  *)); 
 
+
+span.wordactive {
+  position: relative;
+  cursor: pointer;
+}
+
+span.wordactive::after {
+  content: '';
+  position: absolute;
+  width: 0%;
+  bottom: -2px;
+  left: 0;
+
+  border-bottom: 2px solid #69efc9;
+  transition: all 0.3s ease-in-out;
+}
+
+span.wordactive:hover::after{
+  width: 100%;
+}
+
+:root{
+  --hightlight-color: 105 239 201;
+}
