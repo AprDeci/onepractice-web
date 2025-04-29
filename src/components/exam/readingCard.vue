@@ -8,13 +8,11 @@ import type { QuestionPart } from '../../interface/Question';
 const { data } = defineProps<{ data: QuestionPart }>()
 const activeindex = ref(0)
 const reorderedData = computed(() => {
-    return [
-        data.questions.find(item => item.questionType === "cloze"),      // 完形填空
-        data.questions.find(item => item.questionType === "matching"),   // 匹配题
-        data.questions.find(item => item.questionType === "reading" && item.questionOrder === 3), // 阅读1
-        data.questions.find(item => item.questionType === "reading" && item.questionOrder === 4)  // 阅读2
-    ]
+    //按照data每一项的.questionOrder排序
+    return [...data.questions].sort((a, b) => a.questionOrder - b.questionOrder);
+
 })
+
 const readmap = {
     cloze: ReadingcLozeCard,
     matching: ReadingmtachCard,
