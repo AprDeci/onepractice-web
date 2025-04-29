@@ -22,7 +22,6 @@ declare module 'vue' {
     ListeningCard: typeof import('./src/components/exam/listeningCard.vue')['default']
     ListeningSingleCard: typeof import('./src/components/exam/listeningSingleCard.vue')['default']
     OptionGroup: typeof import('./src/components/common/optionGroup.vue')['default']
-    Oselect: typeof import('./src/components/common/oselect.vue')['default']
     PagiNation: typeof import('./src/components/pagiNation.vue')['default']
     PaperCard: typeof import('./src/components/paper-card.vue')['default']
     QuestionCarousel: typeof import('./src/components/common/QuestionCarousel.vue')['default']
