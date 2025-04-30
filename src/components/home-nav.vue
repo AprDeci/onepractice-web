@@ -40,7 +40,7 @@ const setdark = () => {
 </script>
 
 <template>
-    <div class="navbar bg-base-100 h-18 border-0">
+    <div class="navbar bg-base-100 h-18 border-0 lg:px-5">
         <div class="navbar-start">
             <div class="dropdown">
                 <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
@@ -120,27 +120,30 @@ const setdark = () => {
                 </label>
             </div>
         </div>
-        <div class="navbar-end flex gap-5" v-if="!haslogin">
+        <!-- nav-end -->
+        <div class="navbar-end flex gap-3" v-if="!haslogin">
             <div class="btn" @click="router.push('/login')">Sign in</div>
             <div class="btn btn-primary" @click="router.push('/register')">Sign Up</div>
         </div>
         <div class="navbar-end" v-else>
-            <div
-                class="hover:bg-gray-100 mr-10 w-20 flex justify-center items-center h-10 rounded-sm cursor-pointer rounded-lg">
-                <details class="dropdown  dropdown-center">
-                    <summary class="select-none">{{ userInfo.username }}</summary>
-                    <ul class="menu dropdown-content bg-base-100 rounded-box w-32 lg:w-35 z-1 p-2 shadow-sm">
-                        <li>
-                            <a @click="router.push({ name: 'userInfo' })">
-                                <Armchair :size="14" :stroke-width="1.5" />My Space
-                            </a>
-                        </li>
-                        <li><a @click="postlogout" class="text-red-500">
-                                <LogOut :size="14" color="#ff2424" />Log Out
-                            </a></li>
-                    </ul>
-                </details>
-            </div>
+            <ul class="menu  menu-horizontal">
+                <li>
+                    <details>
+                        <summary class="relative font-bold">{{ userInfo.username }}</summary>
+                        <ul class=" bg-base-100 rounded-t-none p-2 absolute right-0">
+                            <li>
+                                <a class="text-nowrap" @click="router.push({ name: 'userInfo' })">
+                                    <Armchair :size="14" :stroke-width="1.5" />My Space
+                                </a>
+                            </li>
+                            <li><a @click="postlogout" class="text-red-500 text-nowrap">
+                                    <LogOut :size="14" color="#ff2424" />Log Out
+                                </a>
+                            </li>
+                        </ul>
+                    </details>
+                </li>
+            </ul>
         </div>
     </div>
 </template>

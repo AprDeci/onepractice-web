@@ -245,7 +245,6 @@ useEventListener(document, 'selectionchange', (evt) => {
                                         </el-select>
                                     </div>
                                 </ul>
-
                             </details>
                         </li>
                     </ul>
