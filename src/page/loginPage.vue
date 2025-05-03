@@ -13,16 +13,26 @@ const loginData = ref({
 
 const { showAlert } = useAlert()
 
-const sendlogin = async () => {
+const sendlogin = async (recaptchatoken: string) => {
     try {
-        await login(loginData.value.usernameOrEmail, loginData.value.password)
+        await login(loginData.value.usernameOrEmail, loginData.value.password, recaptchatoken)
         showAlert("登录成功啦!三秒后自动跳转首页")
         setTimeout(() => {
             router.push("/")
         }, 3000)
     } catch (error) {
-        showAlert("error")
+        showAlert(error, "error")
     }
+}
+
+// recaptcha
+function recaptcha(e) {
+    e.preventDefault();
+    grecaptcha.ready(function () {
+        grecaptcha.execute('6Le-fiwrAAAAANI2DM0GRqdHRQDLWUQOSJtQ9Ere', { action: 'submit' }).then(function (token) {
+            sendlogin(token)
+        });
+    });
 }
 </script>
 
@@ -71,7 +81,7 @@ const sendlogin = async () => {
                             <div class="text-gray-500 hover:text-gray-800 cursor-pointer " @click="router.push({
                                 name: 'resetPassword'
                             })">忘记密码?</div>
-                            <button class="btn btn-primary btn-md mt-2" @click=sendlogin>登陆</button>
+                            <button class="btn btn-primary btn-md mt-2" @click=recaptcha>登陆</button>
                             <button class="btn btn-ghost" @click="router.push({ name: 'register' })">切换为注册</button>
                         </div>
                     </div>
