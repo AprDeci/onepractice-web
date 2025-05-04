@@ -34,3 +34,6 @@ span.wordactive:hover::after{
 :root{
   --hightlight-color: 105 239 201;
 }
+
+.grecaptcha-badge { visibility: hidden;}
+.grecaptcha-badge { display: none; }
