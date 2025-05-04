@@ -9,6 +9,7 @@ import { visualizer } from "rollup-plugin-visualizer";
 import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
+import cdn from "vite-plugin-cdn-import";
 export default defineConfig({
   base: "./",
   plugins: [
@@ -31,6 +32,17 @@ export default defineConfig({
       threshold: 10240, // 文件大小超过此值时进行压缩，单位为字节
       algorithm: "gzip", // 压缩算法，可选 'gzip' 或 'brotli'
       ext: ".gz" // 压缩后的文件扩展名
+    }),
+    cdn({
+      prodUrl: "https://unpkg.com/{name}@{version}/{path}",
+      modules: [
+        "vue",
+        {
+          name: "compromise",
+          var: "compromise",
+          path: "builds/compromise.js"
+        }
+      ]
     })
   ],
   resolve: {
@@ -40,6 +52,7 @@ export default defineConfig({
     }
   },
   build: {
+    rollupOptions: {},
     terserOptions: {
       compress: {
         //生产环境时移除console
