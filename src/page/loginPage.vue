@@ -82,7 +82,7 @@ function recaptcha(e) {
                                 name: 'resetPassword'
                             })">忘记密码?</div>
                             <button class="btn btn-primary btn-md mt-2" @click=recaptcha>登陆</button>
-                            <button class="btn btn-ghost" @click="router.push({ name: 'register' })">切换为注册</button>
+                            <button class="btn btn-ghost mt-2" @click="router.push({ name: 'register' })">切换为注册</button>
                         </div>
                     </div>
 

@@ -48,11 +48,11 @@ const { data: resetdata, loading: resetLoading, send: sendPassword } = useReques
                 <div class="w-full flex flex-col gap-2">
                     <!-- 验证码界面 -->
                     <fieldset v-if="!verifed" class="fieldset relative">
-                        <label class="fieldset-label text-sm">Email</label>
+                        <label class="fieldset-label text-sm">邮箱</label>
                         <input v-model="email" type="email" class="input w-full validator" required
                             placeholder="miku@email.com">
                         <div class="validator-hint">Enter valid email address</div>
-                        <label class="fieldset-label text-sm">captcha</label>
+                        <label class="fieldset-label text-sm">验证码</label>
                         <div class="join w-full">
                             <input v-model="captcha" type="text" class="input rounded-sm">
                             <button class="btn" @click="sendCaptcha" :loading="sending"
