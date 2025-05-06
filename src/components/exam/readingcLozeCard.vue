@@ -14,14 +14,7 @@ const selectedBlankNumber = ref<number | null>(null); // Current blank number
 const selectedWords = ref<Record<number, string>>({}); // User's answers
 
 const blankRefs = ref<Record<number, HTMLElement | null>>({})
-const { width, height } = useWindowSize();
 const isCardVisible = ref(false);
-const cardPosition = ref({ top: '0px', left: '0px' });
-
-// Track if we should position the card above or below the blank
-const positionAbove = ref(false);
-
-
 
 
 // 生成html
@@ -49,6 +42,7 @@ const contentParsed = computed(() => {
 const blank = ref(null)
 const answerCard = ref(null)
 const { floatingStyles } = useFloating(blank, answerCard, {
+    whileElementsMounted: autoUpdate,
     middleware: [offset(0), flip(), shift()],
 }
 )
