@@ -75,7 +75,7 @@ const routes = [
   },
   {
     path: "/test",
-    component: () => import("@/test/testPage.vue")
+    component: () => import("@/page/testPage.vue")
   },
   {
     path: "/:pathMatch(.*)",

@@ -10,6 +10,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     Alert: typeof import('./src/components/common/alert.vue')['default']
     AudioPlayer: typeof import('./src/components/common/audioPlayer.vue')['default']
+    Bg: typeof import('./src/components/login/bg.vue')['default']
     Counter: typeof import('./src/components/common/counter.vue')['default']
     CounterReverse: typeof import('./src/components/common/counterReverse.vue')['default']
     Dicpanel: typeof import('./src/components/exam/dicpanel.vue')['default']

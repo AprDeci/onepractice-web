@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { login } from '../request/methods/user';
 import { useRouter } from 'vue-router';
 import { useAlert } from '../common/alert';
-
+import loginBg from '@/components/login/bg.vue';
 const router = useRouter();
 
 const loginData = ref({
@@ -37,59 +37,54 @@ function recaptcha(e) {
 </script>
 
 <template>
-    <main class="">
-        <div class="absolute left-2 cursor-pointer z-1" @click="router.push('/')">Home</div>
-        <div class="partone flex justify-center items-center h-dvh flex-col">
-            <!-- 登陆 -->
-            <div class="login-card card h-auto w-80  bg-base-100 shadow-xl">
-                <div class="card-title mt-6 ml-5">登陆</div>
-                <!-- name of each tab group should be unique -->
-                <div class="tabs tabs-border">
-                    <input type="radio" name="my_tabs_2" class="tab" aria-label="账号登录" checked="true" />
-                    <div class="tab-content">
-                        <div class="card-body pt-2 flex flex-col gap-0">
-                            <fieldset class="fieldset">
-                                <legend class="fieldset-legend">用户名</legend>
-                                <input v-model="loginData.usernameOrEmail" type="text" class="input validator"
-                                    minlength="3" maxlength="20" placeholder=" " />
-                                <p class="validator-hint">
-                                    用户名至少三位,最长二十位
-                                </p>
-                            </fieldset>
-                            <fieldset>
-                                <legend class="fieldset-legend">密码</legend>
-                                <label class="input validator">
-                                    <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 24 24">
-                                        <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none"
-                                            stroke="currentColor">
-                                            <path
-                                                d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z">
-                                            </path>
-                                            <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle>
-                                        </g>
-                                    </svg>
-                                    <input v-model="loginData.password" class="" type="password" required
-                                        placeholder="Password" minlength="6"
-                                        pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z][^\s]{5,}$" />
-                                </label>
-                                <p class="validator-hint ">
-                                    密码至少六位,字母开头包含数字
-                                </p>
+    <loginBg>
+        <div class="login-card card h-auto w-80  bg-base-100 shadow-xl">
+            <div class="card-title mt-6 ml-5">登陆</div>
+            <!-- name of each tab group should be unique -->
+            <div class="tabs tabs-border">
+                <input type="radio" name="my_tabs_2" class="tab" aria-label="账号登录" checked="true" />
+                <div class="tab-content">
+                    <div class="card-body pt-2 flex flex-col gap-0">
+                        <fieldset class="fieldset">
+                            <legend class="fieldset-legend">用户名</legend>
+                            <input v-model="loginData.usernameOrEmail" type="text" class="input validator" minlength="3"
+                                maxlength="20" placeholder=" " />
+                            <p class="validator-hint">
+                                用户名至少三位,最长二十位
+                            </p>
+                        </fieldset>
+                        <fieldset>
+                            <legend class="fieldset-legend">密码</legend>
+                            <label class="input validator">
+                                <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none"
+                                        stroke="currentColor">
+                                        <path
+                                            d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z">
+                                        </path>
+                                        <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle>
+                                    </g>
+                                </svg>
+                                <input v-model="loginData.password" class="" type="password" required
+                                    placeholder="Password" minlength="6"
+                                    pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z][^\s]{5,}$" />
+                            </label>
+                            <p class="validator-hint ">
+                                密码至少六位,字母开头包含数字
+                            </p>
 
-                            </fieldset>
-                            <div class="text-gray-500 hover:text-gray-800 cursor-pointer " @click="router.push({
-                                name: 'resetPassword'
-                            })">忘记密码?</div>
-                            <button class="btn btn-primary btn-md mt-2" @click=recaptcha>登陆</button>
-                            <button class="btn btn-ghost mt-2" @click="router.push({ name: 'register' })">切换为注册</button>
-                        </div>
+                        </fieldset>
+                        <div class="text-gray-500 hover:text-gray-800 cursor-pointer " @click="router.push({
+                            name: 'resetPassword'
+                        })">忘记密码?</div>
+                        <button class="btn btn-primary btn-md mt-2" @click=recaptcha>登陆</button>
+                        <button class="btn btn-ghost mt-2" @click="router.push({ name: 'register' })">切换为注册</button>
                     </div>
-
                 </div>
+
             </div>
         </div>
-    </main>
+    </loginBg>
 </template>
 
 <style lang="css" scoped>
