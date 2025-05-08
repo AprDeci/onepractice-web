@@ -74,6 +74,10 @@ onMounted(() => {
             ['.card2', { opacity: 1 }, { delay: 3.3 }],
             ['.card2', { y: -150 }, { duration: 0.1 }]
         ])
+        animate([
+            ['.card3', { opacity: 1 }, { delay: 3.3 }],
+            ['.card3', { y: -110 }, { duration: 0.1 }]
+        ])
     }, 500)
 
     onUnmounted(() => {
@@ -244,11 +248,11 @@ const rotateVariants = {
                 <div class="card1 card opacity-0 bg-blue-200 size-30 p-2 absolute top-5 left-10 rotate-20 -z-1">
                     <span class="font-bold text-blue-900">Record</span>
                 </div>
-                <div class="card2 card opacity-0 bg-pink-200 size-50 p-2 absolute bottom-10 right-10 rotate-60 -z-1">
-                    <span class="font-bold text-pink-900">Review</span>
+                <div class="card2 card opacity-0 bg-pink-200 size-50 p-2 absolute bottom-25 right-10 rotate-60 -z-1">
+                    <span class="font-bold text-pink-900 text-xl">Review</span>
                 </div>
-                <div class="card3 card opacity-0 bg-blue-200 size-30 p-2 absolute top-5 left-10 rotate-20 -z-1">
-                    <span class="font-bold text-blue-900">Record</span>
+                <div class="card3 card opacity-0 bg-purple-200 size-50 p-2 absolute bottom-20 left-10 -rotate-70 -z-1">
+                    <span class="font-bold text-purple-900 text-2xl">static</span>
                 </div>
             </div>
         </div>
