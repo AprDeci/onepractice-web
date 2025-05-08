@@ -38,7 +38,7 @@ function recaptcha(e) {
 
 <template>
     <loginBg>
-        <div class="login-card card h-auto w-80  bg-base-100 shadow-xl">
+        <div class="login-card card h-auto w-120  bg-base-100 shadow-xl">
             <div class="card-title mt-6 ml-5">登陆</div>
             <!-- name of each tab group should be unique -->
             <div class="tabs tabs-border">
@@ -47,15 +47,15 @@ function recaptcha(e) {
                     <div class="card-body pt-2 flex flex-col gap-0">
                         <fieldset class="fieldset">
                             <legend class="fieldset-legend">用户名</legend>
-                            <input v-model="loginData.usernameOrEmail" type="text" class="input validator" minlength="3"
-                                maxlength="20" placeholder=" " />
+                            <input v-model="loginData.usernameOrEmail" type="text" class="input w-full validator"
+                                minlength="3" maxlength="20" placeholder=" " />
                             <p class="validator-hint">
                                 用户名至少三位,最长二十位
                             </p>
                         </fieldset>
                         <fieldset>
                             <legend class="fieldset-legend">密码</legend>
-                            <label class="input validator">
+                            <label class="input w-full validator">
                                 <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none"
                                         stroke="currentColor">
