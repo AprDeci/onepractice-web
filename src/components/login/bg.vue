@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import data from '@/assets/example/questions.json'
 import AudioPlayer from '@/components/common/audioPlayer.vue';
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { animate, delay, easeInOut, motion, transform, useAnimate } from 'motion-v'
-import { Dumbbell, Rotate3D, Scale } from 'lucide-vue-next';
 const [scope, animate] = useAnimate()
-const reading = data.questionParts[2].questions
-const listen = data.questionParts[1].questions
+
 const selectindex = ref(0)
 const options = [{
     "label": "A",
@@ -24,30 +21,6 @@ const options = [{
     "label": "D",
     "content": "She is the longest-serving bus driver in Fayetteville."
 }]
-const contentParsed = computed(() => {
-    let content = reading[0].content
-    content = content.replace(/_(\d+)_/g, (match, number) => {
-        const blankNumber = parseInt(number);
-        // const word = selectedWords.value[blankNumber];
-        const word = false
-        return word
-            ? `<span class="dark:text-gray-200 inline-block relative border-b-2 border-blue-400 px-1 mx-1 bg-blue-50 dark:bg-blue-300 dark:text-base-content cursor-pointer" data-blank="${blankNumber}">
-          <span class=" blank-number relative  transform -translate-x-1/2 text-xs font-bold text-blue-600 bg-blue-100 px-1.5 py-0.5 rounded">${blankNumber}</span>
-          ${word}
-          <span class="absolute inset-0" data-blank="${blankNumber}"></span>
-        </span>`
-            : `          
-            <motion.div class="inline-block" :custom="0.25" initial="hidden" :animate="isLoaded ? 'visible' : 'hidden'"
-                                    :variants="fallVariants">
-            <span class="inline-block relative border-b-2 border-gray-400 px-1 mx-1 min-w-[80px] cursor-pointer" data-blank="${blankNumber}">
-          <span class="blank-number absolute -top-0 left-1/2 transform -translate-x-1/2 text-xs font-bold text-blue-600 bg-blue-100 px-1.5 py-0.5 rounded">${blankNumber}</span>
-          ________
-          <span class="absolute inset-0" data-blank="${blankNumber}"></span>
-        </span></motion.div>
-        `;
-    });
-    return content;
-})
 
 //动画
 const isLoaded = ref(false)
