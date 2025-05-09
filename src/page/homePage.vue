@@ -58,7 +58,7 @@ const { loading: continueload, data: continuedata } = useRequest(getPaperIntro(p
                         @click="router.push({ 'name': 'examPage', params: { 'id': paperStore.currentPaperId, 'mode': paperStore.currentMode } })">
                         <!-- 只考虑本地缓存-->
                         <span class="font-bold">{{ continuedata?.examYear }}年{{ continuedata?.examMonth
-                        }}月{{ continuedata?.paperType }}{{ continuedata?.paperName }}</span>
+                            }}月{{ continuedata?.paperType }}{{ continuedata?.paperName }}</span>
                         <div>
                             <span>已用时间:</span>
                             <span>{{ (recordStore.currentHasspendtime / 1000 / 60).toFixed(0) }}min</span>
@@ -70,7 +70,6 @@ const { loading: continueload, data: continuedata } = useRequest(getPaperIntro(p
                         <div className="flex justify-between items-center mb-8 ">
                             <div class="flex-col items-center relative bottom-5 lg:bottom-0">
                                 <h1 className="text-2xl md:text-3xl font-bold mr-5">Available Papers</h1>
-                                <h4 class="text-blue-400 font-bold">预览版2025.5.9</h4>
                                 <div class="absolute flex gap-2 items-center top-[130%]" v-if="type != '' || year != 0">
                                     <span class="hidden text-gray-400 lg:block">Conditions:</span>
                                     <div v-if="type != ''" @click="type = ''"
@@ -89,7 +88,7 @@ const { loading: continueload, data: continuedata } = useRequest(getPaperIntro(p
                                 <select className="px-3 py-2 border border-gray-200 rounded-md text-sm" v-model="type">
                                     <option value="">All Types</option>
                                     <option v-for="(atype, index) in types" :key="index">{{ atype
-                                        }}</option>
+                                    }}</option>
                                 </select>
                                 <select v-model="year" className="px-3 py-2 border border-gray-200 rounded-md text-sm">
                                     <option value="0">All Years</option>

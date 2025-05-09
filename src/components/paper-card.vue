@@ -69,7 +69,7 @@ const getTypeColor = (type: string) => {
 
 
 <template>
-    <div v-if="paper?.questionCount != 0" :data-umami-event="`点击试卷${paper?.paperId}`">
+    <div v-if="paper.questionCount != 0">
         <div class="card  bg-base-90 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 cursor-pointer"
             @click="router.push(`/exam/introduce/${paper?.paperId}`)">
             <div class="card-title">
