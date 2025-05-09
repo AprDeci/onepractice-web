@@ -98,7 +98,6 @@ useEventListener(document, 'selectionchange', (evt) => {
     const selection = selected.selection.value
     if (selection?.rangeCount > 0 && !selection.isCollapsed) {
         const range = selection.getRangeAt(0);
-        console.log(range.startContainer.parentElement)
         const rect = selected.rects.value[0]
         selectreference.value = {
             getBoundingClientRect: () => ({
