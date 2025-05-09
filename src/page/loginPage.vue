@@ -39,7 +39,7 @@ function recaptcha(e) {
 <template>
     <loginBg>
 
-        <div class=" h-auto w-100 space-y-5">
+        <div class=" h-auto w-80  lg:w-100 space-y-5">
             <div class="cursor-pointer" @click="router.push('/')">
                 <span class="font-bold text-2xl text-cyan-900">
                     One Practice

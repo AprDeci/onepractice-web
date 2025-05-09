@@ -65,7 +65,7 @@ const sendregister = async () => {
 <template>
     <loginBg>
         <!-- 注册 -->
-        <div class=" h-auto w-100 space-y-5">
+        <div class=" h-auto w-80 lg:w-100 space-y-5">
             <div class="cursor-pointer" @click="router.push('/')">
                 <span class="font-bold text-2xl text-cyan-900">
                     One Practice
@@ -101,8 +101,7 @@ const sendregister = async () => {
                         <div class="join w-full">
                             <input v-model="registerdata.captchacode" type="text"
                                 class="input lg:  rounded-sm join-item " />
-                            <button class="btn join-item btn-primary btn-lg" @click="sendEmail"
-                                :disabled="hasSendEmail">
+                            <button class="btn join-item btn-primary btn" @click="sendEmail" :disabled="hasSendEmail">
                                 <span v-if="!hasSendEmail && !loading">发送验证码</span>
                                 <span v-if="loading" class="loading loading-spinner loading-xs"></span>
                                 <span v-if="hasSendEmail" class="countdown">
