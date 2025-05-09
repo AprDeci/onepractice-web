@@ -1,4 +1,5 @@
 import { useUtilStore } from "../store/utilStore";
+import nlp from "compromise/one";
 const utilStore = useUtilStore();
 // 分割答案工具类,每四个(ABCD)为一组
 export const splitAnswer = (answers: string[]) => {
@@ -8,18 +9,19 @@ export const splitAnswer = (answers: string[]) => {
 };
 
 // 查词
-// 使用正则匹配单词（按空格分割，保留连字符和撇号等常见情况）
+// 使用NLP分词文本
 export const wrapWordsWithSpan = (inputString: string) => {
-  if (inputString) {
-    if (utilStore.dictionaryMode)
-      return inputString.replace(
-        /\b([a-zA-Z'-]+)\b/g,
-        "<span class='word wordactive' word=true>$1</span>"
-      );
-    else return inputString.replace(/\b([a-zA-Z'-]+)\b/g, "<span class='word' word=true>$1</span>");
-  }
+  const spanClass = utilStore.dictionaryMode ? "word wordactive" : "word";
+  return nlp(inputString)
+    .json()
+    .flatMap((sentence) =>
+      sentence.terms.map(
+        (word) =>
+          `${word.pre}<span class="${spanClass}" word="true">${word.text}</span>${word.post}`
+      )
+    )
+    .join("");
 };
-
 // 标记
 export const mark = (selected) => {
   const selection = selected.selection.value;

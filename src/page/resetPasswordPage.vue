@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router';
 import { useCaptcha, useRequest } from 'alova/client';
 import { resetPassword } from '../request/methods/user';
 import { useAlert } from '../common/alert';
+import loginBg from '@/components/login/bg.vue'
 const router = useRouter();
 const { showAlert } = useAlert()
 
@@ -39,20 +40,23 @@ const { data: resetdata, loading: resetLoading, send: sendPassword } = useReques
 </script>
 
 <template>
-    <main class="">
-        <div class="absolute left-2 cursor-pointer z-1" @click="router.push('/')">Home</div>
-        <div class="partone flex justify-center items-center h-dvh">
-            <!-- 登陆 -->
-            <div class="login-card card h-auto w-80 lg:w-100 bg-base-100 shadow-xl px-5 py-5 flex flex-col gap-5">
+    <loginBg>
+        <div class=" h-auto w-80  lg:w-100 space-y-5">
+            <div class="cursor-pointer" @click="router.push('/')">
+                <span class="font-bold text-2xl text-cyan-900">
+                    One Practice
+                </span>
+            </div>
+            <div class="login-card card bg-base-100 shadow-xl px-5 py-5 flex flex-col gap-5">
                 <div class="card-title">重置密码</div>
                 <div class="w-full flex flex-col gap-2">
                     <!-- 验证码界面 -->
                     <fieldset v-if="!verifed" class="fieldset relative">
-                        <label class="fieldset-label text-sm">Email</label>
+                        <label class="fieldset-label text-sm">邮箱</label>
                         <input v-model="email" type="email" class="input w-full validator" required
                             placeholder="miku@email.com">
                         <div class="validator-hint">Enter valid email address</div>
-                        <label class="fieldset-label text-sm">captcha</label>
+                        <label class="fieldset-label text-sm">验证码</label>
                         <div class="join w-full">
                             <input v-model="captcha" type="text" class="input rounded-sm">
                             <button class="btn" @click="sendCaptcha" :loading="sending"
@@ -79,12 +83,12 @@ const { data: resetdata, loading: resetLoading, send: sendPassword } = useReques
                         <div class="btn btn-primary" @click="sendPassword">确认</div>
                     </fieldset>
                     <div class="w-full flex flex-col ">
-                        <div class="btn" @click="router.push('/login')">返回登录</div>
+                        <div class="btn btn-ghost" @click="router.push('/login')">返回登录</div>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
+    </loginBg>
 </template>
 
 <style lang="css" scoped>

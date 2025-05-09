@@ -3,12 +3,13 @@ import adapterFetch from "alova/fetch";
 import vueHook from "alova/vue";
 import { createClientTokenAuthentication } from "alova/client";
 import { fetchError, HttpRequestError, BusinessLogicError } from "../common/errors";
-import { useRouter } from "vue-router";
 
 const { onAuthRequired, onResponseRefreshToken } = createClientTokenAuthentication({
   async login(response, method) {
     const json = await response.clone().json();
-    localStorage.setItem("token", json.data.token);
+    if (json.code === 200) {
+      localStorage.setItem("token", json.data.token);
+    }
   },
   async logout(response, method) {
     localStorage.removeItem("token");

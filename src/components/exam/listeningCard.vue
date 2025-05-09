@@ -33,7 +33,6 @@ const getnext = () => {
     <div class="max-w-4xl m-auto listening-card card shadow-sm p-4 bg-base-100  flex gap-3 ">
         <div class="player">
             <AudioPlayer :audioSrc="data.questions[0].listenurl" trackTitle=" "></AudioPlayer>
-
         </div>
         <div class="options">
             <QuestionContainer :hasNext="hasNextSection" :hasPrev="hasPrevSection" @prev="getprev" @next="getnext">

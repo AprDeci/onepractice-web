@@ -245,7 +245,6 @@ useEventListener(document, 'selectionchange', (evt) => {
                                         </el-select>
                                     </div>
                                 </ul>
-
                             </details>
                         </li>
                     </ul>
@@ -257,7 +256,7 @@ useEventListener(document, 'selectionchange', (evt) => {
                 </div>
             </div>
 
-            <div class="middle px-6 ">
+            <div class="middle px-6 mb-20">
                 <div class="mt-8 mb-4">
                     <div role="tablist" class="tabs tabs-box"
                         :style="`width: ${data?.questionParts.length * (tabwidth + 36)}px`">
@@ -274,7 +273,7 @@ useEventListener(document, 'selectionchange', (evt) => {
                     </KeepAlive>
                 </div>
             </div>
-            <footer class="sticky bottom-0 w-full z-1">
+            <footer class="fixed bottom-0 w-full z-1">
                 <footer
                     class="footer flex justify-between footer-horizontal bg-base-200 text-neutral-content items-center p-4 border dark:border-base-100">
                     <aside class="grid-flow-col items-center">

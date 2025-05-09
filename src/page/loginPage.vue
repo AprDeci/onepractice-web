@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { login } from '../request/methods/user';
 import { useRouter } from 'vue-router';
 import { useAlert } from '../common/alert';
-
+import loginBg from '@/components/login/bg.vue';
 const router = useRouter();
 
 const loginData = ref({
@@ -13,25 +13,39 @@ const loginData = ref({
 
 const { showAlert } = useAlert()
 
-const sendlogin = async () => {
+const sendlogin = async (recaptchatoken: string) => {
     try {
-        await login(loginData.value.usernameOrEmail, loginData.value.password)
+        await login(loginData.value.usernameOrEmail, loginData.value.password, recaptchatoken)
         showAlert("登录成功啦!三秒后自动跳转首页")
         setTimeout(() => {
             router.push("/")
         }, 3000)
     } catch (error) {
-        showAlert("error")
+        showAlert(error, "error")
     }
+}
+
+// recaptcha
+function recaptcha(e) {
+    e.preventDefault();
+    grecaptcha.ready(function () {
+        grecaptcha.execute('6Le-fiwrAAAAANI2DM0GRqdHRQDLWUQOSJtQ9Ere', { action: 'submit' }).then(function (token) {
+            sendlogin(token)
+        });
+    });
 }
 </script>
 
 <template>
-    <main class="">
-        <div class="absolute left-2 cursor-pointer z-1" @click="router.push('/')">Home</div>
-        <div class="partone flex justify-center items-center h-dvh flex-col">
-            <!-- 登陆 -->
-            <div class="login-card card h-auto w-80  bg-base-100 shadow-xl">
+    <loginBg>
+
+        <div class=" h-auto w-80  lg:w-100 space-y-5">
+            <div class="cursor-pointer" @click="router.push('/')">
+                <span class="font-bold text-2xl text-cyan-900">
+                    One Practice
+                </span>
+            </div>
+            <div class="login-card card bg-base-100 shadow-xl">
                 <div class="card-title mt-6 ml-5">登陆</div>
                 <!-- name of each tab group should be unique -->
                 <div class="tabs tabs-border">
@@ -39,8 +53,8 @@ const sendlogin = async () => {
                     <div class="tab-content">
                         <div class="card-body pt-2 flex flex-col gap-0">
                             <fieldset class="fieldset">
-                                <legend class="fieldset-legend">用户名</legend>
-                                <input v-model="loginData.usernameOrEmail" type="text" class="input validator"
+                                <legend class="fieldset-legend">用户名或邮箱</legend>
+                                <input v-model="loginData.usernameOrEmail" type="text" class="input w-full validator"
                                     minlength="3" maxlength="20" placeholder=" " />
                                 <p class="validator-hint">
                                     用户名至少三位,最长二十位
@@ -48,7 +62,7 @@ const sendlogin = async () => {
                             </fieldset>
                             <fieldset>
                                 <legend class="fieldset-legend">密码</legend>
-                                <label class="input validator">
+                                <label class="input w-full validator">
                                     <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 24 24">
                                         <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none"
@@ -71,15 +85,15 @@ const sendlogin = async () => {
                             <div class="text-gray-500 hover:text-gray-800 cursor-pointer " @click="router.push({
                                 name: 'resetPassword'
                             })">忘记密码?</div>
-                            <button class="btn btn-primary btn-md mt-2" @click=sendlogin>登陆</button>
-                            <button class="btn btn-ghost" @click="router.push({ name: 'register' })">切换为注册</button>
+                            <button class="btn btn-primary btn-md mt-2" @click=recaptcha>登陆</button>
+                            <button class="btn btn-ghost mt-2" @click="router.push({ name: 'register' })">切换为注册</button>
                         </div>
                     </div>
 
                 </div>
             </div>
         </div>
-    </main>
+    </loginBg>
 </template>
 
 <style lang="css" scoped>

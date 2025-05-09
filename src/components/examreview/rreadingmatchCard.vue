@@ -4,6 +4,7 @@ import { ChevronDownIcon } from 'lucide-vue-next'
 import type { QuestionsDO } from '../../interface/Question'
 import { usepaperStore } from '../../store/paperStore.ts';
 import { wrapWordsWithSpan } from '../../common/utils';
+import { jsonrepair } from 'jsonrepair';
 const paperSotre = usepaperStore()
 const { question } = defineProps<{
     question: QuestionsDO
@@ -16,7 +17,11 @@ const currentItem = ref<number | null>(null)
 const highlightedParagraph = ref<string | null>(null)
 const searchText = ref('')
 const questionJsoncontent = computed(() => {
-    return JSON.parse(question.content)
+    try {
+        return JSON.parse(jsonrepair(question.content))
+    } catch (error) {
+        return "糟糕，题目解析错误了,快反馈给作者吧"
+    }
 })
 // Toggle dropdown for an item
 const toggleDropdown = (itemId: number) => {

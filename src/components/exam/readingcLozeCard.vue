@@ -5,27 +5,16 @@ import { XIcon } from 'lucide-vue-next'
 import type { QuestionsDO } from '../../interface/Question'
 import { usepaperStore } from '../../store/paperStore.ts'
 import { wrapWordsWithSpan } from '../../common/utils.ts'
+import { useFloating, autoUpdate, offset, flip, shift } from '@floating-ui/vue'
 const paperStore = usepaperStore()
 const { question } = defineProps<{
     question: QuestionsDO
 }>()
 const selectedBlankNumber = ref<number | null>(null); // Current blank number
 const selectedWords = ref<Record<number, string>>({}); // User's answers
-const answerCard = ref(null)
+
 const blankRefs = ref<Record<number, HTMLElement | null>>({})
-const { width, height } = useWindowSize();
 const isCardVisible = ref(false);
-const cardPosition = ref({ top: '0px', left: '0px' });
-
-// Track if we should position the card above or below the blank
-const positionAbove = ref(false);
-
-// Close the answer card when clicking outside
-onClickOutside(answerCard, () => {
-    if (isCardVisible.value) {
-        isCardVisible.value = false;
-    }
-})
 
 
 // 生成html
@@ -49,72 +38,42 @@ const contentParsed = computed(() => {
     });
     return content;
 })
+// 选择答案面板弹出
+const blank = ref(null)
+const answerCard = ref(null)
+const { floatingStyles } = useFloating(blank, answerCard, {
+    whileElementsMounted: autoUpdate,
+    middleware: [offset(0), flip(), shift()],
+}
+)
+onClickOutside(answerCard, () => {
+    if (isCardVisible.value) {
+        isCardVisible.value = false;
+    }
+})
 
-// Handle click on the content area
+
 const handleContentClick = (e: MouseEvent) => {
-    // Find if we clicked on a blank or its child
-    let target = e.target as HTMLElement;
+    blank.value = e.target as HTMLElement;
     let blankNumber: number | null = null;
 
-    // Traverse up to find the blank element
-    while (target && !blankNumber) {
-        const attr = target.getAttribute('data-blank');
+    while (blank.value && !blankNumber) {
+        const attr = blank.value.getAttribute('data-blank');
         if (attr) {
             blankNumber = parseInt(attr);
             break;
         }
-        target = target.parentElement as HTMLElement;
+        blank.value = blank.value.parentElement as HTMLElement;
     }
 
     if (blankNumber) {
-        openAnswerWindow(e, blankNumber);
-    }
-}
-
-// Calculate and position the answer card
-const openAnswerWindow = (e: MouseEvent, blankNumber: number) => {
-    selectedBlankNumber.value = blankNumber;
-
-    // Get the clicked element's position
-    const blankElement = document.querySelector(`[data-blank="${blankNumber}"]`) as HTMLElement;
-    if (!blankElement) return;
-
-    const blankRect = blankElement.getBoundingClientRect();
-    const cardWidth = 320; // Estimated card width
-    const cardHeight = 200; // Estimated card height
-
-    // Calculate available space
-    const spaceBelow = window.innerHeight - blankRect.bottom;
-    const spaceAbove = blankRect.top;
-
-    // Determine if card should appear above or below
-    positionAbove.value = spaceBelow < cardHeight && spaceAbove > cardHeight;
-
-    // Calculate horizontal position (centered on blank when possible)
-    let left = blankRect.left + (blankRect.width / 2) - (cardWidth / 2);
-
-    // Ensure card doesn't go off-screen horizontally
-    const minLeft = 16; // Minimum margin from left edge
-    const maxLeft = window.innerWidth - cardWidth - 16; // Maximum left position
-    left = Math.max(minLeft, Math.min(left, maxLeft));
-
-    // Calculate vertical position
-    let top;
-    if (positionAbove.value) {
-        top = blankRect.top - cardHeight - 8; // Position above with 8px gap
-    } else {
-        top = blankRect.bottom + 8; // Position below with 8px gap
+        selectedBlankNumber.value = blankNumber;
+        isCardVisible.value = true;
     }
 
-    // Set position
-    cardPosition.value = {
-        top: `${top}px`,
-        left: `${left}px`
-    };
 
-    // Show the card
-    isCardVisible.value = true;
 }
+
 
 // Save the selected answer
 const saveAnswer = (word: string, index: number) => {
@@ -192,11 +151,10 @@ onMounted(() => {
         </div>
 
         <!-- 答案卡片 -->
-        <div v-if="isCardVisible" ref="answerCard"
-            class="fixed z-50 bg-white dark:bg-base-200 rounded-lg shadow-xl border border-gray-200 w-80"
-            :class="{ 'answer-card-above': positionAbove }" :style="{ top: cardPosition.top, left: cardPosition.left }">
+        <div v-if="isCardVisible" ref="answerCard" :style="floatingStyles"
+            class="fixed z-50 bg-white dark:bg-base-200 rounded-lg shadow-xl border border-gray-200 w-80">
             <!-- Card header -->
-            <div class="flex justify-between items-center p-3 border-b bg-gray-50 dark:bg-base-300 rounded-t-lg">
+            <div class=" flex justify-between items-center p-3 border-b bg-gray-50 dark:bg-base-300 rounded-t-lg">
                 <h4 class="font-medium text-gray-700 dark:text-gray-400">
                     Select word for blank {{ selectedBlankNumber }}
                 </h4>

@@ -5,6 +5,7 @@ import { getEmailCaptcha } from '../request/methods/captcha';
 import { register } from '../request/methods/user';
 import { useRouter } from 'vue-router';
 import { useAlert } from '../common/alert';
+import loginBg from '@/components/login/bg.vue';
 
 const router = useRouter();
 
@@ -62,16 +63,20 @@ const sendregister = async () => {
 </script>
 
 <template>
-    <main class="">
-        <div class="absolute left-2 cursor-pointer z-1" @click="router.push('/')">Home</div>
-        <div class="partone flex justify-center items-center h-dvh">
-            <!-- 注册 -->
-            <div class="register-card card  w-80 bg-base-100 shadow-xl">
+    <loginBg>
+        <!-- 注册 -->
+        <div class=" h-auto w-80 lg:w-100 space-y-5">
+            <div class="cursor-pointer" @click="router.push('/')">
+                <span class="font-bold text-2xl text-cyan-900">
+                    One Practice
+                </span>
+            </div>
+            <div class="register-card card bg-base-100 shadow-xl">
                 <div class="card-title mt-6 ml-5">注册</div>
                 <div class="card-body pt-2">
                     <fieldset class="fieldset">
                         <legend class="fieldset-legend">用户名</legend>
-                        <input v-model="registerdata.username" type="text" class="input validator" minlength="3"
+                        <input v-model="registerdata.username" type="text" class="input validator w-full " minlength="3"
                             maxlength="20" placeholder=" " />
                         <p class="validator-hint hidden">
                             用户名至少三位,最长二十位
@@ -79,7 +84,7 @@ const sendregister = async () => {
                     </fieldset>
                     <fieldset class="fieldset">
                         <legend class="fieldset-legend">邮箱</legend>
-                        <label class="input validator">
+                        <label class="input validator w-full ">
                             <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                 <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none"
                                     stroke="currentColor">
@@ -93,10 +98,10 @@ const sendregister = async () => {
                     </fieldset>
                     <fieldset>
                         <legend class="fieldset-legend">验证码</legend>
-                        <div class="join">
+                        <div class="join w-full">
                             <input v-model="registerdata.captchacode" type="text"
-                                class="input  rounded-sm join-item w-40 lg:w-56" placeholder="Type here" />
-                            <button class="btn join-item btn-primary" @click="sendEmail" :disabled="hasSendEmail">
+                                class="input lg:  rounded-sm join-item " />
+                            <button class="btn join-item btn-primary btn" @click="sendEmail" :disabled="hasSendEmail">
                                 <span v-if="!hasSendEmail && !loading">发送验证码</span>
                                 <span v-if="loading" class="loading loading-spinner loading-xs"></span>
                                 <span v-if="hasSendEmail" class="countdown">
@@ -108,7 +113,7 @@ const sendregister = async () => {
                     </fieldset>
                     <fieldset>
                         <legend class=" fieldset-legend">密码</legend>
-                        <label class="input validator">
+                        <label class="input validator w-full ">
                             <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                 <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none"
                                     stroke="currentColor">
@@ -131,7 +136,7 @@ const sendregister = async () => {
                 </div>
             </div>
         </div>
-    </main>
+    </loginBg>
 </template>
 
 <style lang="css" scoped>

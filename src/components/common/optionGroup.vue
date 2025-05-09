@@ -24,9 +24,7 @@ onMounted(() => {
             :class="{ 'bg-gray-100 dark:bg-base-300': option.label === selected }" v-for="(option, index) in options"
             :key="index" @click="selectoption(option.label)">
             <input type="radio" class="radio mr-4 " :checked="selected === option.label" />
-            <!-- <span class="mr-2">{{ option.label }}.</span><span>{{ option.content }}</span> -->
             <span class="mr-2">{{ option.label }}.</span><span v-html="wrapWordsWithSpan(option.content)"></span>
         </div>
-
     </div>
 </template>
