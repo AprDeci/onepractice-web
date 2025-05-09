@@ -148,10 +148,8 @@ const rotateVariants = {
 
 <template>
     <main class="flex h-screen bg-gradient-to-b from-sky-50 to-purple-50  items-center justify-between overflow-hidden">
-        <div ref="scope" class="left h-screen flex items-center justify-center w-1/2">
-            <!-- <motion.div ref="cardRef" class="hidden max-h-[100vh] lg:block perspective-1000 w-dvw lg:w-[800px] z-1"
-            :style="{ transform: isLoaded ? `rotate3d(-1, 1, 0, 45deg) perspective(1000px) rotateX(${mousePosition.y * -0.01}deg) rotateY(${mousePosition.x * -0.01}deg)` : 'rotate3d(-1, 1, 0, 45deg)', transition: 'transform 0.3s ease-out' }"> -->
-            <div class="all hidden max-h-[70vh] lg:block perspective-1000 w-[600px] z-1 card  rotate">
+        <div ref="scope" class="left h-screen flex items-center justify-center w-1/2 z-2">
+            <div class="all hidden  lg:block perspective-1000 w-[80%]  card  rotate">
                 <motion.div :custom="0" initial="hidden" :animate="isLoaded ? 'visible' : 'hidden'"
                     :variants="fallVariants">
                     <div class="">
@@ -185,13 +183,12 @@ const rotateVariants = {
                     </div>
                 </motion.div>
                 <!-- cloze -->
-                <div class="overflow-y-hidden">
+                <div class="">
                     <motion.div :custom="0" initial="hidden" :animate="isLoaded ? 'visible' : 'hidden'"
                         :variants="fallVariants">
                         <div class="card bg-base-100 shadow-xl px-4 py-4">
-                            <div class="prose prose-lg max-w-none mb-8 relative">
-                                <div class="text-base-content text-sm leading-relaxed  dark:text-base-content"
-                                    @click="null">
+                            <div class="prose max-w-none  relative">
+                                <div class="text-base-content  leading-relaxed  dark:text-base-content" @click="null">
                                     When Toni Morrison died in 2019, the world lost one of its most influential authors.
                                     But
                                     Morrison was not an early success. Her first novel was not published until she was
@@ -242,7 +239,6 @@ const rotateVariants = {
                                 </div>
                             </div>
                         </div>
-
                     </motion.div>
                 </div>
                 <div class="card1 card opacity-0 bg-blue-200 size-30 p-2 absolute top-5 left-10 rotate-20 -z-1">
@@ -258,7 +254,8 @@ const rotateVariants = {
         </div>
         <div class="cut hidden lg:block"></div>
         <div class="flex right">
-            <div class="w-screen lg:w-[50vw] h-screen flex items-center justify-center bg-[#e1f6f9] dark:bg-base-200">
+            <div
+                class="w-screen lg:w-[50vw] h-screen flex flex-col items-center justify-center bg-[#e1f6f9] dark:bg-base-200">
                 <slot></slot>
             </div>
         </div>
