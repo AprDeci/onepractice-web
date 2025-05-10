@@ -42,7 +42,7 @@ const Review = (index: number) => {
 </script>
 
 <template>
-    <HomeNav></HomeNav>
+    <HomeNav class="relative z-1"></HomeNav>
     <div class="main px-4 lg:px-20 flex flex-col lg:flex-row gap-5 lg:gap-10">
         <div class="info card bg-base-100 shadow-sm w-full lg:w-80 flex flex-wrap lg:flex-col  gap-4 p-5">
             <div class="avatar avatar-placeholder flex items-center justify-center ">
