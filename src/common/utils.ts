@@ -15,10 +15,18 @@ export const wrapWordsWithSpan = (inputString: string) => {
   return nlp(inputString)
     .json()
     .flatMap((sentence) =>
-      sentence.terms.map(
-        (word) =>
-          `${word.pre}<span class="${spanClass}" word="true">${word.text}</span>${word.post}`
-      )
+      sentence.terms.map((word) => {
+        // 检查是否是数字或特定模式（如 _12_）
+        const isNumber = /^[\d_]+$/.test(word.text);
+
+        if (isNumber) {
+          // 如果是数字或特定模式，不包裹span
+          return `${word.pre}${word.text}${word.post}`;
+        } else {
+          // 否则正常包裹span
+          return `${word.pre}<span class="${spanClass}" word="true">${word.text}</span>${word.post}`;
+        }
+      })
     )
     .join("");
 };
@@ -42,7 +50,6 @@ export const mark = (selected) => {
   }
 
   selection.removeAllRanges();
-  showselectpanel.value = false;
 };
 
 // 找出选区内的所有div
