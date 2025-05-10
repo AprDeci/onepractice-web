@@ -25,18 +25,7 @@ const { paper } = defineProps<{
 
 
 
-const getLevelColor = (level: null | string) => {
-    switch (level) {
-        case "Beginner":
-            return "bg-green-100 text-green-800"
-        case "Intermediate":
-            return "bg-yellow-100 text-yellow-800"
-        case "Advanced":
-            return "bg-red-100 text-red-800"
-        default:
-            return "bg-orange-100 text-orange-800"
-    }
-}
+
 // Function to determine the background color based on category
 const getCategoryColor = (category: string) => {
     switch (category) {
@@ -54,6 +43,30 @@ const getCategoryColor = (category: string) => {
             return 'bg-indigo-50 text-indigo-700'
         default:
             return 'bg-gray-50 text-gray-700'
+    }
+}
+
+const getrate = (num: number) => {
+    //1-2.5 2.5-4 4-5 简单 中等 困难
+    if (num <= 2.5) {
+        return 'easy'
+    } else if (num <= 4) {
+        return 'medium'
+    } else {
+        return 'Advanced'
+    }
+}
+
+const getLevelColor = (level: string) => {
+    switch (level) {
+        case 'Beginner':
+            return 'bg-green-50 text-green-700'
+        case 'Intermediate':
+            return 'bg-yellow-50 text-yellow-700'
+        case 'Advanced':
+            return 'bg-red-50 text-red-700'
+        default:
+
     }
 }
 
@@ -88,7 +101,7 @@ const getTypeColor = (type: string) => {
                     <div>
                         <span
                             :class="`inline-block px-2 py-1 rounded-full text-xs font-medium ${getLevelColor(getPaperdifficult(paper?.rating))}`">
-                            {{ paper?.rating && paper?.number > 5 ? paper?.rating : "评分人数过少" }}
+                            {{ paper?.rating && paper?.number > 5 ? getrate(paper?.rating) : "评分人数过少" }}
                         </span>
                     </div>
                 </div>
