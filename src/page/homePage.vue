@@ -37,9 +37,7 @@ const { loading, data: papers, isLastPage, page, pageSize, pageCount, total } = 
 const changePage = (newval: number) => {
     page.value = newval
 }
-const { loading: continueload, data: continuedata } = useRequest(getPaperIntro(paperStore.currentPaperId as number)).onError(() => {
 
-})
 
 
 </script>
