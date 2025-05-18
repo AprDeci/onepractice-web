@@ -64,7 +64,9 @@ onBeforeMount(() => {
 
 onBeforeUnmount(() => {
     // 销毁前更新record数据 更新时间
-    recordStore.updateRecord(parseInt(id))
+    if (recordStore.records[parseInt(id)]) {
+        recordStore.updateRecord(parseInt(id))
+    }
 })
 
 const showAlert = ref(false)
@@ -95,7 +97,7 @@ const submit = async () => {
         return ''
     }
     // 更新时间记录
-    await recordStore.updateRecord(parseInt(id))
+    recordStore.updateRecord(parseInt(id))
     if (recordId || recordStore.currentRecordId != 0) {
         if (recordId) { //优先recordId
             await updateRecord(recordId, paperStore.currentPaperId, mode, paperStore.currentUserAnswersLength === paperStore.currentCorrectAnswersLength ? 1 : 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, Object.keys(paperStore.currentCorrectAnswers).length, 0, recordStore.currentHasspendtime);
@@ -107,11 +109,6 @@ const submit = async () => {
         const data = await saveRecord(paperStore.currentPaperId, mode, paperStore.currentUserAnswersLength === paperStore.currentCorrectAnswersLength ? 1 : 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, Object.keys(paperStore.currentCorrectAnswers).length, 0, recordStore.currentHasspendtime);
         // 将对应record的recordId保存到recordStore中
         recordStore.setRecordId(parseInt(id), data)
-    }
-    //如果做完了所有客观题,则清除recordstore,避免重新做卷覆盖记录
-    if (paperStore.currentUserAnswersLength == paperStore.currentCorrectAnswersLength) {
-        console.log("delete")
-        recordStore.removeRecord(parseInt(id))
     }
     router.push({ name: 'examResult' });
 

@@ -86,6 +86,10 @@ export const userecordStore = defineStore(
       records.value[index].laststarttime = Date.now();
     };
 
+    const removeRecord = (index: number) => {
+      delete records.value[index];
+    };
+
     return {
       records,
       currentRecord,
@@ -96,7 +100,8 @@ export const userecordStore = defineStore(
       setRecordtime,
       setRecordLasttime,
       initRecord,
-      updateRecord
+      updateRecord,
+      removeRecord
     };
   },
   {

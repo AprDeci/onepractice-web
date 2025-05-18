@@ -36,6 +36,8 @@ onBeforeUnmount(() => {
         // 如果从非Review离开
         if (destroy.value) {
             delete paperStore.papersData[paperStore.currentPaperId as number]
+            //如果做完了所有客观题,则清除recordstore,避免重新做卷覆盖记录
+            recordStore.removeRecord(paperStore.currentPaperId as number)
         }
     }
     //反之不做变化
