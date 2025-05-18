@@ -16,11 +16,13 @@ import { useElementSize, useElementByPoint, useMouse, useEventListener, onClickO
 import { userecordStore } from '../store/recordStore.ts'
 import { useUtilStore } from '../store/utilStore.ts'
 import { useFloating, autoUpdate, offset, flip, shift } from '@floating-ui/vue'
+import { useAlert } from '../common/alert';
 import dicpanel from '../components/exam/dicpanel.vue'
 import SelectPanel from '../components/exam/selectPanel.vue'
 const utilStore = useUtilStore()
 const paperStore = usepaperStore()
 const recordStore = userecordStore()
+const { showAlert: showerrormessage } = useAlert()
 const { id, mode, recordId } = defineProps<{
     id: string,
     mode: string
@@ -100,10 +102,16 @@ const submit = async () => {
         } else {
             await updateRecord(recordStore.currentRecordId, paperStore.currentPaperId, mode, paperStore.currentUserAnswersLength === paperStore.currentCorrectAnswersLength ? 1 : 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, Object.keys(paperStore.currentCorrectAnswers).length, 0, recordStore.currentHasspendtime);
         }
+        // 清理recordStore
     } else {
         const data = await saveRecord(paperStore.currentPaperId, mode, paperStore.currentUserAnswersLength === paperStore.currentCorrectAnswersLength ? 1 : 0, JSON.stringify(paperStore.currentUserAnswers), paperStore.currentScore, Object.keys(paperStore.currentCorrectAnswers).length, 0, recordStore.currentHasspendtime);
         // 将对应record的recordId保存到recordStore中
         recordStore.setRecordId(parseInt(id), data)
+    }
+    //如果做完了所有客观题,则清除recordstore,避免重新做卷覆盖记录
+    if (paperStore.currentUserAnswersLength == paperStore.currentCorrectAnswersLength) {
+        console.log("delete")
+        recordStore.removeRecord(parseInt(id))
     }
     router.push({ name: 'examResult' });
 
@@ -191,7 +199,9 @@ useEventListener(document, 'selectionchange', (evt) => {
     }
 })
 
-
+onClickOutside(markpanel.value, () => {
+    showselectpanel.value = false
+})
 
 
 
@@ -351,7 +361,9 @@ useEventListener(document, 'selectionchange', (evt) => {
                                 </div>
 
                                 <!-- 题号 -->
-                                <span class="text-xs text-gray-500 mt-1.5">{{ answer.index }}</span>
+                                <span class="text-xs text-gray-500 mt-1.5" :class="[
+                                    paperStore.currentUserAnswers[answer.index] ? 'text-xs text-gray-500 mt-1.5' : 'text-xs text-rose-400 mt-1.5'
+                                ]">{{ answer.index }}</span>
                             </div>
 
                         </div>
