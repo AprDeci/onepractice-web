@@ -3,7 +3,9 @@ import adapterFetch from "alova/fetch";
 import vueHook from "alova/vue";
 import { createClientTokenAuthentication } from "alova/client";
 import { fetchError, HttpRequestError, BusinessLogicError } from "../common/errors";
+import { useAlert } from "../common/alert";
 
+const { showAlert } = useAlert();
 const { onAuthRequired, onResponseRefreshToken } = createClientTokenAuthentication({
   async login(response, method) {
     const json = await response.clone().json();
@@ -29,6 +31,7 @@ export const httpclient = createAlova({
   responded: onResponseRefreshToken({
     onSuccess: async (Response, method) => {
       if (Response.status !== 200) {
+        showAlert(Response.statusText, "error");
         throw new HttpRequestError(Response.statusText);
       }
       const json = await Response.json();
@@ -45,6 +48,7 @@ export const httpclient = createAlova({
       return json.data;
     },
     onError: (err, method) => {
+      showAlert(err, "error");
       throw new fetchError(err);
     },
     onComplete: (method) => {}
