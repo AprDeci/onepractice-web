@@ -64,7 +64,7 @@ onMounted(() => {
             [scope.current, { transform: "rotate3d(-1,1,0,40deg)" },],
             [scope.current, { transform: "rotate3d(-1,1,0,0deg)" }, { duration: 0.8, delay: 2 }],
             ['.all', { scale: 1.05 }, { duration: 0.3, type: 'spring' }],
-            ['.all', { scale: 0.96 }, { duration: 0.3, type: 'spring' }],
+            ['.all', { scale: 0.9 }, { duration: 0.3, type: 'spring' }],
         ])
         animate([
             ['.card1', { opacity: 1 }, { delay: 3.3 }],
@@ -147,7 +147,7 @@ const rotateVariants = {
 </script>
 
 <template>
-    <main class="flex h-screen bg-gradient-to-b from-sky-50 to-purple-50  items-center justify-between overflow-hidden">
+    <main class="flex h-dvh   bg-gradient-to-b from-sky-50 to-purple-50  items-center justify-between overflow-hidden">
         <div ref="scope" class="left h-screen flex items-center justify-center w-1/2 z-2">
             <div class="all hidden  lg:block perspective-1000 w-[80%]  card  rotate">
                 <motion.div :custom="0" initial="hidden" :animate="isLoaded ? 'visible' : 'hidden'"
@@ -155,13 +155,12 @@ const rotateVariants = {
                     <div class="">
                         <div>
                             <div>
-                                <div
-                                    class="max-w-4xl m-auto listening-card card shadow-sm p-4 bg-base-100  flex gap-3 ">
+                                <div class=" m-auto listening-card card shadow-sm p-4 bg-base-100  flex gap-3 ">
                                     <motion.div :custom="0.3" initial="hidden"
                                         :animate="isLoaded ? 'visible' : 'hidden'" :variants="fallVariants">
-                                        <div class="player">
+                                        <!-- <div class="player">
                                             <AudioPlayer></AudioPlayer>
-                                        </div>
+                                        </div> -->
                                     </motion.div>
                                     <div class="optionsgroup">
                                         <div class="rounded-lg h-min-12 my-2 w-full border flex items-center p-3 border-base-300 cursor-pointer shadow-sm"
@@ -183,7 +182,7 @@ const rotateVariants = {
                     </div>
                 </motion.div>
                 <!-- cloze -->
-                <div class="">
+                <div class="max-w-full">
                     <motion.div :custom="0" initial="hidden" :animate="isLoaded ? 'visible' : 'hidden'"
                         :variants="fallVariants">
                         <div class="card bg-base-100 shadow-xl px-4 py-4">
