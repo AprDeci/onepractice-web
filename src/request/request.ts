@@ -43,7 +43,7 @@ export const httpclient = createAlova({
         }
       }
       if (json.code !== 200) {
-        throw new BusinessLogicError(json.msg);
+        showAlert(json.msg, "error");
       }
       return json.data;
     },
