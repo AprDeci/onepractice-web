@@ -37,9 +37,12 @@ const { loading, data: papers, isLastPage, page, pageSize, pageCount, total } = 
 const changePage = (newval: number) => {
     page.value = newval
 }
-const { loading: continueload, data: continuedata } = useRequest(getPaperIntro(paperStore.currentPaperId as number)).onError(() => {
+const { loading: continueload, data: continuedata } = paperStore.currentPaperId ? useRequest(getPaperIntro(paperStore.currentPaperId as number)).onError(() => {
 
-})
+}) : {
+    loading: false,
+    data: null
+}
 
 
 </script>
@@ -58,7 +61,7 @@ const { loading: continueload, data: continuedata } = useRequest(getPaperIntro(p
                         @click="router.push({ 'name': 'examPage', params: { 'id': paperStore.currentPaperId, 'mode': paperStore.currentMode } })">
                         <!-- 只考虑本地缓存-->
                         <span class="font-bold">{{ continuedata?.examYear }}年{{ continuedata?.examMonth
-                        }}月{{ continuedata?.paperType }}{{ continuedata?.paperName }}</span>
+                            }}月{{ continuedata?.paperType }}{{ continuedata?.paperName }}</span>
                         <div>
                             <span>已用时间:</span>
                             <span>{{ (recordStore.currentHasspendtime / 1000 / 60).toFixed(0) }}min</span>
@@ -88,7 +91,7 @@ const { loading: continueload, data: continuedata } = useRequest(getPaperIntro(p
                                 <select className="px-3 py-2 border border-gray-200 rounded-md text-sm" v-model="type">
                                     <option value="">All Types</option>
                                     <option v-for="(atype, index) in types" :key="index">{{ atype
-                                        }}</option>
+                                    }}</option>
                                 </select>
                                 <select v-model="year" className="px-3 py-2 border border-gray-200 rounded-md text-sm">
                                     <option value="0">All Years</option>
