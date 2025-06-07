@@ -20,14 +20,21 @@ const { loading, data: wordmean, } = useWatcher(() => {
     return { wordmean: { word: word, mean: '查无此词' } }
 })
 //单词收藏
+const islogin = localStorage.getItem('token') ? true : false;
 const { data: iscollected } = useWatcher(
     () => {
         return hascollected(pword.value)
     },
     [() => word],
+    {
+        middleware: async (context, next) => {
+            if (!islogin) return context.abort();
+        }
+    }
 )
 
 const addword = async () => {
+    if (!islogin) return ''
     try {
         if (iscollected.value) {
             console.log(pword.value)
@@ -48,7 +55,8 @@ const addword = async () => {
     <div class="bg-base-100 flex flex-col rounded-xl shadow-sm text-base-content max-w-[80%] lg:max-w-100">
         <div class="bg-emerald-100 dark:bg-emerald-400 rounded-t-xl  p-2 flex justify-between">
             <div>{{ pword }}</div>
-            <div class="flex justify-center items-center"><label class="container">
+            <div class="flex justify-center items-center" v-if="islogin">
+                <label class="container">
                     <input type="checkbox" :checked="iscollected" @click="addword" v-model="iscollected" />
                     <svg class="star-regular" xmlns="http://www.w3.org/2000/svg" height="0.5em" viewBox="0 0 576 512">
                         <path
