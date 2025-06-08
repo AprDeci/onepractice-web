@@ -9,6 +9,7 @@ import { usepaperStore } from "../store/paperStore";
 import { useRouter } from "vue-router";
 import { userecordStore } from "../store/recordStore";
 import { getCollectedWords } from "../request/methods/word";
+
 import { ref } from "vue";
 const { data: userinfo } = useRequest(getUserInfo);
 const { data: records } = useRequest(getRecords(30));
@@ -50,14 +51,23 @@ const Review = (index: number) => {
 
 //获取收藏单词
 
-const { data: collectedWords,page:wordpage,pageSize:wordsize,pageCount,total } = usePagination((wordpage,wordsize)=>getCollectedWords(wordpage, wordsize),{
-    initialData:{
-        total:0,
-        data:[]
-    },
-        initialPage: 1, // 初始页码，默认为1
-      initialPageSize: 20
+const {
+  data: collectedWords,
+  page: wordpage,
+  pageSize: wordsize,
+  pageCount: wordpagecount,
+  total: wordtotal
+} = usePagination((wordpage, wordsize) => getCollectedWords(wordpage, wordsize), {
+  initialData: {
+    total: 0,
+    data: []
+  },
+  initialPage: 1, // 初始页码，默认为1
+  initialPageSize: 20
 });
+const wordpagechange = (page: number) => {
+  wordpage.value = page;
+};
 </script>
 
 <template>
@@ -177,6 +187,15 @@ const { data: collectedWords,page:wordpage,pageSize:wordsize,pageCount,total } =
           >
             {{ wordDO.word }}
           </div>
+        </div>
+        <div class="flex items-center justify-center">
+          <el-pagination
+            :hide-on-single-page="true"
+            layout="prev,pager,next"
+            :page-size="wordsize"
+            :page-count="wordpagecount"
+            @current-change="wordpagechange"
+          ></el-pagination>
         </div>
       </div>
       <div class="charts card flex flex-col gap-4 bg-base-100 px-4 py-6 shadow-md">

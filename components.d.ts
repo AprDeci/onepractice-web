@@ -15,6 +15,7 @@ declare module 'vue' {
     CounterReverse: typeof import('./src/components/common/counterReverse.vue')['default']
     Dicpanel: typeof import('./src/components/exam/dicpanel.vue')['default']
     ElOption: typeof import('element-plus/es')['ElOption']
+    ElPagination: typeof import('element-plus/es')['ElPagination']
     ElSelect: typeof import('element-plus/es')['ElSelect']
     ElTag: typeof import('element-plus/es')['ElTag']
     FloatingPaper: typeof import('./src/components/floating-paper.vue')['default']
